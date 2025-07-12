@@ -1,0 +1,14 @@
+{
+  "compilerOptions": {
+    "baseUrl": "src",
+    "paths": {
+      "@pages/*": ["app/pages/*"],
+      "@core/*": ["app/core/*"],
+      "@shared/*": ["app/shared/*"],
+      "@styles/*": ["styles/*"],
+      "@modules/*": ["app/modules/*"],
+      "@environments/*": ["environments/*"],
+      "@assets/*": ["assets/*"]
+    }
+  }
+}

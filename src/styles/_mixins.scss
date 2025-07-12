@@ -1,0 +1,9 @@
+@use 'sass:math';
+
+@function pxToRem($px, $base: 16) {
+  @return math.div($px, 16) * 1rem;
+}
+
+@function get-spacing($factor) {
+  @return map-get($spacing, $factor);
+}
