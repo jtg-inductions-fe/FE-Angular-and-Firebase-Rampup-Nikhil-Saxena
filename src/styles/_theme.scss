@@ -3,14 +3,16 @@
 
 @include mat.core();
 
-$custom-theme: mat.define-light-theme((
-  color: (
-    primary: v.$primary,
-    accent: v.$accent,
-    warn: v.$warn,
-  ),
-  density: 0,
-));
+$custom-theme: mat.define-light-theme(
+  (
+    color: (
+      primary: v.$primary,
+      accent: v.$accent,
+      warn: v.$warn,
+    ),
+    density: 0,
+  )
+);
 
 // Apply Angular Material theme styles
 @include mat.all-component-themes($custom-theme);
