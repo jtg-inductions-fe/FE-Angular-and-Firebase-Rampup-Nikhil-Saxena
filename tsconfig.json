@@ -3,6 +3,7 @@
   "extends": "./tsconfig.paths.json",
   "compileOnSave": false,
   "compilerOptions": {
+    "incremental": true,
     "outDir": "./dist/out-tsc",
     "strict": true,
     "noImplicitOverride": true,

@@ -6,7 +6,7 @@
 
 - [ ] Documentation added at appropriate places
 - [ ] UI & Responsiveness verified if needed
-- [ ] Tested Cross-browser / Cross-platform
+- [ ] Tested cross-browser / Cross-platform
 - [ ] Self review complete
 - [ ] Build script is running with no issues
 - [ ] Lint issues resolved
@@ -20,4 +20,4 @@
 
 #### Screenshots (if applicable)
 
-Add screenshots if applicable
+Add screenshots if applicable.

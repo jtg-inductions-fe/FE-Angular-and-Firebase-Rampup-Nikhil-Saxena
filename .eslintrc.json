@@ -1,77 +1,46 @@
 {
-  // This marks this file as the root ESLint config
   "root": true,
-
-  // Ignore specific patterns (e.g., generated files)
   "ignorePatterns": ["projects/**/*", "dist/**/*"],
-
   "overrides": [
     {
-      // Applies these rules to TypeScript files
       "files": ["*.ts"],
-
-      // ESLint config extensions
       "extends": [
-        "plugin:@angular-eslint/recommended", // Basic Angular linting rules
-        "plugin:@angular-eslint/recommended--strict", // Stricter Angular rules
-        "plugin:@typescript-eslint/recommended", // Recommended TypeScript rules
-        "plugin:prettier/recommended" // Integrates Prettier formatting
+        "plugin:@angular-eslint/recommended",
+        "plugin:@typescript-eslint/recommended",
+        "plugin:prettier/recommended"
       ],
-
-      // Parser options for TypeScript
       "parserOptions": {
         "project": ["tsconfig.json"],
         "createDefaultProgram": true
       },
-
-      // ESLint plugins and custom rules
+      "plugins": ["import", "unused-imports"],
       "rules": {
-        // Warn if console.log is used
         "no-console": "warn",
-
-        // Disallow variable shadowing
         "no-shadow": "error",
-
-        // Disallow unused imports
-        "@typescript-eslint/no-unused-imports": "error",
-
-        // Naming convention for variables, types, etc.
+        "unused-imports/no-unused-imports": "warn",
         "@typescript-eslint/naming-convention": [
           "error",
-          {
-            "selector": "default",
-            "format": ["camelCase"]
-          },
-          {
-            "selector": "typeLike",
-            "format": ["PascalCase"]
-          }
+          { "selector": "default", "format": ["camelCase"] },
+          { "selector": "typeLike", "format": ["PascalCase"] }
         ],
-
-        // Order import groups for better readability
         "import/order": [
           1,
           {
             "groups": [
-              "external", // External libraries (e.g. @angular/core, rxjs)
-              "builtin", // Node built-in modules (e.g. fs, path)
-              "internal", // Internal aliases (e.g. @app/*, @env/*)
-              "sibling", // Imports from same directory
-              "parent", // Imports from parent directories
-              "index" // Index files (e.g. ./index.ts)
+              "external",
+              "builtin",
+              "internal",
+              "sibling",
+              "parent",
+              "index"
             ],
-            "alphabetize": {
-              "order": "asc",
-              "caseInsensitive": true
-            },
+            "alphabetize": { "order": "asc", "caseInsensitive": true },
             "newlines-between": "always"
           }
         ]
       }
     },
-
     {
-      // Template-specific linting rules for Angular HTML templates
       "files": ["*.html"],
       "extends": ["plugin:@angular-eslint/template/recommended"],
       "rules": {

@@ -1,4 +1,4 @@
-# FEAngularAndFirebaseRampupNikhilSaxena
+# FE Angular and Firebase Rampup - Nikhil Saxena
 
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 17.
 

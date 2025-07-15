@@ -1,1 +1,8 @@
-// TODO
+@use '@angular/material' as mat;
+@use './variables' as *;
+
+@mixin app-button-styles($theme) {
+  .btn-primary {
+    // TODO
+  }
+}

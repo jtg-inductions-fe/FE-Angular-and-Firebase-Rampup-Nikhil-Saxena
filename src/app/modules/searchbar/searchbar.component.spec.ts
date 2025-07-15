@@ -1,17 +1,17 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { SearhbarComponent } from './searhbar.component';
+import { SearchbarComponent } from './searchbar.component';
 
-describe('SearhbarComponent', () => {
-  let component: SearhbarComponent;
-  let fixture: ComponentFixture<SearhbarComponent>;
+describe('SearchbarComponent', () => {
+  let component: SearchbarComponent;
+  let fixture: ComponentFixture<SearchbarComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [SearhbarComponent],
+      imports: [SearchbarComponent],
     }).compileComponents();
 
-    fixture = TestBed.createComponent(SearhbarComponent);
+    fixture = TestBed.createComponent(SearchbarComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
