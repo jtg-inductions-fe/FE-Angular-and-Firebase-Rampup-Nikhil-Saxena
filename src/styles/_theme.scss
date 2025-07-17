@@ -9,6 +9,7 @@ $custom-theme: mat.define-light-theme(
       primary: v.$primary,
       accent: v.$accent,
       warn: v.$warn,
+      card-background: v.$app-background,
     ),
     density: 0,
   )

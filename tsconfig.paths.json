@@ -8,7 +8,9 @@
       "@styles/*": ["styles/*"],
       "@modules/*": ["app/modules/*"],
       "@environments/*": ["environments/*"],
-      "@assets/*": ["assets/*"]
+      "@assets/*": ["assets/*"],
+      "@models/*": ["app/core/models/*"],
+      "@services/*": ["app/core/services/*"]
     }
   }
 }

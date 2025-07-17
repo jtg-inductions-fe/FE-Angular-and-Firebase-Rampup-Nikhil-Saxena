@@ -1,15 +1,38 @@
 import { Routes } from '@angular/router';
-import { NotFoundComponent } from '@modules/not-found/not-found.component';
-import { LoginComponent } from '@pages/auth/login/login.component';
-import { SignupComponent } from '@pages/auth/signup/signup.component';
-import { DashboardComponent } from '@pages/dashboard/dashboard.component';
-import { HomeComponent } from '@pages/home/home.component';
-import { SearchPageComponent } from '@pages/search-page/search-page.component';
+import { authGuard } from '@core/guards/auth.guard';
 export const routes: Routes = [
-  { path: '', component: HomeComponent },
-  { path: 'admin', component: DashboardComponent },
-  { path: 'login', component: LoginComponent },
-  { path: 'signup', component: SignupComponent },
-  { path: 'search', component: SearchPageComponent },
-  { path: '**', component: NotFoundComponent },
+  {
+    path: '',
+    loadComponent: () =>
+      import('@pages/home/home.component').then(m => m.HomeComponent),
+    canActivate: [authGuard],
+  },
+  {
+    path: 'admin',
+    loadComponent: () =>
+      import('@pages/dashboard/dashboard.component').then(
+        m => m.DashboardComponent
+      ),
+    canActivate: [authGuard],
+  },
+  {
+    path: 'auth',
+    loadChildren: () =>
+      import('@modules/auth/auth.module').then(m => m.AuthenticationModule),
+  },
+  {
+    path: 'search',
+    loadComponent: () =>
+      import('@pages/search-page/search-page.component').then(
+        m => m.SearchPageComponent
+      ),
+    canActivate: [authGuard],
+  },
+  {
+    path: '**',
+    loadComponent: () =>
+      import('@modules/not-found/not-found.component').then(
+        m => m.NotFoundComponent
+      ),
+  },
 ];
