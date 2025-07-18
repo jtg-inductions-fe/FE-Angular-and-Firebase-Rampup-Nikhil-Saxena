@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { inject } from '@angular/core';
+import { signal } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { NavigationService } from '@core/services/navigation.services';
 
@@ -33,6 +34,11 @@ export class SignupComponent {
     const confirm = group.get('confirmPassword')?.value;
     return password === confirm ? null : { mismatch: true };
   }
+  hide = signal(true);
+  clickEvent(event: MouseEvent) {
+    this.hide.set(!this.hide());
+    event.stopPropagation();
+  }
 
   onSubmit(): void {
     if (this.signupForm.invalid) return;
@@ -63,9 +69,5 @@ export class SignupComponent {
         this.isSubmitting = false;
       },
     });
-  }
-
-  goToLogin(): void {
-    this.navigate.handleNavigation('/auth/login');
   }
 }

@@ -1,5 +1,7 @@
 import { Component } from '@angular/core';
 import { inject } from '@angular/core';
+import { signal } from '@angular/core';
+import { ChangeDetectionStrategy } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { NavigationService } from '@core/services/navigation.services';
 
@@ -9,6 +11,7 @@ import { AuthService } from '../../../core/services/auth.services';
   selector: 'app-login',
   templateUrl: './login.component.html',
   styleUrl: './login.component.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class LoginComponent {
   private fb = inject(FormBuilder);
@@ -24,6 +27,11 @@ export class LoginComponent {
   successMessage: string | null = null;
   isSubmitting = false;
 
+  hide = signal(true);
+  clickEvent(event: MouseEvent) {
+    this.hide.set(!this.hide());
+    event.stopPropagation();
+  }
   onSubmit(): void {
     if (this.loginForm.invalid) return;
 
@@ -46,9 +54,5 @@ export class LoginComponent {
         this.errorMessage = error.code;
       },
     });
-  }
-
-  goToSignup(): void {
-    this.navigate.handleNavigation('/auth/signup');
   }
 }

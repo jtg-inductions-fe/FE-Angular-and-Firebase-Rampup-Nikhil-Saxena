@@ -50,13 +50,22 @@
         <input
           matInput
           formControlName="password"
-          type="password"
+          [type]="hide() ? 'password' : 'text'"
           placeholder="Enter your password" />
         <mat-error
           *ngIf="signupForm.get('password')?.hasError('required')"
           class="signup__error">
           Password is required
         </mat-error>
+        <button
+          mat-icon-button
+          matSuffix
+          type="button"
+          (click)="clickEvent($event)"
+          [attr.aria-label]="'Hide password'"
+          [attr.aria-pressed]="hide()">
+          <mat-icon>{{ hide() ? 'visibility_off' : 'visibility' }}</mat-icon>
+        </button>
       </mat-form-field>
 
       <!-- Confirm Password -->
@@ -67,7 +76,7 @@
         <input
           matInput
           formControlName="confirmPassword"
-          type="password"
+          [type]="hide() ? 'password' : 'text'"
           placeholder="Confirm password" />
         <mat-error
           *ngIf="signupForm.get('confirmPassword')?.hasError('required')"
@@ -79,6 +88,16 @@
           class="signup__error">
           Passwords do not match
         </mat-error>
+
+        <button
+          mat-icon-button
+          matSuffix
+          type="button"
+          (click)="clickEvent($event)"
+          [attr.aria-label]="'Hide password'"
+          [attr.aria-pressed]="hide()">
+          <mat-icon>{{ hide() ? 'visibility_off' : 'visibility' }}</mat-icon>
+        </button>
       </mat-form-field>
 
       <div
@@ -102,7 +121,7 @@
 
     <p class="signup__footer">
       Already have an account?
-      <a (click)="goToLogin()" href="/auth/login" class="signup__link">Login</a>
+      <a routerLink="/auth/login" class="signup__link">Login</a>
     </p>
   </mat-card>
 </div>
