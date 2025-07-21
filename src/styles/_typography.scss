@@ -1,9 +1,0 @@
-@use '@angular/material' as mat;
-@use './variables' as *;
-
-// Custom typography config
-$custom-typography: mat.define-typography-config(
-  $font-family: 'Roboto, "Helvetica Neue", sans-serif', // TODO
-);
-
-$typography-config: $custom-typography;

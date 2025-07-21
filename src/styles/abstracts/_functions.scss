@@ -1,4 +1,5 @@
 @use 'sass:math';
+@use 'sass:map';
 
 @function pxToRem($px, $base: 16) {
   @return math.div($px, $base) * 1rem;
@@ -6,4 +7,8 @@
 
 @function get-spacing($factor) {
   @return map-get($spacing, $factor);
+}
+
+@function get-palette-color($palette-map, $shade) {
+  @return map.get($palette-map, $shade);
 }

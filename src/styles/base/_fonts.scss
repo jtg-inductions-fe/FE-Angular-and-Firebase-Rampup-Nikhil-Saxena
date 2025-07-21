@@ -1,0 +1,15 @@
+@use './abstracts/mixins' as mix;
+@use './base/variables' as var;
+
+@each $key, $font in var.$fonts {
+  // Generate a @font-face CSS rule using the font-face mixin
+  // Parameters:
+  // - map-get($font, name): the font-family name
+  // - map-get($font, path): the file path to the font (without extension)
+  // - map-get($font, weight): the font weight
+  @include mix.font-face(
+    map-get($font, name),
+    map-get($font, path),
+    map-get($font, weight)
+  );
+}

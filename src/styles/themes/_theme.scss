@@ -1,14 +1,14 @@
 @use '@angular/material' as mat;
-@use './variables' as v;
+@use './base/variables' as var;
 
 @include mat.core();
 
 $custom-theme: mat.define-light-theme(
   (
     color: (
-      primary: v.$primary,
-      accent: v.$accent,
-      warn: v.$warn,
+      primary: var.$primary,
+      accent: var.$accent,
+      warn: var.$warn,
     ),
     density: 0,
   )

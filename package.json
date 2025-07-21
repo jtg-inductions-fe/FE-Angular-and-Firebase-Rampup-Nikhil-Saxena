@@ -1,5 +1,5 @@
 {
-  "name": "NS_R1",
+  "name": "Writica",
   "version": "0.0.0",
   "description": "A modern blog website built with Angular and Firebase, featuring a landing page, secure Firebase Authentication. Designed with Angular Material for responsive UI and seamless user experience",
   "scripts": {
@@ -11,7 +11,8 @@
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
     "serve:ssr": "node dist/fe-angular-and-firebase-rampup-nikhil-saxena/server/server.mjs",
-    "prepare": "husky install"
+    "prepare": "husky install",
+    "prettier": "npx prettier --write ./"
   },
   "private": true,
   "dependencies": {

@@ -3,7 +3,7 @@
   "ignorePatterns": ["projects/**/*", "dist/**/*"],
   "overrides": [
     {
-      "files": ["*.ts"],
+      "files": ["*.ts", "*.component.ts"],
       "extends": [
         "plugin:@angular-eslint/recommended",
         "plugin:@typescript-eslint/recommended",
@@ -37,6 +37,11 @@
             "alphabetize": { "order": "asc", "caseInsensitive": true },
             "newlines-between": "always"
           }
+        ],
+        "padding-line-between-statements": [
+          "error",
+          { "blankLine": "always", "prev": "*", "next": "export" },
+          { "blankLine": "always", "prev": "*", "next": "class" }
         ]
       }
     },
