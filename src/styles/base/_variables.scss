@@ -70,18 +70,24 @@ $font-path: '@assets/fonts/';
 // Font-face configuration map
 $fonts: (
   'roboto-regular': (
-    name: 'circular-std',
+    name: 'roboto',
     path: $font-path + 'Roboto-Regular',
-    weight: 450,
+    weight: 400,
   ),
-  'roboto-semibold': (
-    name: 'circular-std',
-    path: $font-path + 'Roboto-Semi-Bold',
+  'roboto-medium': (
+    name: 'roboto',
+    path: $font-path + 'Roboto-Medium',
+    weight: 500,
+  ),
+
+  'roboto-bold': (
+    name: 'roboto',
+    path: $font-path + 'Roboto-Bold',
     weight: 700,
   ),
-  'roboto-bold': (
-    name: 'circular-std',
-    path: $font-path + 'Roboto-Bold',
-    weight: 900,
+  'roboto-black': (
+    name: 'roboto',
+    path: $font-path + 'Roboto-Black',
+    weight: 800,
   ),
 );
