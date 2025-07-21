@@ -30,7 +30,7 @@ export class AuthService {
   private firestore = inject(Firestore);
   private localStorage = inject(LocalStorageService);
   private cookieService = inject(CookieService);
-  private navigate = inject(NavigationService);
+  private navigationService = inject(NavigationService);
 
   /**
    * Saves the Firebase ID token in a cookie with 2-day expiration.
@@ -141,7 +141,7 @@ export class AuthService {
   logOutUser(): void {
     this.cookieService.delete('Authorization', '/');
     this.localStorage.clearUserData();
-    this.navigate.handleNavigation('/auth/login');
+    this.navigationService.handleNavigation('/auth/login');
   }
 
   /**

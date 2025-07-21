@@ -18,3 +18,14 @@
     @return null;
   }
 }
+
+/// Mixin: Box Shadow
+@mixin box-shadow-rem(
+  $x: 0,
+  $y: 2,
+  $blur: 6,
+  $spread: 0,
+  $color: va.$app-border
+) {
+  box-shadow: pxToRem($x) pxToRem($y) pxToRem($blur) pxToRem($spread) $color;
+}

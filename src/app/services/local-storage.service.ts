@@ -1,4 +1,4 @@
-import { inject, Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 
 import { User as AppUser } from '@core/models/user.model';
 
@@ -8,32 +8,29 @@ import { NavigationService } from './navigation.services';
   providedIn: 'root',
 })
 export class LocalStorageService {
-  private navigationService = inject(NavigationService);
-  private isBrowser(): boolean {
-    return typeof window !== 'undefined' && typeof localStorage !== 'undefined';
-  }
+  private navigate = inject(NavigationService);
+
   /**
    * Retrieves user data from local storage.
    * If any required field is missing, navigates to the login page.
    *
    * @returns An object containing username, email, and userId, or null if not found.
    */
+  getLocalStorage(): {
+    username: string;
+    email: string;
+    userId: string;
+  } | null {
+    const username = localStorage.getItem('username');
+    const email = localStorage.getItem('email');
+    const userId = localStorage.getItem('userId');
 
-  getLocalStorage(): AppUser | null {
-    if (!this.isBrowser()) return null;
-
-    try {
-      const username = localStorage.getItem('username');
-      const email = localStorage.getItem('email');
-      const userId = localStorage.getItem('userId');
-
-      if (username && email && userId) return { username, email, userId };
-      else throw new Error('User Data Not Found');
-    } catch {
-      this.navigationService.handleNavigation('/auth/login');
-    } finally {
-      return null;
+    if (username && email && userId) {
+      return { username, email, userId };
+    } else {
+      this.navigate.handleNavigation('/auth/login');
     }
+    return null;
   }
 
   /**
@@ -41,32 +38,16 @@ export class LocalStorageService {
    *
    * @param user - The user object containing userId, username, and email.
    */
-
   setUserData(user: AppUser): void {
-    if (!this.isBrowser()) return;
-
-    try {
-      localStorage.setItem('username', user.username);
-      localStorage.setItem('email', user.email);
-      localStorage.setItem('userId', user.userId);
-    } catch (error) {
-      console.warn('Failed to write to localStorage:', error);
-    }
+    localStorage.setItem('userId', user.userId);
+    localStorage.setItem('username', user.username);
+    localStorage.setItem('email', user.email);
   }
 
   /**
    * Clears all user-related data from local storage.
    */
-
   clearUserData(): void {
-    if (!this.isBrowser()) return;
-
-    try {
-      localStorage.removeItem('username');
-      localStorage.removeItem('email');
-      localStorage.removeItem('userId');
-    } catch (error) {
-      console.warn('Failed to clear localStorage:', error);
-    }
+    localStorage.clear();
   }
 }
