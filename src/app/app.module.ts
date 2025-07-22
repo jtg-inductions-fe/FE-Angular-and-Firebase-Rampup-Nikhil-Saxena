@@ -4,7 +4,7 @@ import { provideAuth } from '@angular/fire/auth';
 import { provideStorage } from '@angular/fire/storage';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { RouterModule } from '@angular/router';
+import { RouterModule, RouterOutlet } from '@angular/router';
 
 import {
   initializeFirebaseApp,
@@ -19,6 +19,7 @@ import { routes } from './app.routes';
   declarations: [AppComponent],
   imports: [
     BrowserModule,
+    RouterOutlet,
     RouterModule.forRoot(routes),
     BrowserAnimationsModule,
   ],

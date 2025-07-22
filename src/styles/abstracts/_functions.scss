@@ -1,5 +1,6 @@
 @use 'sass:math';
 @use 'sass:map';
+@use './base/variables' as var;
 
 @function pxToRem($px, $base: 16) {
   @return math.div($px, $base) * 1rem;
@@ -9,6 +10,11 @@
   @return map-get($spacing, $factor);
 }
 
-@function get-palette-color($palette-map, $shade) {
-  @return map.get($palette-map, $shade);
+@function spacing($key) {
+  @if map-has-key(var.$spacing, $key) {
+    @return map-get(var.$spacing, $key);
+  } @else {
+    @warn "Spacing key '#{$key}' not found!";
+    @return null;
+  }
 }

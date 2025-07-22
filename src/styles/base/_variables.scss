@@ -1,5 +1,9 @@
 @use '@angular/material' as mat;
-@use './abstracts/functions' as *;
+@use 'sass:map';
+
+@function get-palette-color($palette-map, $shade) {
+  @return map.get($palette-map, $shade);
+}
 
 // Primary Color Template: Teal
 $primary: mat.define-palette(mat.$teal-palette);
