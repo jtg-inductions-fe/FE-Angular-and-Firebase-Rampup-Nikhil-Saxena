@@ -17,7 +17,7 @@ import { User as AppUser } from '@core/models/user.model';
 import { CookieService } from 'ngx-cookie-service';
 import { from, switchMap, catchError, throwError, Observable } from 'rxjs';
 
-import { SessionStorageService } from './session-storage.services';
+import { LocalStorageService } from './local-storage.service';
 
 @Injectable({
   providedIn: 'root',
@@ -26,7 +26,7 @@ export class AuthService {
   private auth = inject(Auth);
   private db = inject(Database);
   private isAuthenticated = false;
-  private sessionStorage = inject(SessionStorageService);
+  private localStorage = inject(LocalStorageService);
   private cookieService = inject(CookieService);
 
   // Consider making this method private if only used internally
@@ -89,7 +89,7 @@ export class AuthService {
                   createdAt: new Date().toISOString(),
                 };
 
-                this.sessionStorage.setUserData(userData);
+                this.localStorage.setUserData(userData);
 
                 // Save user data to Realtime DB
                 return from(set(ref(this.db, `users/${uid}`), userData)).pipe(
@@ -125,7 +125,7 @@ export class AuthService {
               switchMap((snapshot: DataSnapshot) => {
                 if (snapshot.exists()) {
                   const userData = snapshot.val() as AppUser;
-                  this.sessionStorage.setUserData(userData);
+                  this.localStorage.setUserData(userData);
                   // Ensure 'uid' and 'email' are present in the returned user data if not directly from DB
                   return from([{ ...userData, uid, email }]);
                 } else {
@@ -146,7 +146,7 @@ export class AuthService {
 
   logOutUser(): void {
     this.handleTokenCookieSave('');
-    this.sessionStorage.clearUserData();
+    this.localStorage.clearUserData();
     this.isAuthenticated = false;
   }
 
