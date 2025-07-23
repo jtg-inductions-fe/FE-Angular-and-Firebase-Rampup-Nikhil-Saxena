@@ -13,8 +13,10 @@ import {
   child,
   DataSnapshot,
 } from '@angular/fire/database';
+
 import { User as AppUser } from '@core/models/user.model';
 import { CookieService } from 'ngx-cookie-service';
+
 import { from, switchMap, catchError, throwError, Observable } from 'rxjs';
 
 import { LocalStorageService } from './local-storage.service';

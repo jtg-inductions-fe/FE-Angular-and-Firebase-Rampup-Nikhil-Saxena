@@ -8,6 +8,7 @@ import {
   AbstractControl,
 } from '@angular/forms';
 import { ValidationErrors } from '@angular/forms';
+
 import { emailRegex } from '@core/constants/constants';
 import { AuthService } from '@services/auth.services';
 import { NavigationService } from '@services/navigation.services';

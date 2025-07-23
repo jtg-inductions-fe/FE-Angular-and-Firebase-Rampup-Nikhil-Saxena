@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+
 import { User as AppUser } from '@core/models/user.model';
 
 @Injectable({
