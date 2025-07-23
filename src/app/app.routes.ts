@@ -1,19 +1,21 @@
 import { Routes } from '@angular/router';
 
-import { HomeComponent } from '@pages/home/home.component';
+import { accessGuard } from '@core/guards/access.guard';
 
 export const routes: Routes = [
   {
     path: '',
     loadComponent: () =>
       import('@pages/home/home.component').then(m => m.HomeComponent),
-    canActivate: [authGuard],
+    canActivate: [accessGuard],
+    data: { requiresAuth: true }, // Require login
   },
   {
     path: 'auth',
     loadChildren: () =>
       import('@modules/auth/auth.module').then(m => m.AuthenticationModule),
-    canActivate: [guestGuard],
+    canActivate: [accessGuard],
+    data: { requiresAuth: false }, // Only guests
   },
   {
     path: '**',

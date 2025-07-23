@@ -1,6 +1,4 @@
-import { Component } from '@angular/core';
-import { inject } from '@angular/core';
-import { signal } from '@angular/core';
+import { Component, inject, signal } from '@angular/core';
 import { ChangeDetectionStrategy } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { AuthService } from '@services/auth.services';
@@ -9,7 +7,7 @@ import { NavigationService } from '@services/navigation.services';
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
-  styleUrl: './login.component.scss',
+  styleUrls: ['./login.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class LoginComponent {
@@ -31,14 +29,24 @@ export class LoginComponent {
     this.hide.set(!this.hide());
     event.stopPropagation();
   }
+
+  get email() {
+    return this.loginForm.get('email');
+  }
+
+  get password() {
+    return this.loginForm.get('password');
+  }
+
   onSubmit(): void {
     if (this.loginForm.invalid) return;
 
     this.isSubmitting = true;
+    this.loginForm.disable();
     this.errorMessage = null;
     this.successMessage = null;
 
-    const { email, password } = this.loginForm.value;
+    const { email, password } = this.loginForm.getRawValue();
 
     this.authService.loginUser(email, password).subscribe({
       next: userCredential => {
@@ -46,10 +54,30 @@ export class LoginComponent {
         this.isSubmitting = false;
         this.navigate.handleNavigation('/');
       },
-
       error: error => {
-        this.errorMessage = error.code;
+        this.handleFirebaseError(error);
+        this.loginForm.enable();
+        this.isSubmitting = false;
       },
     });
+  }
+
+  private handleFirebaseError(errorCode: string) {
+    this.email?.setErrors(null);
+    this.password?.setErrors(null);
+
+    const errorStr = String(errorCode); // Typecast to string
+    console.log(errorStr);
+
+    if (
+      errorStr.includes('auth/user-not-found') ||
+      errorStr.includes('auth/invalid-credential')
+    ) {
+      this.errorMessage = 'Invalid email or password.';
+    } else if (errorStr.includes('auth/too-many-requests')) {
+      this.errorMessage = 'Too many failed attempts. Try again later.';
+    } else {
+      this.errorMessage = 'Login failed. Please try again.';
+    }
   }
 }

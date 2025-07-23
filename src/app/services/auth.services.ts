@@ -151,6 +151,6 @@ export class AuthService {
   }
 
   getAuthenticationStatus(): boolean {
-    return this.cookieService.check('Authorization');
+    return this.cookieService.get('Authorization') != '';
   }
 }

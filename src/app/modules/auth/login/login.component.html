@@ -4,53 +4,61 @@
 
     <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" class="login__form">
       <!-- Email -->
-      <mat-form-field
-        appearance="outline"
-        class="login__field login__field--full-width">
-        <mat-label>Email</mat-label>
-        <input
-          matInput
-          formControlName="email"
-          type="email"
-          placeholder="Enter your email" />
-        <mat-error
-          *ngIf="loginForm.get('email')?.hasError('required')"
-          class="login__error">
-          Email is required
-        </mat-error>
-        <mat-error
-          *ngIf="loginForm.get('email')?.hasError('email')"
-          class="login__error">
-          Invalid email
-        </mat-error>
-      </mat-form-field>
+      <div class="login__field-wrapper">
+        <mat-form-field
+          appearance="outline"
+          class="login__field login__field--full-width">
+          <mat-label>Email</mat-label>
+          <input
+            matInput
+            formControlName="email"
+            type="email"
+            placeholder="Enter your email" />
+        </mat-form-field>
+        <ng-container
+          *ngTemplateOutlet="
+            errorTemplate;
+            context: {
+              control: loginForm.get('email'),
+              fieldName: 'Email',
+            }
+          ">
+        </ng-container>
+      </div>
 
       <!-- Password -->
-      <mat-form-field
-        appearance="outline"
-        class="login__field login__field--full-width">
-        <mat-label>Password</mat-label>
-        <input
-          matInput
-          formControlName="password"
-          [type]="hide() ? 'password' : 'text'"
-          placeholder="Enter your password" />
-        <button
-          mat-icon-button
-          matSuffix
-          type="button"
-          (click)="clickEvent($event)"
-          [attr.aria-label]="'Hide password'"
-          [attr.aria-pressed]="hide()">
-          <mat-icon>{{ hide() ? 'visibility_off' : 'visibility' }}</mat-icon>
-        </button>
-        <mat-error
-          *ngIf="loginForm.get('password')?.hasError('required')"
-          class="login__error">
-          Password is required
-        </mat-error>
-      </mat-form-field>
+      <div class="login__field-wrapper">
+        <mat-form-field
+          appearance="outline"
+          class="login__field login__field--full-width">
+          <mat-label>Password</mat-label>
+          <input
+            matInput
+            formControlName="password"
+            [type]="hide() ? 'password' : 'text'"
+            placeholder="Enter your password" />
+          <button
+            mat-icon-button
+            matSuffix
+            type="button"
+            (click)="clickEvent($event)"
+            [attr.aria-label]="'Hide password'"
+            [attr.aria-pressed]="hide()">
+            <mat-icon>{{ hide() ? 'visibility_off' : 'visibility' }}</mat-icon>
+          </button>
+        </mat-form-field>
+        <ng-container
+          *ngTemplateOutlet="
+            errorTemplate;
+            context: {
+              control: loginForm.get('password'),
+              fieldName: 'Password',
+            }
+          ">
+        </ng-container>
+      </div>
 
+      <!-- Success / Error Messages -->
       <div
         class="login__message login__message--success"
         *ngIf="successMessage">
@@ -60,11 +68,12 @@
         {{ errorMessage }}
       </div>
 
+      <!-- Submit Button -->
       <button
         mat-raised-button
         color="primary"
         type="submit"
-        [disabled]="loginForm.invalid"
+        [disabled]="loginForm.invalid || isSubmitting"
         class="login__button">
         Log In
       </button>
@@ -75,4 +84,21 @@
       <a routerLink="/auth/signup" class="login__link">Signup</a>
     </p>
   </mat-card>
+
+  <!-- Shared Error Template -->
+  <ng-template #errorTemplate let-control="control" let-fieldName="fieldName">
+    <div class="login__error">
+      <ng-container *ngIf="control?.touched">
+        <mat-error *ngIf="control?.errors?.['required']">
+          {{ fieldName }} is required
+        </mat-error>
+        <mat-error *ngIf="control?.errors?.['email']">
+          Please enter a valid email address
+        </mat-error>
+        <mat-error *ngIf="control?.errors?.['server']">
+          {{ control.errors['server'] }}
+        </mat-error>
+      </ng-container>
+    </div>
+  </ng-template>
 </div>

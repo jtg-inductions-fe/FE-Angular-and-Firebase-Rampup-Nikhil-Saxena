@@ -4,102 +4,116 @@
 
     <form [formGroup]="signupForm" (ngSubmit)="onSubmit()" class="signup__form">
       <!-- Username -->
-      <mat-form-field
-        appearance="outline"
-        class="signup__field signup__field--full-width">
-        <mat-label>Username</mat-label>
-        <input
-          matInput
-          formControlName="username"
-          type="text"
-          placeholder="Enter your username" />
-        <mat-error
-          *ngIf="signupForm.get('username')?.hasError('required')"
-          class="signup__error">
-          Username is required
-        </mat-error>
-      </mat-form-field>
+      <div class="signup__field-wrapper">
+        <mat-form-field
+          appearance="outline"
+          class="signup__field signup__field--full-width">
+          <mat-label>Username</mat-label>
+          <input
+            matInput
+            formControlName="username"
+            type="text"
+            placeholder="Enter your username" />
+        </mat-form-field>
+        <ng-container
+          *ngTemplateOutlet="
+            errorTemplate;
+            context: {
+              control: signupForm.get('username'),
+              fieldName: 'Username',
+            }
+          ">
+        </ng-container>
+      </div>
 
       <!-- Email -->
-      <mat-form-field
-        appearance="outline"
-        class="signup__field signup__field--full-width">
-        <mat-label>Email</mat-label>
-        <input
-          matInput
-          formControlName="email"
-          type="email"
-          placeholder="Enter your email" />
-        <mat-error
-          *ngIf="signupForm.get('email')?.hasError('required')"
-          class="signup__error">
-          Email is required
-        </mat-error>
-        <mat-error
-          *ngIf="signupForm.get('email')?.hasError('email')"
-          class="signup__error">
-          Invalid email
-        </mat-error>
-      </mat-form-field>
+      <div class="signup__field-wrapper">
+        <mat-form-field
+          appearance="outline"
+          class="signup__field signup__field--full-width">
+          <mat-label>Email</mat-label>
+          <input
+            matInput
+            formControlName="email"
+            type="email"
+            placeholder="Enter your email" />
+        </mat-form-field>
+        <ng-container
+          *ngTemplateOutlet="
+            errorTemplate;
+            context: {
+              control: signupForm.get('email'),
+              fieldName: 'Email',
+            }
+          ">
+        </ng-container>
+      </div>
 
       <!-- Password -->
-      <mat-form-field
-        appearance="outline"
-        class="signup__field signup__field--full-width">
-        <mat-label>Password</mat-label>
-        <input
-          matInput
-          formControlName="password"
-          [type]="hide() ? 'password' : 'text'"
-          placeholder="Enter your password" />
-        <mat-error
-          *ngIf="signupForm.get('password')?.hasError('required')"
-          class="signup__error">
-          Password is required
-        </mat-error>
-        <button
-          mat-icon-button
-          matSuffix
-          type="button"
-          (click)="clickEvent($event)"
-          [attr.aria-label]="'Hide password'"
-          [attr.aria-pressed]="hide()">
-          <mat-icon>{{ hide() ? 'visibility_off' : 'visibility' }}</mat-icon>
-        </button>
-      </mat-form-field>
+      <div class="signup__field-wrapper">
+        <mat-form-field
+          appearance="outline"
+          class="signup__field signup__field--full-width">
+          <mat-label>Password</mat-label>
+          <input
+            matInput
+            formControlName="password"
+            [type]="hide() ? 'password' : 'text'"
+            placeholder="Enter your password" />
+          <button
+            mat-icon-button
+            matSuffix
+            type="button"
+            (click)="clickEvent($event)"
+            [attr.aria-label]="'Hide password'"
+            [attr.aria-pressed]="hide()">
+            <mat-icon>{{ hide() ? 'visibility_off' : 'visibility' }}</mat-icon>
+          </button>
+        </mat-form-field>
+        <ng-container
+          *ngTemplateOutlet="
+            errorTemplate;
+            context: {
+              control: signupForm.get('password'),
+              fieldName: 'Password',
+            }
+          ">
+        </ng-container>
+      </div>
 
       <!-- Confirm Password -->
-      <mat-form-field
-        appearance="outline"
-        class="signup__field signup__field--full-width">
-        <mat-label>Confirm Password</mat-label>
-        <input
-          matInput
-          formControlName="confirmPassword"
-          [type]="hide() ? 'password' : 'text'"
-          placeholder="Confirm password" />
-        <mat-error
-          *ngIf="signupForm.get('confirmPassword')?.hasError('required')"
-          class="signup__error">
-          Confirm password is required
-        </mat-error>
-        <mat-error
-          *ngIf="signupForm.hasError('mismatch')"
-          class="signup__error">
-          Passwords do not match
-        </mat-error>
+      <div class="signup__field-wrapper">
+        <mat-form-field
+          appearance="outline"
+          class="signup__field signup__field--full-width">
+          <mat-label>Confirm Password</mat-label>
+          <input
+            matInput
+            formControlName="confirmPassword"
+            [type]="hide() ? 'password' : 'text'"
+            placeholder="Confirm your password" />
+          <button
+            mat-icon-button
+            matSuffix
+            type="button"
+            (click)="clickEvent($event)"
+            [attr.aria-label]="'Hide password'"
+            [attr.aria-pressed]="hide()">
+            <mat-icon>{{ hide() ? 'visibility_off' : 'visibility' }}</mat-icon>
+          </button>
+        </mat-form-field>
+        <ng-container
+          *ngTemplateOutlet="
+            errorTemplate;
+            context: {
+              control: signupForm.get('confirmPassword'),
+              fieldName: 'Confirm Password',
+            }
+          ">
+        </ng-container>
+      </div>
 
-        <button
-          mat-icon-button
-          matSuffix
-          type="button"
-          (click)="clickEvent($event)"
-          [attr.aria-label]="'Hide password'"
-          [attr.aria-pressed]="hide()">
-          <mat-icon>{{ hide() ? 'visibility_off' : 'visibility' }}</mat-icon>
-        </button>
-      </mat-form-field>
-
+      <!-- Success / Error Message -->
       <div
         class="signup__message signup__message--success"
         *ngIf="successMessage">
@@ -109,11 +123,12 @@
         {{ errorMessage }}
       </div>
 
+      <!-- Submit -->
       <button
         mat-raised-button
         color="primary"
         type="submit"
-        [disabled]="signupForm.invalid"
+        [disabled]="signupForm.invalid || isSubmitting"
         class="signup__button">
         Register
       </button>
@@ -124,4 +139,35 @@
       <a routerLink="/auth/login" class="signup__link">Login</a>
     </p>
   </mat-card>
+
+  <!-- Reusable Error Template -->
+  <ng-template #errorTemplate let-control="control" let-fieldName="fieldName">
+    <div class="signup__error">
+      <ng-container *ngIf="control?.touched">
+        <mat-error *ngIf="control?.errors?.['required']">
+          {{ fieldName }} is required
+        </mat-error>
+        <mat-error *ngIf="control?.errors?.['email']">
+          Please enter a valid email address
+        </mat-error>
+        <mat-error *ngIf="control?.errors?.['minlength']">
+          {{ fieldName }} must be at least
+          {{ control.errors['minlength'].requiredLength }} characters
+        </mat-error>
+        <mat-error *ngIf="control?.errors?.['pattern']">
+          {{ fieldName }} must include an uppercase, lowercase, and a special
+          character
+        </mat-error>
+        <mat-error
+          *ngIf="
+            signupForm.errors?.['mismatch'] && fieldName === 'Confirm Password'
+          ">
+          Passwords do not match
+        </mat-error>
+        <mat-error *ngIf="control?.errors?.['server']">
+          {{ control.errors['server'] }}
+        </mat-error>
+      </ng-container>
+    </div>
+  </ng-template>
 </div>
