@@ -1,0 +1,116 @@
+<div class="create-update">
+  <div class="create-update__container">
+    <form [formGroup]="articleForm" class="create-update__form">
+      <!-- Title -->
+      <mat-form-field class="create-update__form-field">
+        <mat-label>Enter Your Title</mat-label>
+        <input matInput placeholder="Enter Title" formControlName="title" />
+      </mat-form-field>
+      <ng-container
+        *ngTemplateOutlet="
+          errorTemplate;
+          context: { control: articleForm.get('title'), fieldName: 'Title' }
+        ">
+      </ng-container>
+
+      <!-- Title Image Upload -->
+      <mat-form-field class="create-update__image-input" appearance="outline">
+        <mat-label>Upload Title Image (Optional)</mat-label>
+        <input
+          matInput
+          [value]="selectedFileName"
+          readonly
+          (click)="fileInput.click()"
+          accept="image/*" />
+        <button
+          type="button"
+          mat-icon-button
+          matSuffix
+          (click)="fileInput.click()">
+          <mat-icon>attach_file</mat-icon>
+        </button>
+        <input
+          type="file"
+          hidden
+          #fileInput
+          accept="image/*"
+          (change)="onFileSelected($event)" />
+      </mat-form-field>
+
+      <!-- Editor -->
+      <h2 class="create-update__write-story">Write Your Story</h2>
+      <app-text-editor
+        [content]="editorValue"
+        (contentChange)="handleContentChange($event)">
+      </app-text-editor>
+      <ng-container
+        *ngTemplateOutlet="
+          errorTemplate;
+          context: {
+            control: articleForm.get('editorContent'),
+            fieldName: 'Content',
+          }
+        ">
+      </ng-container>
+
+      <!-- Tags -->
+      <div class="create-update__tag-input-container">
+        <tag-input
+          formControlName="tags"
+          [(ngModel)]="tags"
+          [editable]="true"
+          [theme]="'custom-theme'"
+          secondaryPlaceholder="Tags related to your story"
+          [onlyFromAutocomplete]="true">
+          <tag-input-dropdown
+            [showDropdownIfEmpty]="true"
+            [focusFirstElement]="true"
+            [autocompleteItems]="autocompleteItems"></tag-input-dropdown>
+        </tag-input>
+
+        <ng-container
+          *ngTemplateOutlet="
+            errorTemplate;
+            context: { control: articleForm.get('tags'), fieldName: 'Tags' }
+          ">
+        </ng-container>
+      </div>
+
+      <!-- Submit -->
+      <button
+        color="primary"
+        class="create-update__publish-button"
+        mat-raised-button
+        type="button"
+        (click)="onSubmit()">
+        Publish Your Story
+      </button>
+    </form>
+  </div>
+</div>
+
+<!-- Preview -->
+<app-article-card
+  [cardImage]="base64Image"
+  [cardTitle]="articleForm.get('title')?.value"
+  [cardContent]="editorValue"
+  [username]="username"
+  [lastUpdateDate]="lastUpdatedDate"
+  [tags]="tags">
+</app-article-card>
+
+<!-- Reusable Error Template -->
+<ng-template #errorTemplate let-control="control" let-fieldName="fieldName">
+  <div class="signup__error" *ngIf="control?.touched || control?.dirty">
+    <mat-error *ngIf="control?.errors?.['required']; else checkMinLength">
+      {{ fieldName }} is required
+    </mat-error>
+
+    <ng-template #checkMinLength>
+      <mat-error *ngIf="control?.errors?.['minlength']">
+        {{ fieldName }} must be at least
+        {{ control.errors['minlength']?.requiredLength }} characters
+      </mat-error>
+    </ng-template>
+  </div>
+</ng-template>

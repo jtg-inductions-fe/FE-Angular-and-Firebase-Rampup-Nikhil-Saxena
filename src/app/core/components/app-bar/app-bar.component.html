@@ -33,7 +33,7 @@
         alt="User avatar"
         class="app-bar__profile-avatar" />
     </button>
-
+    <p *ngIf="isGoodCode">Retained in company</p>
     <mat-menu #profileMenu="matMenu" xPosition="before" yPosition="below">
       <div class="app-bar__profile-menu-tooltip"></div>
       <div class="app-bar__profile-menu">

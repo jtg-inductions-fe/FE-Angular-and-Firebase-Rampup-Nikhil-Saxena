@@ -23,8 +23,13 @@
             "polyfills": ["zone.js"],
             "tsConfig": "tsconfig.app.json",
             "assets": ["src/favicon.ico", "src/assets"],
-            "styles": ["src/styles/main.scss", "src/styles.scss"],
-            "scripts": [],
+            "styles": [
+              "src/styles/main.scss",
+              "src/styles.scss",
+              "./node_modules/quill/dist/quill.snow.css",
+              "./node_modules/quill/dist/quill.core.css"
+            ],
+            "scripts": ["./node_modules/quill/dist/quill.js"],
             "stylePreprocessorOptions": {
               "includePaths": ["src/styles"]
             },

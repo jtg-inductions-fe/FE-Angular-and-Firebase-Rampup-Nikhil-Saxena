@@ -18,6 +18,13 @@ export const ROUTE_REF: Routes = [
     data: { requiresAuth: false }, // Only guests
   },
   {
+    path: 'article',
+    loadChildren: () =>
+      import('@modules/article/article.module').then(m => m.ArticleModule),
+    canActivate: [AccessGuard],
+    data: { requiresAuth: true }, // Require login
+  },
+  {
     path: '**',
     loadComponent: () =>
       import('@pages/not-found/not-found.component').then(
