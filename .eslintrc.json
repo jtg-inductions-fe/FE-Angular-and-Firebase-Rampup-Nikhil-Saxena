@@ -27,13 +27,28 @@
           1,
           {
             "groups": [
-              "external",
-              "builtin",
-              "internal",
-              "sibling",
-              "parent",
-              "index"
+              "builtin", // Node.js built-ins
+              "external", // Angular and third-party packages
+              "internal", // Aliased paths or internal libraries
+              ["parent", "sibling", "index"] // Relative imports
             ],
+            "pathGroups": [
+              {
+                "pattern": "@angular/**",
+                "group": "external",
+                "position": "before"
+              },
+              {
+                "pattern": "rxjs",
+                "group": "external",
+                "position": "after"
+              },
+              {
+                "pattern": "@app/**",
+                "group": "internal"
+              }
+            ],
+            "pathGroupsExcludedImportTypes": ["builtin"],
             "alphabetize": { "order": "asc", "caseInsensitive": true },
             "newlines-between": "always"
           }
