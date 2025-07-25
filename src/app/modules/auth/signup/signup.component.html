@@ -15,15 +15,17 @@
             type="text"
             placeholder="Enter your username" />
         </mat-form-field>
-        <ng-container
-          *ngTemplateOutlet="
-            errorTemplate;
-            context: {
-              control: signupForm.get('username'),
-              fieldName: 'Username',
-            }
-          ">
-        </ng-container>
+        <div class="signup__error-container">
+          <ng-container
+            *ngTemplateOutlet="
+              errorTemplate;
+              context: {
+                control: signupForm.get('username'),
+                fieldName: 'Username',
+              }
+            ">
+          </ng-container>
+        </div>
       </div>
 
       <!-- Email -->
@@ -38,15 +40,17 @@
             type="email"
             placeholder="Enter your email" />
         </mat-form-field>
-        <ng-container
-          *ngTemplateOutlet="
-            errorTemplate;
-            context: {
-              control: signupForm.get('email'),
-              fieldName: 'Email',
-            }
-          ">
-        </ng-container>
+        <div class="signup__error-container">
+          <ng-container
+            *ngTemplateOutlet="
+              errorTemplate;
+              context: {
+                control: signupForm.get('email'),
+                fieldName: 'Email',
+              }
+            ">
+          </ng-container>
+        </div>
       </div>
 
       <!-- Password -->
@@ -70,15 +74,17 @@
             <mat-icon>{{ hide() ? 'visibility_off' : 'visibility' }}</mat-icon>
           </button>
         </mat-form-field>
-        <ng-container
-          *ngTemplateOutlet="
-            errorTemplate;
-            context: {
-              control: signupForm.get('password'),
-              fieldName: 'Password',
-            }
-          ">
-        </ng-container>
+        <div class="signup__error-container">
+          <ng-container
+            *ngTemplateOutlet="
+              errorTemplate;
+              context: {
+                control: signupForm.get('password'),
+                fieldName: 'Password',
+              }
+            ">
+          </ng-container>
+        </div>
       </div>
 
       <!-- Confirm Password -->
@@ -102,15 +108,17 @@
             <mat-icon>{{ hide() ? 'visibility_off' : 'visibility' }}</mat-icon>
           </button>
         </mat-form-field>
-        <ng-container
-          *ngTemplateOutlet="
-            errorTemplate;
-            context: {
-              control: signupForm.get('confirmPassword'),
-              fieldName: 'Confirm Password',
-            }
-          ">
-        </ng-container>
+        <div class="signup__error-container">
+          <ng-container
+            *ngTemplateOutlet="
+              errorTemplate;
+              context: {
+                control: signupForm.get('confirmPassword'),
+                fieldName: 'Confirm Password',
+              }
+            ">
+          </ng-container>
+        </div>
       </div>
 
       <!-- Success / Error Message -->
@@ -136,32 +144,40 @@
 
     <p class="signup__footer">
       Already have an account?
-      <a routerLink="/auth/login" class="signup__link">Login</a>
+      <a routerLink="/auth/signup" class="signup__link">signup</a>
     </p>
   </mat-card>
 
   <!-- Reusable Error Template -->
   <ng-template #errorTemplate let-control="control" let-fieldName="fieldName">
     <div class="signup__error" *ngIf="control?.touched">
-      <mat-error *ngIf="control?.errors?.['required']; else checkEmail">
+      <mat-error
+        class="signup__error-text"
+        *ngIf="control?.errors?.['required']; else checkEmail">
         {{ fieldName }} is required
       </mat-error>
 
       <ng-template #checkEmail>
-        <mat-error *ngIf="control?.errors?.['email']; else checkMinLength">
+        <mat-error
+          class="signup__error-text"
+          *ngIf="control?.errors?.['email']; else checkMinLength">
           Please enter a valid email address
         </mat-error>
       </ng-template>
 
       <ng-template #checkMinLength>
-        <mat-error *ngIf="control?.errors?.['minlength']; else checkPattern">
+        <mat-error
+          class="signup__error-text"
+          *ngIf="control?.errors?.['minlength']; else checkPattern">
           {{ fieldName }} must be at least
           {{ control.errors['minlength']?.requiredLength }} characters
         </mat-error>
       </ng-template>
 
       <ng-template #checkPattern>
-        <mat-error *ngIf="control?.errors?.['pattern']; else checkMismatch">
+        <mat-error
+          class="signup__error-text"
+          *ngIf="control?.errors?.['pattern']; else checkMismatch">
           {{ fieldName }} must include an uppercase, lowercase, and a special
           character
         </mat-error>
@@ -169,6 +185,7 @@
 
       <ng-template #checkMismatch>
         <mat-error
+          class="signup__error-text"
           *ngIf="
             signupForm.errors?.['mismatch'] && fieldName === 'Confirm Password';
             else checkServer
@@ -178,7 +195,9 @@
       </ng-template>
 
       <ng-template #checkServer>
-        <mat-error *ngIf="control?.errors?.['server']">
+        <mat-error
+          class="signup__error-text"
+          *ngIf="control?.errors?.['server']">
           {{ control.errors['server'] }}
         </mat-error>
       </ng-template>

@@ -15,15 +15,17 @@
             type="email"
             placeholder="Enter your email" />
         </mat-form-field>
-        <ng-container
-          *ngTemplateOutlet="
-            errorTemplate;
-            context: {
-              control: loginForm.get('email'),
-              fieldName: 'Email',
-            }
-          ">
-        </ng-container>
+        <div class="login__error-container">
+          <ng-container
+            *ngTemplateOutlet="
+              errorTemplate;
+              context: {
+                control: loginForm.get('email'),
+                fieldName: 'Email',
+              }
+            ">
+          </ng-container>
+        </div>
       </div>
 
       <!-- Password -->
@@ -47,15 +49,17 @@
             <mat-icon>{{ hide() ? 'visibility_off' : 'visibility' }}</mat-icon>
           </button>
         </mat-form-field>
-        <ng-container
-          *ngTemplateOutlet="
-            errorTemplate;
-            context: {
-              control: loginForm.get('password'),
-              fieldName: 'Password',
-            }
-          ">
-        </ng-container>
+        <div class="login__error-container">
+          <ng-container
+            *ngTemplateOutlet="
+              errorTemplate;
+              context: {
+                control: loginForm.get('password'),
+                fieldName: 'Password',
+              }
+            ">
+          </ng-container>
+        </div>
       </div>
 
       <!-- Success / Error Messages -->
@@ -89,13 +93,17 @@
   <ng-template #errorTemplate let-control="control" let-fieldName="fieldName">
     <div class="login__error">
       <ng-container *ngIf="control?.touched">
-        <mat-error *ngIf="control?.errors?.['required']">
+        <mat-error
+          class="login__error-text"
+          *ngIf="control?.errors?.['required']">
           {{ fieldName }} is required
         </mat-error>
-        <mat-error *ngIf="control?.errors?.['email']">
+        <mat-error class="login__error-text" *ngIf="control?.errors?.['email']">
           Please enter a valid email address
         </mat-error>
-        <mat-error *ngIf="control?.errors?.['server']">
+        <mat-error
+          class="login__error-text"
+          *ngIf="control?.errors?.['server']">
           {{ control.errors['server'] }}
         </mat-error>
       </ng-container>
