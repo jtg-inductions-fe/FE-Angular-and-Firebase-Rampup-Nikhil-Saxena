@@ -1,7 +1,8 @@
+import { initializeApp, FirebaseApp } from '@angular/fire/app';
+import { getAuth } from '@angular/fire/auth';
+import { getDatabase } from '@angular/fire/database';
+
 import { environment } from '@environments/environment.dev';
-import { initializeApp, FirebaseApp } from 'firebase/app';
-import { getAuth } from 'firebase/auth';
-import { getStorage } from 'firebase/storage';
 
 export function initializeFirebaseApp(): FirebaseApp {
   if (!environment.firebaseConfig) {
@@ -14,6 +15,6 @@ export function provideFirebaseAuth() {
   return getAuth();
 }
 
-export function provideFirebaseStorage() {
-  return getStorage();
+export function provideFirebaseDatabase() {
+  return getDatabase();
 }

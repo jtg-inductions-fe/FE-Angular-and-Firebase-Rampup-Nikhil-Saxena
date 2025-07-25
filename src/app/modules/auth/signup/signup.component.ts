@@ -1,5 +1,9 @@
-import { Component, inject } from '@angular/core';
-import { signal } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  inject,
+  signal,
+} from '@angular/core';
 import {
   FormGroup,
   FormControl,
@@ -17,6 +21,7 @@ import { NavigationService } from '@services/navigation.services';
   selector: 'app-signup',
   templateUrl: './signup.component.html',
   styleUrls: ['./signup.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SignupComponent {
   private navigate = inject(NavigationService);

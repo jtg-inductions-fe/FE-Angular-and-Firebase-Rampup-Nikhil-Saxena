@@ -27,24 +27,15 @@ import { LocalStorageService } from './local-storage.service';
 export class AuthService {
   private auth = inject(Auth);
   private db = inject(Database);
-  private isAuthenticated = false;
   private localStorage = inject(LocalStorageService);
   private cookieService = inject(CookieService);
 
   // Consider making this method private if only used internally
   private handleTokenCookieSave(tokenCookie: string) {
-    const date = new Date();
-    // expires in 2 days
-    date.setTime(date.getTime() + 2 * 24 * 60 * 60 * 1000);
+    const expirationDate = new Date();
+    expirationDate.setTime(expirationDate.getTime() + 2 * 24 * 60 * 60 * 1000);
 
-    // Set it
-    document.cookie =
-      'Authorization' +
-      '=' +
-      tokenCookie +
-      '; expires=' +
-      date.toUTCString() +
-      '; path=/';
+    this.cookieService.set('Authorization', tokenCookie, expirationDate, '/');
   }
 
   registerUser(
@@ -83,7 +74,6 @@ export class AuthService {
               switchMap((idToken: string) => {
                 this.handleTokenCookieSave(idToken); // Save the actual ID Token
 
-                this.isAuthenticated = true;
                 const userData: AppUser = {
                   uid,
                   email,
@@ -120,7 +110,6 @@ export class AuthService {
         return from(userCredential.user.getIdToken()).pipe(
           switchMap((idToken: string) => {
             this.handleTokenCookieSave(idToken); // Save the actual ID Token
-            this.isAuthenticated = true;
 
             // Get user data from Realtime DB
             return from(get(ref(this.db, `users/${uid}`))).pipe(
@@ -147,9 +136,8 @@ export class AuthService {
   }
 
   logOutUser(): void {
-    this.handleTokenCookieSave('');
+    this.cookieService.delete('Authorization', '/');
     this.localStorage.clearUserData();
-    this.isAuthenticated = false;
   }
 
   getAuthenticationStatus(): boolean {

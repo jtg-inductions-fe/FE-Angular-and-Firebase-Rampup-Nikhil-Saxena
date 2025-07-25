@@ -1,6 +1,6 @@
 import { Component, inject, signal } from '@angular/core';
 import { ChangeDetectionStrategy } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { Validators, FormControl, FormGroup } from '@angular/forms';
 
 import { AuthService } from '@services/auth.services';
 import { NavigationService } from '@services/navigation.services';
@@ -12,13 +12,18 @@ import { NavigationService } from '@services/navigation.services';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class LoginComponent {
-  private fb = inject(FormBuilder);
   private authService = inject(AuthService);
   private navigate = inject(NavigationService);
 
-  loginForm: FormGroup = this.fb.group({
-    email: ['', [Validators.required, Validators.email]],
-    password: ['', [Validators.required]],
+  loginForm = new FormGroup({
+    email: new FormControl<string>('', {
+      nonNullable: true,
+      validators: [Validators.required, Validators.email],
+    }),
+    password: new FormControl<string>('', {
+      nonNullable: true,
+      validators: [Validators.required],
+    }),
   });
 
   errorMessage: string | null = null;
@@ -26,6 +31,7 @@ export class LoginComponent {
   isSubmitting = false;
 
   hide = signal(true);
+
   clickEvent(event: MouseEvent) {
     this.hide.set(!this.hide());
     event.stopPropagation();
@@ -67,8 +73,7 @@ export class LoginComponent {
     this.email?.setErrors(null);
     this.password?.setErrors(null);
 
-    const errorStr = String(errorCode); // Typecast to string
-    console.log(errorStr);
+    const errorStr = String(errorCode);
 
     if (
       errorStr.includes('auth/user-not-found') ||

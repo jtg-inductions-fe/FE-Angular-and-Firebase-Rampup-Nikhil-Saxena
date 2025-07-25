@@ -25,6 +25,15 @@
   }
 }
 
+/// Flexbox Layout Mixin
+/// Creates a flex container with configurable properties.
+///
+/// @param {String} $direction   - Flex direction (row, column, etc.)
+/// @param {String} $justify     - Justify-content value (default: flex-start)
+/// @param {String} $align       - Align-items value (default: flex-start)
+/// @param {String} $gap         - Gap between flex items (default: 0)
+/// @param {String} $wrap        - Flex-wrap value (default: nowrap)
+///
 @mixin flex(
   $direction,
   $justify: flex-start,

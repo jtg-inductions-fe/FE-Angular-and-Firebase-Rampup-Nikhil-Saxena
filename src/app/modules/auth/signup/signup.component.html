@@ -142,32 +142,46 @@
 
   <!-- Reusable Error Template -->
   <ng-template #errorTemplate let-control="control" let-fieldName="fieldName">
-    <div class="signup__error">
-      <ng-container *ngIf="control?.touched">
-        <mat-error *ngIf="control?.errors?.['required']">
-          {{ fieldName }} is required
-        </mat-error>
-        <mat-error *ngIf="control?.errors?.['email']">
+    <div class="signup__error" *ngIf="control?.touched">
+      <mat-error *ngIf="control?.errors?.['required']; else checkEmail">
+        {{ fieldName }} is required
+      </mat-error>
+
+      <ng-template #checkEmail>
+        <mat-error *ngIf="control?.errors?.['email']; else checkMinLength">
           Please enter a valid email address
         </mat-error>
-        <mat-error *ngIf="control?.errors?.['minlength']">
+      </ng-template>
+
+      <ng-template #checkMinLength>
+        <mat-error *ngIf="control?.errors?.['minlength']; else checkPattern">
           {{ fieldName }} must be at least
-          {{ control.errors['minlength'].requiredLength }} characters
+          {{ control.errors['minlength']?.requiredLength }} characters
         </mat-error>
-        <mat-error *ngIf="control?.errors?.['pattern']">
+      </ng-template>
+
+      <ng-template #checkPattern>
+        <mat-error *ngIf="control?.errors?.['pattern']; else checkMismatch">
           {{ fieldName }} must include an uppercase, lowercase, and a special
           character
         </mat-error>
+      </ng-template>
+
+      <ng-template #checkMismatch>
         <mat-error
           *ngIf="
-            signupForm.errors?.['mismatch'] && fieldName === 'Confirm Password'
+            signupForm.errors?.['mismatch'] && fieldName === 'Confirm Password';
+            else checkServer
           ">
           Passwords do not match
         </mat-error>
+      </ng-template>
+
+      <ng-template #checkServer>
         <mat-error *ngIf="control?.errors?.['server']">
           {{ control.errors['server'] }}
         </mat-error>
-      </ng-container>
+      </ng-template>
     </div>
   </ng-template>
 </div>
