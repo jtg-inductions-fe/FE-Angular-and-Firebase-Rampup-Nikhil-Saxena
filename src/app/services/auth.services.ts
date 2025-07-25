@@ -20,6 +20,7 @@ import { CookieService } from 'ngx-cookie-service';
 import { from, switchMap, catchError, throwError, Observable } from 'rxjs';
 
 import { LocalStorageService } from './local-storage.service';
+import { NavigationService } from './navigation.services';
 
 @Injectable({
   providedIn: 'root',
@@ -29,6 +30,7 @@ export class AuthService {
   private db = inject(Database);
   private localStorage = inject(LocalStorageService);
   private cookieService = inject(CookieService);
+  private navigate = inject(NavigationService);
 
   // Consider making this method private if only used internally
   private handleTokenCookieSave(tokenCookie: string) {
@@ -138,6 +140,7 @@ export class AuthService {
   logOutUser(): void {
     this.cookieService.delete('Authorization', '/');
     this.localStorage.clearUserData();
+    this.navigate.handleNavigation('/auth/login');
   }
 
   getAuthenticationStatus(): boolean {
