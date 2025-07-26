@@ -1,15 +1,15 @@
 import { NgModule } from '@angular/core';
 import { provideFirebaseApp } from '@angular/fire/app';
 import { provideAuth } from '@angular/fire/auth';
-import { provideDatabase } from '@angular/fire/database';
+import { provideFirestore } from '@angular/fire/firestore';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { RouterModule, RouterOutlet } from '@angular/router';
 
-import { provideFirebaseDatabase } from '@core/firebase/firebase.config';
 import {
   initializeFirebaseApp,
   provideFirebaseAuth,
+  provideFirestore as provideCustomFirestore,
 } from '@core/firebase/firebase.config';
 
 import { AppComponent } from './app.component';
@@ -26,7 +26,7 @@ import { routes } from './app.routes';
   providers: [
     provideFirebaseApp(() => initializeFirebaseApp()),
     provideAuth(() => provideFirebaseAuth()),
-    provideDatabase(() => provideFirebaseDatabase()),
+    provideFirestore(() => provideCustomFirestore()),
   ],
   bootstrap: [AppComponent],
 })

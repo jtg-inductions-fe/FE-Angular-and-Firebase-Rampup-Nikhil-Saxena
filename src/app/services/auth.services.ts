@@ -6,13 +6,13 @@ import {
   signInWithEmailAndPassword,
 } from '@angular/fire/auth';
 import {
-  Database,
-  ref,
-  set,
-  get,
-  child,
-  DataSnapshot,
-} from '@angular/fire/database';
+  Firestore,
+  doc,
+  getDoc,
+  setDoc,
+  collection,
+  getDocs,
+} from '@angular/fire/firestore';
 
 import { User as AppUser } from '@core/models/user.model';
 import { CookieService } from 'ngx-cookie-service';
@@ -27,54 +27,55 @@ import { NavigationService } from './navigation.services';
 })
 export class AuthService {
   private auth = inject(Auth);
-  private db = inject(Database);
+  private firestore = inject(Firestore);
   private localStorage = inject(LocalStorageService);
   private cookieService = inject(CookieService);
   private navigate = inject(NavigationService);
 
-  // Consider making this method private if only used internally
+  /**
+   * Saves the Firebase ID token in a cookie with 2-day expiration.
+   * @param tokenCookie - Firebase Auth token.
+   */
   private handleTokenCookieSave(tokenCookie: string) {
     const expirationDate = new Date();
     expirationDate.setTime(expirationDate.getTime() + 2 * 24 * 60 * 60 * 1000);
-
     this.cookieService.set('Authorization', tokenCookie, expirationDate, '/');
   }
 
+  /**
+   * Registers a new user if the email is not already taken.
+   * Saves the user info in Firestore and stores auth token in cookie.
+   * @param email - User email.
+   * @param password - User password.
+   * @param username - Username to associate with account.
+   * @returns Observable of UserCredential on success.
+   */
   registerUser(
     email: string,
     password: string,
     username: string
   ): Observable<UserCredential> {
-    // Explicitly define return type as Observable
-    const dbRef = ref(this.db);
+    return from(getDocs(collection(this.firestore, 'users'))).pipe(
+      switchMap(snapshot => {
+        const userExists = snapshot.docs.some(
+          document => (document.data() as AppUser).email === email
+        );
 
-    // Check if email already exists in DB
-    return from(get(child(dbRef, 'users'))).pipe(
-      switchMap((snapshot: DataSnapshot) => {
-        if (snapshot.exists()) {
-          const users = snapshot.val();
-          const userExists = (Object.values(users) as AppUser[]).some(
-            user => user.email === email
+        if (userExists) {
+          return throwError(
+            () => new Error('User with this email already exists.')
           );
-
-          if (userExists) {
-            const errorMsg =
-              'User with this email already exists in the database.';
-            return throwError(() => new Error(errorMsg));
-          }
         }
 
-        // Create Firebase Auth user
         return from(
           createUserWithEmailAndPassword(this.auth, email, password)
         ).pipe(
           switchMap((userCredential: UserCredential) => {
             const { uid } = userCredential.user;
 
-            // Get the Firebase ID Token (JWT) using getIdToken()
             return from(userCredential.user.getIdToken()).pipe(
               switchMap((idToken: string) => {
-                this.handleTokenCookieSave(idToken); // Save the actual ID Token
+                this.handleTokenCookieSave(idToken);
 
                 const userData: AppUser = {
                   uid,
@@ -85,45 +86,43 @@ export class AuthService {
 
                 this.localStorage.setUserData(userData);
 
-                // Save user data to Realtime DB
-                return from(set(ref(this.db, `users/${uid}`), userData)).pipe(
-                  // After setting, we complete the Observable with the original userCredential
-                  switchMap(() => from([userCredential])) // Wrap userCredential in 'from' to make it an Observable
-                );
+                return from(
+                  setDoc(doc(this.firestore, 'users', uid), userData)
+                ).pipe(switchMap(() => from([userCredential])));
               })
             );
           })
         );
       }),
-      catchError(error => {
-        // It's good practice to re-throw the error as an Observable
-        return throwError(() => error);
-      })
+      catchError(error => throwError(() => error))
     );
   }
 
+  /**
+   * Authenticates the user with email and password.
+   * Retrieves user data from Firestore and saves token in cookie.
+   * @param email - User email.
+   * @param password - User password.
+   * @returns Observable of the authenticated AppUser.
+   */
   loginUser(email: string, password: string): Observable<AppUser> {
-    // Explicitly define return type
     return from(signInWithEmailAndPassword(this.auth, email, password)).pipe(
       switchMap((userCredential: UserCredential) => {
-        const { uid } = userCredential.user; // Destructure email directly
+        const { uid } = userCredential.user;
 
-        // Get the Firebase ID Token (JWT) using getIdToken()
         return from(userCredential.user.getIdToken()).pipe(
           switchMap((idToken: string) => {
-            this.handleTokenCookieSave(idToken); // Save the actual ID Token
+            this.handleTokenCookieSave(idToken);
 
-            // Get user data from Realtime DB
-            return from(get(ref(this.db, `users/${uid}`))).pipe(
-              switchMap((snapshot: DataSnapshot) => {
+            return from(getDoc(doc(this.firestore, 'users', uid))).pipe(
+              switchMap(snapshot => {
                 if (snapshot.exists()) {
-                  const userData = snapshot.val() as AppUser;
+                  const userData = snapshot.data() as AppUser;
                   this.localStorage.setUserData(userData);
-                  // Ensure 'uid' and 'email' are present in the returned user data if not directly from DB
                   return from([{ ...userData, uid, email }]);
                 } else {
                   return throwError(
-                    () => new Error('User data not found in database.')
+                    () => new Error('User data not found in Firestore.')
                   );
                 }
               })
@@ -131,19 +130,25 @@ export class AuthService {
           })
         );
       }),
-      catchError(error => {
-        return throwError(() => error);
-      })
+      catchError(error => throwError(() => error))
     );
   }
 
+  /**
+   * Logs out the user by removing auth cookie and clearing local storage.
+   * Navigates to the login page.
+   */
   logOutUser(): void {
     this.cookieService.delete('Authorization', '/');
     this.localStorage.clearUserData();
     this.navigate.handleNavigation('/auth/login');
   }
 
+  /**
+   * Checks whether an auth token cookie is present to determine authentication.
+   * @returns Boolean indicating authentication status.
+   */
   getAuthenticationStatus(): boolean {
-    return this.cookieService.get('Authorization') != '';
+    return this.cookieService.get('Authorization') !== '';
   }
 }

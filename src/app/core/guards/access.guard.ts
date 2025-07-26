@@ -3,6 +3,18 @@ import { CanActivateFn, ActivatedRouteSnapshot, Router } from '@angular/router';
 
 import { AuthService } from '@services/auth.services';
 
+/**
+ * Route guard to control access based on authentication status.
+ *
+ * It checks if the route requires authentication and whether the user is authenticated,
+ * and redirects accordingly.
+ *
+ * - If `requiresAuth` is true and the user is not authenticated, redirects to `/auth/login`.
+ * - If `requiresAuth` is false and the user *is* authenticated, redirects to the home page `/`.
+ *
+ * @param route The current route snapshot containing route metadata.
+ * @returns `true` if access is allowed, `false` otherwise (after redirect).
+ */
 export const accessGuard: CanActivateFn = (route: ActivatedRouteSnapshot) => {
   const authService = inject(AuthService);
   const router = inject(Router);

@@ -1,5 +1,6 @@
 import { Component, inject, signal } from '@angular/core';
 import { ChangeDetectionStrategy } from '@angular/core';
+import { ViewEncapsulation } from '@angular/core';
 import { Validators, FormControl, FormGroup } from '@angular/forms';
 
 import { AuthService } from '@services/auth.services';
@@ -10,6 +11,7 @@ import { NavigationService } from '@services/navigation.services';
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  encapsulation: ViewEncapsulation.None,
 })
 export class LoginComponent {
   private authService = inject(AuthService);
@@ -30,7 +32,7 @@ export class LoginComponent {
   successMessage: string | null = null;
   isSubmitting = false;
 
-  hide = signal(true);
+  hide = signal<boolean>(true);
 
   clickEvent(event: MouseEvent) {
     this.hide.set(!this.hide());
@@ -56,8 +58,8 @@ export class LoginComponent {
     const { email, password } = this.loginForm.getRawValue();
 
     this.authService.loginUser(email, password).subscribe({
-      next: userCredential => {
-        this.successMessage = `Successfully Logged In ${userCredential.email}`;
+      next: user => {
+        this.successMessage = `Successfully Logged In ${user.email}`;
         this.isSubmitting = false;
         this.navigate.handleNavigation('/');
       },
@@ -69,19 +71,22 @@ export class LoginComponent {
     });
   }
 
-  private handleFirebaseError(errorCode: string) {
+  private handleFirebaseError(error: unknown) {
     this.email?.setErrors(null);
     this.password?.setErrors(null);
 
-    const errorStr = String(errorCode);
+    const errorStr = String(error);
 
     if (
       errorStr.includes('auth/user-not-found') ||
+      errorStr.includes('auth/wrong-password') ||
       errorStr.includes('auth/invalid-credential')
     ) {
       this.errorMessage = 'Invalid email or password.';
     } else if (errorStr.includes('auth/too-many-requests')) {
       this.errorMessage = 'Too many failed attempts. Try again later.';
+    } else if (errorStr.includes('User data not found in database')) {
+      this.errorMessage = 'Account does not exist or was deleted.';
     } else {
       this.errorMessage = 'Login failed. Please try again.';
     }

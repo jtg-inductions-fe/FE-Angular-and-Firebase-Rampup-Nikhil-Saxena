@@ -3,6 +3,7 @@ import {
   Component,
   inject,
   signal,
+  ViewEncapsulation,
 } from '@angular/core';
 import {
   FormGroup,
@@ -10,10 +11,10 @@ import {
   Validators,
   ValidatorFn,
   AbstractControl,
+  ValidationErrors,
 } from '@angular/forms';
-import { ValidationErrors } from '@angular/forms';
 
-import { emailRegex } from '@core/constants/constants';
+import { passwordRegex } from '@core/constants/constants';
 import { AuthService } from '@services/auth.services';
 import { NavigationService } from '@services/navigation.services';
 
@@ -22,6 +23,7 @@ import { NavigationService } from '@services/navigation.services';
   templateUrl: './signup.component.html',
   styleUrls: ['./signup.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  encapsulation: ViewEncapsulation.None,
 })
 export class SignupComponent {
   private navigate = inject(NavigationService);
@@ -31,20 +33,20 @@ export class SignupComponent {
   errorMessage: string | null = null;
   successMessage: string | null = null;
 
-  hide = signal(true);
+  hide = signal<boolean>(true);
   clickEvent(event: MouseEvent) {
     this.hide.set(!this.hide());
     event.stopPropagation();
   }
 
-  signupForm: FormGroup = new FormGroup(
+  signupForm = new FormGroup(
     {
       username: new FormControl('', [Validators.required]),
       email: new FormControl('', [Validators.required, Validators.email]),
       password: new FormControl('', [
         Validators.required,
         Validators.minLength(8),
-        Validators.pattern(emailRegex),
+        Validators.pattern(passwordRegex),
       ]),
       confirmPassword: new FormControl('', [Validators.required]),
     },
@@ -84,6 +86,7 @@ export class SignupComponent {
     this.successMessage = null;
 
     const { email, password, username } = this.signupForm.getRawValue();
+    if (!email || !password || !username) return;
 
     this.authService.registerUser(email, password, username).subscribe({
       next: userCredential => {
@@ -99,18 +102,20 @@ export class SignupComponent {
     });
   }
 
-  private handleFirebaseError(errorCode: string) {
+  private handleFirebaseError(error: unknown) {
     this.email?.setErrors(null);
     this.password?.setErrors(null);
     this.confirmPassword?.setErrors(null);
 
-    const errorStr = String(errorCode); // Typecast to string
+    const errorStr = String(error);
 
     if (
       errorStr.includes('already exists') ||
       errorStr.includes('email-already-in-use')
     ) {
       this.errorMessage = 'Email Already in use. Please try Log In';
+    } else if (errorStr.includes('weak-password')) {
+      this.errorMessage = 'Password should be at least 6 characters';
     } else {
       this.errorMessage = 'An unexpected error occurred. Please try again.';
     }
