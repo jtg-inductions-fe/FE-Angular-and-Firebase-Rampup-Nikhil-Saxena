@@ -1,10 +1,10 @@
 // Firebase initialization and service providers for AngularFire
 
 import { initializeApp, FirebaseApp } from '@angular/fire/app';
-import { getAuth } from '@angular/fire/auth';
-import { getFirestore } from '@angular/fire/firestore';
+import { getAuth, Auth } from '@angular/fire/auth';
+import { getFirestore, Firestore } from '@angular/fire/firestore';
 
-import { environment } from '@environments/environment.dev';
+import { ENVIRONMENT } from '@environments/environment.dev';
 
 /**
  * Initializes the Firebase App instance using the configuration
@@ -14,10 +14,10 @@ import { environment } from '@environments/environment.dev';
  * @throws {Error} If the Firebase config is missing.
  */
 export function initializeFirebaseApp(): FirebaseApp {
-  if (!environment.firebaseConfig) {
+  if (!ENVIRONMENT.firebaseConfig) {
     throw new Error('Firebase config is missing from environment.ts');
   }
-  return initializeApp(environment.firebaseConfig);
+  return initializeApp(ENVIRONMENT.firebaseConfig);
 }
 
 /**
@@ -25,7 +25,7 @@ export function initializeFirebaseApp(): FirebaseApp {
  *
  * @returns {Auth} The Firebase Authentication instance.
  */
-export function provideFirebaseAuth() {
+export function provideFirebaseAuth(): Auth {
   return getAuth();
 }
 
@@ -34,6 +34,6 @@ export function provideFirebaseAuth() {
  *
  * @returns {Firestore} The Firestore instance.
  */
-export function provideFirestore() {
+export function provideFirestore(): Firestore {
   return getFirestore();
 }

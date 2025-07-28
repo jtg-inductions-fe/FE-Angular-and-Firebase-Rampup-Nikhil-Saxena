@@ -16,6 +16,12 @@ $warn: mat.define-palette(mat.$red-palette);
 $primary-color: get-palette-color($primary, 600);
 $primary-color-dark: get-palette-color($primary, 900);
 
+// Warn Color
+$warn-color: get-palette-color($warn, 600);
+
+// Accent Color
+$accent-color: get-palette-color($warn, 600);
+
 // White
 $white: #ffffff;
 

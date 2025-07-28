@@ -1,13 +1,16 @@
-<div class="login">
-  <mat-card class="login__card">
-    <h2 class="login__title">Log In</h2>
+<div class="auth-card">
+  <mat-card class="auth-card__card">
+    <h2 class="auth-card__title">Log In</h2>
 
-    <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" class="login__form">
+    <form
+      [formGroup]="loginForm"
+      (ngSubmit)="onSubmit()"
+      class="auth-card__form">
       <!-- Email -->
-      <div class="login__field-wrapper">
+      <div class="auth-card__field-wrapper">
         <mat-form-field
           appearance="outline"
-          class="login__field login__field--full-width">
+          class="auth-card__field auth-card__field--full-width">
           <mat-label>Email</mat-label>
           <input
             matInput
@@ -15,7 +18,7 @@
             type="email"
             placeholder="Enter your email" />
         </mat-form-field>
-        <div class="login__error-container">
+        <div class="auth-card__error-container">
           <ng-container
             *ngTemplateOutlet="
               errorTemplate;
@@ -29,15 +32,15 @@
       </div>
 
       <!-- Password -->
-      <div class="login__field-wrapper">
+      <div class="auth-card__field-wrapper">
         <mat-form-field
           appearance="outline"
-          class="login__field login__field--full-width">
+          class="auth-card__field auth-card__field--full-width">
           <mat-label>Password</mat-label>
           <input
             matInput
             formControlName="password"
-            [type]="hide() ? 'password' : 'text'"
+            [type]="hidePassword() ? 'password' : 'text'"
             placeholder="Enter your password" />
           <button
             mat-icon-button
@@ -45,11 +48,13 @@
             type="button"
             (click)="clickEvent($event)"
             [attr.aria-label]="'Hide password'"
-            [attr.aria-pressed]="hide()">
-            <mat-icon>{{ hide() ? 'visibility_off' : 'visibility' }}</mat-icon>
+            [attr.aria-pressed]="hidePassword()">
+            <mat-icon>{{
+              hidePassword() ? 'visibility_off' : 'visibility'
+            }}</mat-icon>
           </button>
         </mat-form-field>
-        <div class="login__error-container">
+        <div class="auth-card__error-container">
           <ng-container
             *ngTemplateOutlet="
               errorTemplate;
@@ -62,47 +67,39 @@
         </div>
       </div>
 
-      <!-- Success / Error Messages -->
-      <div
-        class="login__message login__message--success"
-        *ngIf="successMessage">
-        {{ successMessage }}
-      </div>
-      <div class="login__message login__message--error" *ngIf="errorMessage">
-        {{ errorMessage }}
-      </div>
-
       <!-- Submit Button -->
       <button
         mat-raised-button
         color="primary"
         type="submit"
-        [disabled]="loginForm.invalid || isSubmitting"
-        class="login__button">
+        [disabled]="loginForm.invalid || isSubmitting()"
+        class="auth-card__button">
         Log In
       </button>
     </form>
 
-    <p class="login__footer">
+    <p class="auth-card__footer">
       Don't have an account?
-      <a routerLink="/auth/signup" class="login__link">Signup</a>
+      <a routerLink="/auth/signup" class="auth-card__link">Signup</a>
     </p>
   </mat-card>
 
   <!-- Shared Error Template -->
   <ng-template #errorTemplate let-control="control" let-fieldName="fieldName">
-    <div class="login__error">
+    <div class="auth-card__error">
       <ng-container *ngIf="control?.touched">
         <mat-error
-          class="login__error-text"
+          class="auth-card__error-text"
           *ngIf="control?.errors?.['required']">
           {{ fieldName }} is required
         </mat-error>
-        <mat-error class="login__error-text" *ngIf="control?.errors?.['email']">
+        <mat-error
+          class="auth-card__error-text"
+          *ngIf="control?.errors?.['email']">
           Please enter a valid email address
         </mat-error>
         <mat-error
-          class="login__error-text"
+          class="auth-card__error-text"
           *ngIf="control?.errors?.['server']">
           {{ control.errors['server'] }}
         </mat-error>

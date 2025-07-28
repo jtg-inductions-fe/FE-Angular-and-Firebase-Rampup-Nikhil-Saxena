@@ -1,6 +1,7 @@
 import { Environment } from './environment.model';
 
-export const environment: Environment = {
+
+export const ENVIRONMENT: Environment = {
   production: false,
   firebaseConfig: {
     databaseURL:

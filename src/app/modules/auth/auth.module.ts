@@ -1,4 +1,3 @@
-export class AuthModule {}
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
@@ -8,7 +7,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 
-import { AuthService } from 'app/services/auth.services';
+import { AuthService } from '@services/auth.services';
 
 import { AuthenticationRoutingModule } from './auth-routing.module';
 import { LoginComponent } from './login/login.component';
@@ -19,7 +18,6 @@ import { SignupComponent } from './signup/signup.component';
   imports: [
     CommonModule,
     AuthenticationRoutingModule,
-    CommonModule,
     MatFormFieldModule,
     ReactiveFormsModule,
     MatInputModule,
@@ -29,4 +27,4 @@ import { SignupComponent } from './signup/signup.component';
   ],
   providers: [AuthService],
 })
-export class AuthenticationModule {}
+export class AuthModule {}

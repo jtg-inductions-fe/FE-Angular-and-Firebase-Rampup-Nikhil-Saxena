@@ -1,6 +1,6 @@
 @use 'sass:math';
 @use 'sass:map';
-@use './base/variables' as var;
+@use 'base/variables' as var;
 
 @function pxToRem($px, $base: 16) {
   @return math.div($px, $base) * 1rem;

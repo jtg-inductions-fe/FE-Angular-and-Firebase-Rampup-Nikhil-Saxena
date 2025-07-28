@@ -1,6 +1,6 @@
 import { Environment } from './environment.model';
 
-export const environment:Environment = {
+export const ENVIRONMENT:Environment = {
   production: true,
   firebaseConfig: {
     apiKey: process.env['NG_APP_API_KEY'],

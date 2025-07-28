@@ -78,10 +78,10 @@ export class AuthService {
                 this.handleTokenCookieSave(idToken);
 
                 const userData: AppUser = {
-                  uid,
+                  userId: uid,
                   email,
                   username,
-                  createdAt: new Date().toISOString(),
+                  createdAt: new Date(),
                 };
 
                 this.localStorage.setUserData(userData);

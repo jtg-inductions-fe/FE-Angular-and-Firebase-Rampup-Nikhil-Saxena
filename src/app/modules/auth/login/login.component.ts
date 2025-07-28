@@ -5,6 +5,7 @@ import { Validators, FormControl, FormGroup } from '@angular/forms';
 
 import { AuthService } from '@services/auth.services';
 import { NavigationService } from '@services/navigation.services';
+import { SnackbarService } from '@services/snackbar.service';
 
 @Component({
   selector: 'app-login',
@@ -15,7 +16,8 @@ import { NavigationService } from '@services/navigation.services';
 })
 export class LoginComponent {
   private authService = inject(AuthService);
-  private navigate = inject(NavigationService);
+  private navigationService = inject(NavigationService);
+  private snackBarService = inject(SnackbarService);
 
   loginForm = new FormGroup({
     email: new FormControl<string>('', {
@@ -28,14 +30,13 @@ export class LoginComponent {
     }),
   });
 
-  errorMessage: string | null = null;
-  successMessage: string | null = null;
-  isSubmitting = false;
+  errorMessage: string = '';
+  successMessage: string = '';
+  isSubmitting = signal(false);
 
-  hide = signal<boolean>(true);
-
+  hidePassword = signal<boolean>(true);
   clickEvent(event: MouseEvent) {
-    this.hide.set(!this.hide());
+    this.hidePassword.set(!this.hidePassword());
     event.stopPropagation();
   }
 
@@ -50,23 +51,24 @@ export class LoginComponent {
   onSubmit(): void {
     if (this.loginForm.invalid) return;
 
-    this.isSubmitting = true;
+    this.isSubmitting.set(true);
     this.loginForm.disable();
-    this.errorMessage = null;
-    this.successMessage = null;
+    this.errorMessage = '';
+    this.successMessage = '';
 
     const { email, password } = this.loginForm.getRawValue();
 
     this.authService.loginUser(email, password).subscribe({
       next: user => {
         this.successMessage = `Successfully Logged In ${user.email}`;
-        this.isSubmitting = false;
-        this.navigate.handleNavigation('/');
+        this.snackBarService.show(this.successMessage);
+        this.isSubmitting.set(false);
+        this.navigationService.handleNavigation('/');
       },
       error: error => {
         this.handleFirebaseError(error);
         this.loginForm.enable();
-        this.isSubmitting = false;
+        this.isSubmitting.set(false);
       },
     });
   }
@@ -90,5 +92,7 @@ export class LoginComponent {
     } else {
       this.errorMessage = 'Login failed. Please try again.';
     }
+
+    this.snackBarService.show(this.errorMessage);
   }
 }

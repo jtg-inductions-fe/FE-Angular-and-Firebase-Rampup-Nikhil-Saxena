@@ -9,6 +9,6 @@ export class NavigationService {
   private router = inject(Router);
 
   handleNavigation(link: string) {
-    this.router.navigate([`${link}`]);
+    this.router.navigate([link]);
   }
 }

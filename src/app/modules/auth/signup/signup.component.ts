@@ -14,9 +14,10 @@ import {
   ValidationErrors,
 } from '@angular/forms';
 
-import { passwordRegex } from '@core/constants/constants';
+import { PASSWORD_REGEX } from '@core/constants/constants';
 import { AuthService } from '@services/auth.services';
 import { NavigationService } from '@services/navigation.services';
+import { SnackbarService } from '@services/snackbar.service';
 
 @Component({
   selector: 'app-signup',
@@ -26,16 +27,16 @@ import { NavigationService } from '@services/navigation.services';
   encapsulation: ViewEncapsulation.None,
 })
 export class SignupComponent {
-  private navigate = inject(NavigationService);
+  private navigationService = inject(NavigationService);
+  private snackBarService = inject(SnackbarService);
   private authService = inject(AuthService);
 
-  isSubmitting = false;
-  errorMessage: string | null = null;
-  successMessage: string | null = null;
-
-  hide = signal<boolean>(true);
+  isSubmitting = signal<boolean>(false);
+  errorMessage: string = '';
+  successMessage: string = '';
+  hidePassword = signal<boolean>(true);
   clickEvent(event: MouseEvent) {
-    this.hide.set(!this.hide());
+    this.hidePassword.set(!this.hidePassword());
     event.stopPropagation();
   }
 
@@ -46,7 +47,7 @@ export class SignupComponent {
       password: new FormControl('', [
         Validators.required,
         Validators.minLength(8),
-        Validators.pattern(passwordRegex),
+        Validators.pattern(PASSWORD_REGEX),
       ]),
       confirmPassword: new FormControl('', [Validators.required]),
     },
@@ -80,10 +81,10 @@ export class SignupComponent {
   onSubmit(): void {
     if (this.signupForm.invalid) return;
 
-    this.isSubmitting = true;
+    this.isSubmitting.set(true);
     this.signupForm.disable();
-    this.errorMessage = null;
-    this.successMessage = null;
+    this.errorMessage = '';
+    this.successMessage = '';
 
     const { email, password, username } = this.signupForm.getRawValue();
     if (!email || !password || !username) return;
@@ -91,13 +92,14 @@ export class SignupComponent {
     this.authService.registerUser(email, password, username).subscribe({
       next: userCredential => {
         this.successMessage = `Successfully registered ${userCredential.user.email}`;
-        this.isSubmitting = false;
-        this.navigate.handleNavigation('/');
+        this.snackBarService.show(this.successMessage);
+        this.isSubmitting.set(false);
+        this.navigationService.handleNavigation('/');
       },
       error: error => {
         this.handleFirebaseError(error);
         this.signupForm.enable();
-        this.isSubmitting = false;
+        this.isSubmitting.set(false);
       },
     });
   }
@@ -119,5 +121,6 @@ export class SignupComponent {
     } else {
       this.errorMessage = 'An unexpected error occurred. Please try again.';
     }
+    this.snackBarService.show(this.errorMessage);
   }
 }
