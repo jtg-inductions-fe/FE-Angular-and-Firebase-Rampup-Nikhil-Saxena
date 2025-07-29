@@ -95,7 +95,7 @@
   [cardTitle]="articleForm.get('title')?.value"
   [cardContent]="editorValue"
   [username]="username"
-  [lastUpdateDate]="lastUpdatedDate"
+  [lastUpdateDate]="lastUpdatedDate.toISOString()"
   [tags]="tags">
 </app-article-card>
 

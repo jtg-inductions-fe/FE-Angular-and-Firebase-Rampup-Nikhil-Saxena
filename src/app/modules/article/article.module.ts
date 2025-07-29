@@ -9,6 +9,7 @@ import { MatInputModule } from '@angular/material/input';
 
 import { EditorModule } from '@features/rich-editor/text-editor.module';
 import { ImageService } from '@services/image.service';
+import { CustomDatePipe } from '@shared/pipes/custom-date.pipe';
 import { TagInputModule } from 'ngx-chips';
 import { QuillModule } from 'ngx-quill';
 
@@ -17,7 +18,7 @@ import { ArticleRoutingModule } from './article.routing-module';
 import { CreateArticleComponent } from './create-update-article/create-update-article.component';
 
 @NgModule({
-  declarations: [CreateArticleComponent, ArticleCardComponent],
+  declarations: [CreateArticleComponent, ArticleCardComponent, CustomDatePipe],
   imports: [
     CommonModule,
     QuillModule.forRoot(),

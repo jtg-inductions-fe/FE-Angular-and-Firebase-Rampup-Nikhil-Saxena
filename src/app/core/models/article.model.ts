@@ -5,8 +5,8 @@ export class ArticleRequestModel {
   articleImage: string;
   articleContent: string;
   articleTags: string[];
-  lastUpdated: string;
-  createdAt: string;
+  lastUpdated: Date;
+  createdAt: Date;
 
   constructor(
     userId: string,
@@ -15,8 +15,8 @@ export class ArticleRequestModel {
     articleImage: string,
     articleContent: string,
     articleTags: string[],
-    lastUpdated: string,
-    createdAt: string
+    lastUpdated: Date,
+    createdAt: Date
   ) {
     this.userId = userId;
     this.articleUsername = articleUsername;
@@ -40,8 +40,8 @@ export class Article extends ArticleRequestModel {
     articleImage: string,
     articleContent: string,
     articleTags: string[],
-    lastUpdated: string,
-    createdAt: string
+    lastUpdated: Date,
+    createdAt: Date
   ) {
     super(
       userId,

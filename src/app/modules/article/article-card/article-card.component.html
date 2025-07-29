@@ -18,7 +18,9 @@
         alt="User Avatar" />
       <mat-card-subtitle *ngIf="username">by {{ username }}</mat-card-subtitle>
       <span class="article-card__subtitle-spacing"></span>
-      <p class="article-card__last-edited">{{ lastUpdateDate }}</p>
+      <p class="article-card__last-edited">
+        {{ lastUpdateDate | customDate }}
+      </p>
     </mat-card-subtitle>
 
     <div class="article-card__content">

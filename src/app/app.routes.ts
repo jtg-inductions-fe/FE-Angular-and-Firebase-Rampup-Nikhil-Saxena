@@ -5,8 +5,8 @@ import { AccessGuard } from '@core/guards/access.guard';
 export const ROUTE_REF: Routes = [
   {
     path: '',
-    loadComponent: () =>
-      import('@pages/home/home.component').then(m => m.HomeComponent),
+    loadChildren: () =>
+      import('@pages/home/home.module').then(m => m.HomeModule),
     canActivate: [AccessGuard],
     data: { requiresAuth: true }, // Require login
   },

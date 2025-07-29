@@ -6,7 +6,6 @@ import {
   AbstractControl,
   ValidationErrors,
 } from '@angular/forms';
-import { MatSnackBar } from '@angular/material/snack-bar';
 import { ActivatedRoute } from '@angular/router';
 
 import { Article } from '@core/models/article.model';
@@ -14,8 +13,8 @@ import { ArticleService } from '@services/article.service';
 import { ImageService } from '@services/image.service';
 import { LocalStorageService } from '@services/local-storage.service';
 import { NavigationService } from '@services/navigation.services';
+import { SnackbarService } from '@services/snackbar.service';
 import { blogTags } from '@shared/constants/blogTags';
-import { CustomDatePipe } from '@shared/pipes/custom-date.pipe';
 
 @Component({
   selector: 'app-create-article',
@@ -29,7 +28,7 @@ export class CreateArticleComponent implements OnInit {
   private articleService = inject(ArticleService);
   private route = inject(ActivatedRoute);
   private navigationService = inject(NavigationService);
-  private snackBar = inject(MatSnackBar);
+  private snackBarService = inject(SnackbarService);
 
   articleForm!: FormGroup;
 
@@ -38,22 +37,14 @@ export class CreateArticleComponent implements OnInit {
   selectedFileName = '';
   base64Image: string | null = null;
 
-  username: string = '';
-  userId: string = '';
+  username = '';
+  userId = '';
   tags: string[] = [];
-  lastUpdatedDate: string = '';
-  createdAtDate: string = '';
+  lastUpdatedDate = new Date();
+  createdAtDate = new Date();
 
   articleId: string | null = null;
   isEditMode = false;
-
-  resetForm() {
-    this.articleForm.reset();
-    this.editorValue = '';
-    this.tags = [];
-    this.base64Image = '';
-    this.selectedFileName = '';
-  }
 
   ngOnInit(): void {
     this.articleForm = this.fb.group({
@@ -67,11 +58,6 @@ export class CreateArticleComponent implements OnInit {
     this.username = user?.username || '';
     this.userId = user?.userId || '';
 
-    const now = new Date();
-    const pipe = new CustomDatePipe();
-    this.lastUpdatedDate = pipe.transform(now) || '';
-    this.createdAtDate = pipe.transform(now) || '';
-
     this.route.paramMap.subscribe(params => {
       const id = params.get('id');
       if (id) {
@@ -80,6 +66,14 @@ export class CreateArticleComponent implements OnInit {
         this.fetchArticleById(id);
       }
     });
+  }
+
+  resetForm() {
+    this.articleForm.reset();
+    this.editorValue = '';
+    this.tags = [];
+    this.base64Image = '';
+    this.selectedFileName = '';
   }
 
   private tagsValidator(control: AbstractControl): ValidationErrors | null {
@@ -91,13 +85,13 @@ export class CreateArticleComponent implements OnInit {
     this.articleService.getArticleById(id).subscribe({
       next: (article: Article | null) => {
         if (!article) {
-          this.snackBar.open('Article not found.', 'Close');
+          this.snackBarService.show('Article not found.');
           this.navigationService.handleNavigation('/');
           return;
         }
 
         if (article.userId !== this.userId) {
-          this.snackBar.open('Unauthorized access to article.', 'Close');
+          this.snackBarService.show('Unauthorized access to article.');
           this.navigationService.handleNavigation('/');
           return;
         }
@@ -106,16 +100,17 @@ export class CreateArticleComponent implements OnInit {
           title: article.articleTitle,
           titleImage: article.articleImage,
           tags: article.articleTags,
+          editorContent: article.articleContent,
         });
 
         this.editorValue = article.articleContent;
         this.tags = article.articleTags;
         this.base64Image = article.articleImage;
-        this.createdAtDate = article.createdAt;
+        this.createdAtDate = new Date(article.createdAt); // ensure valid date object
       },
       error: err => {
-        this.snackBar.open('Error fetching article.', 'Close');
-        throw new Error(err);
+        this.snackBarService.show('Error fetching article.');
+        console.error(err);
       },
     });
   }
@@ -129,13 +124,11 @@ export class CreateArticleComponent implements OnInit {
         next: result => {
           this.base64Image = result;
           this.articleForm.patchValue({ titleImage: result });
-          this.snackBar.open('Image uploaded successfully.', 'Close', {
-            duration: 2000,
-          });
+          this.snackBarService.show('Image uploaded successfully.');
         },
         error: err => {
-          this.snackBar.open('Image upload failed.', 'Close');
-          throw new Error(err);
+          this.snackBarService.show('Image upload failed.');
+          console.error(err);
         },
       });
     }
@@ -148,63 +141,63 @@ export class CreateArticleComponent implements OnInit {
 
   onSubmit(): void {
     if (this.articleForm.invalid) {
-      this.snackBar.open('Please fill out all required fields.', 'Close', {
-        duration: 3000,
-      });
-      return;
-    }
-
-    if (this.editorValue === '') {
-      this.snackBar.open('Story cannot be empty.', 'Close', {
-        duration: 3000,
-      });
+      this.snackBarService.show('Please fill out all required fields.');
       return;
     }
 
     const formValue = this.articleForm.value;
 
-    const article = new Article(
-      this.userId,
-      this.articleId ?? '',
-      this.username,
-      formValue.title,
-      formValue.titleImage || '',
-      formValue.editorContent,
-      formValue.tags,
-      this.lastUpdatedDate,
-      this.createdAtDate
-    );
-
     if (this.isEditMode && this.articleId) {
-      this.articleService.updateArticle(this.articleId, article).subscribe({
-        next: () => {
-          this.snackBar.open('Article updated successfully.', 'Close');
-          this.resetForm();
-        },
-        error: err => {
-          this.snackBar.open('Failed to update article.', 'Close');
-          throw new Error(err);
-        },
-      });
+      const updatedFields = {
+        articleTitle: formValue.title,
+        articleImage: formValue.titleImage || '',
+        articleContent: formValue.editorContent,
+        articleTags: formValue.tags,
+      };
+
+      this.articleService
+        .updateArticle(this.articleId, updatedFields)
+        .subscribe({
+          next: () => {
+            this.snackBarService.show('Article updated successfully.');
+            this.resetForm();
+            this.navigationService.handleNavigation('/');
+          },
+          error: err => {
+            this.snackBarService.show('Failed to update article.');
+            console.error(err);
+          },
+        });
     } else {
+      const newArticle = new Article(
+        this.userId,
+        Date.now().toString(),
+        this.username,
+        formValue.title,
+        formValue.titleImage || '',
+        formValue.editorContent,
+        formValue.tags,
+        new Date(),
+        new Date()
+      );
+
       this.articleService
         .createArticle(
-          article.articleTitle,
-          article.articleImage,
-          article.articleContent,
-          article.articleTags,
-          article.lastUpdated
+          newArticle.articleTitle,
+          newArticle.articleImage,
+          newArticle.articleContent,
+          newArticle.articleTags,
+          newArticle.lastUpdated
         )
         .subscribe({
           next: () => {
-            this.snackBar.open('Article created successfully.', 'Close', {
-              duration: 3000,
-            });
+            this.snackBarService.show('Article created successfully.');
             this.resetForm();
+            this.navigationService.handleNavigation('/');
           },
           error: err => {
-            this.snackBar.open('Failed to create article.', 'Close');
-            throw new Error(err);
+            this.snackBarService.show('Failed to create article.');
+            console.error(err);
           },
         });
     }
