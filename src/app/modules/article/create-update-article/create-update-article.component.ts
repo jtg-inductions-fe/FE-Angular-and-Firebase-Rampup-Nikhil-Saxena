@@ -108,9 +108,8 @@ export class CreateArticleComponent implements OnInit {
         this.base64Image = article.articleImage;
         this.createdAtDate = new Date(article.createdAt); // ensure valid date object
       },
-      error: err => {
+      error: () => {
         this.snackBarService.show('Error fetching article.');
-        console.error(err);
       },
     });
   }
@@ -126,9 +125,8 @@ export class CreateArticleComponent implements OnInit {
           this.articleForm.patchValue({ titleImage: result });
           this.snackBarService.show('Image uploaded successfully.');
         },
-        error: err => {
+        error: () => {
           this.snackBarService.show('Image upload failed.');
-          console.error(err);
         },
       });
     }
@@ -163,9 +161,8 @@ export class CreateArticleComponent implements OnInit {
             this.resetForm();
             this.navigationService.handleNavigation('/');
           },
-          error: err => {
+          error: () => {
             this.snackBarService.show('Failed to update article.');
-            console.error(err);
           },
         });
     } else {
@@ -195,9 +192,8 @@ export class CreateArticleComponent implements OnInit {
             this.resetForm();
             this.navigationService.handleNavigation('/');
           },
-          error: err => {
+          error: () => {
             this.snackBarService.show('Failed to create article.');
-            console.error(err);
           },
         });
     }
