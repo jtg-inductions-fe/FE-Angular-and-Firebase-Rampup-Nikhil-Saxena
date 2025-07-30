@@ -8,6 +8,7 @@ import { MatIconModule } from '@angular/material/icon';
 
 import { NavigationService } from '@services/navigation.services';
 import { ICellRendererAngularComp } from 'ag-grid-angular';
+import { ICellRendererParams } from 'ag-grid-community';
 
 @Component({
   selector: 'app-actions-buttons-list',
@@ -20,12 +21,10 @@ import { ICellRendererAngularComp } from 'ag-grid-angular';
 })
 export class ActionsButtonsListComponent implements ICellRendererAngularComp {
   private navigationService = inject(NavigationService);
-  //eslint-disable-next-line
-  params: any;
+  params!: ICellRendererParams;
   articleId: string = '';
 
-  //eslint-disable-next-line
-  agInit(params: any): void {
+  agInit(params: ICellRendererParams): void {
     this.params = params;
     this.articleId = params.data.articleId;
   }
