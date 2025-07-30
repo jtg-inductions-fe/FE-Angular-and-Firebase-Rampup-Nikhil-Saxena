@@ -57,7 +57,6 @@
       <div class="create-update__tag-input-container">
         <tag-input
           formControlName="tags"
-          [(ngModel)]="tags"
           [editable]="true"
           [theme]="'custom-theme'"
           secondaryPlaceholder="Tags related to your story"
@@ -95,7 +94,7 @@
   [cardTitle]="articleForm.get('title')?.value"
   [cardContent]="editorValue"
   [username]="username"
-  [lastUpdateDate]="lastUpdatedDate.toISOString()"
+  [lastUpdateDate]="lastUpdatedDate.toString()"
   [tags]="tags">
 </app-article-card>
 

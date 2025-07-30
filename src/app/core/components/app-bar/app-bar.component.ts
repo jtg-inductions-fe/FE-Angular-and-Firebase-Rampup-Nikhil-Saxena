@@ -19,7 +19,6 @@ export class AppBarComponent {
   username = signal('');
   email = signal('');
   profileCardDisplay = signal(false); // This will manage the dropdown visibility
-  isGoodCode = false;
 
   constructor() {
     // Fetch user details from session storage
@@ -29,10 +28,6 @@ export class AppBarComponent {
       this.username.set(userDetails.username);
       this.email.set(userDetails.email);
     }
-  }
-
-  miracle() {
-    this.isGoodCode = true;
   }
 
   // Handle logout

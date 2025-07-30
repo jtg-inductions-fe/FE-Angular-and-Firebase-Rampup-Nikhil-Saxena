@@ -7,9 +7,9 @@ import { Pipe, PipeTransform } from '@angular/core';
  * It returns an empty string for invalid or null values.
  */
 @Pipe({
-  name: 'customDate',
+  name: 'DateTransformPipe',
 })
-export class CustomDatePipe implements PipeTransform {
+export class DateTransformPipe implements PipeTransform {
   /**
    * Transforms a date input into the format "DD Month YYYY", e.g., "28 July 2025".
    *

@@ -1,4 +1,10 @@
-import { Component, inject, OnInit } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  inject,
+  OnInit,
+} from '@angular/core';
+import { Timestamp } from '@angular/fire/firestore';
 import {
   FormBuilder,
   FormGroup,
@@ -8,6 +14,7 @@ import {
 } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 
+import { ArticleTagObjectModel } from '@core/models/article-tag.model';
 import { Article } from '@core/models/article.model';
 import { ArticleService } from '@services/article.service';
 import { ImageService } from '@services/image.service';
@@ -15,11 +22,13 @@ import { LocalStorageService } from '@services/local-storage.service';
 import { NavigationService } from '@services/navigation.services';
 import { SnackbarService } from '@services/snackbar.service';
 import { blogTags } from '@shared/constants/blogTags';
+import { ArticleTagPipe } from '@shared/pipes/article-tags-pipe.pipe';
 
 @Component({
   selector: 'app-create-article',
   templateUrl: './create-update-article.component.html',
   styleUrls: ['./create-update-article.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class CreateArticleComponent implements OnInit {
   private fb = inject(FormBuilder);
@@ -30,6 +39,8 @@ export class CreateArticleComponent implements OnInit {
   private navigationService = inject(NavigationService);
   private snackBarService = inject(SnackbarService);
 
+  articleTagPipe = new ArticleTagPipe();
+
   articleForm!: FormGroup;
 
   autocompleteItems = blogTags;
@@ -39,12 +50,21 @@ export class CreateArticleComponent implements OnInit {
 
   username = '';
   userId = '';
+  title = '';
   tags: string[] = [];
-  lastUpdatedDate = new Date();
-  createdAtDate = new Date();
+  lastUpdatedDate: Timestamp | Date = new Date();
+  createdAtDate: Timestamp | Date = new Date();
 
   articleId: string | null = null;
   isEditMode = false;
+
+  resetForm(): void {
+    this.articleForm.reset();
+    this.editorValue = '';
+    this.tags = [];
+    this.base64Image = '';
+    this.selectedFileName = '';
+  }
 
   ngOnInit(): void {
     this.articleForm = this.fb.group({
@@ -66,14 +86,12 @@ export class CreateArticleComponent implements OnInit {
         this.fetchArticleById(id);
       }
     });
-  }
 
-  resetForm() {
-    this.articleForm.reset();
-    this.editorValue = '';
-    this.tags = [];
-    this.base64Image = '';
-    this.selectedFileName = '';
+    this.articleForm
+      .get('tags')
+      ?.valueChanges.subscribe((newTags: ArticleTagObjectModel[]) => {
+        this.tags = this.articleTagPipe.transform(newTags);
+      });
   }
 
   private tagsValidator(control: AbstractControl): ValidationErrors | null {
@@ -106,7 +124,7 @@ export class CreateArticleComponent implements OnInit {
         this.editorValue = article.articleContent;
         this.tags = article.articleTags;
         this.base64Image = article.articleImage;
-        this.createdAtDate = new Date(article.createdAt); // ensure valid date object
+        this.createdAtDate = article.createdAt;
       },
       error: () => {
         this.snackBarService.show('Error fetching article.');
@@ -150,7 +168,7 @@ export class CreateArticleComponent implements OnInit {
         articleTitle: formValue.title,
         articleImage: formValue.titleImage || '',
         articleContent: formValue.editorContent,
-        articleTags: formValue.tags,
+        articleTags: this.articleTagPipe.transform(formValue.tags),
       };
 
       this.articleService
@@ -173,29 +191,21 @@ export class CreateArticleComponent implements OnInit {
         formValue.title,
         formValue.titleImage || '',
         formValue.editorContent,
-        formValue.tags,
+        this.articleTagPipe.transform(formValue.tags),
         new Date(),
         new Date()
       );
 
-      this.articleService
-        .createArticle(
-          newArticle.articleTitle,
-          newArticle.articleImage,
-          newArticle.articleContent,
-          newArticle.articleTags,
-          newArticle.lastUpdated
-        )
-        .subscribe({
-          next: () => {
-            this.snackBarService.show('Article created successfully.');
-            this.resetForm();
-            this.navigationService.handleNavigation('/');
-          },
-          error: () => {
-            this.snackBarService.show('Failed to create article.');
-          },
-        });
+      this.articleService.createArticle(newArticle).subscribe({
+        next: () => {
+          this.snackBarService.show('Article created successfully.');
+          this.resetForm();
+          this.navigationService.handleNavigation('/');
+        },
+        error: () => {
+          this.snackBarService.show('Failed to create article.');
+        },
+      });
     }
   }
 }

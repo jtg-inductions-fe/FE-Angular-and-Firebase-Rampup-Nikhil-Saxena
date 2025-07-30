@@ -13,6 +13,7 @@ $accent: mat.define-palette(mat.$grey-palette, 600, 300, 900);
 $warn: mat.define-palette(mat.$red-palette);
 
 // Primary Color
+$primary-color-light: get-palette-color($primary, 50);
 $primary-color: get-palette-color($primary, 600);
 $primary-color-dark: get-palette-color($primary, 900);
 

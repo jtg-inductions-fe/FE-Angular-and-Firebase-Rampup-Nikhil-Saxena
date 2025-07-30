@@ -8,9 +8,14 @@ import {
   updateDoc,
   CollectionReference,
   DocumentReference,
+  query,
+  getDocs,
+  where,
+  Timestamp,
 } from '@angular/fire/firestore';
 
 import { Article as AppArticle } from '@core/models/article.model';
+import { DateTimestampPipe } from '@shared/pipes/dateTimestamp.pipe';
 
 import { from, map, Observable } from 'rxjs';
 
@@ -22,9 +27,14 @@ import { LocalStorageService } from './local-storage.service';
 export class ArticleService {
   private firestore = inject(Firestore);
   private localStorage = inject(LocalStorageService);
+  private dateTimestampPipe = new DateTimestampPipe();
 
   private userId = this.localStorage.getLocalStorage()?.userId;
   private username = this.localStorage.getLocalStorage()?.username;
+
+  getTransformedDate(rawDate: Timestamp | Date): Date {
+    return this.dateTimestampPipe.transform(rawDate);
+  }
 
   /**
    * Returns the Firestore collection reference for articles.
@@ -43,13 +53,7 @@ export class ArticleService {
    * @param lastUpdated - Date when the article was last updated
    * @returns An observable emitting the created `AppArticle` object
    */
-  createArticle(
-    articleTitle: string,
-    articleImage: string,
-    articleContent: string,
-    articleTags: string[],
-    lastUpdated: Date
-  ): Observable<AppArticle> {
+  createArticle(article: AppArticle): Observable<AppArticle> {
     if (!this.username || !this.userId) {
       throw new Error('Username or userId is missing.');
     }
@@ -61,11 +65,11 @@ export class ArticleService {
       this.userId,
       articleId,
       this.username,
-      articleTitle,
-      articleImage,
-      articleContent,
-      articleTags,
-      lastUpdated,
+      article.articleTitle,
+      article.articleImage,
+      article.articleContent,
+      article.articleTags,
+      article.lastUpdated,
       createdAt
     );
 
@@ -101,8 +105,8 @@ export class ArticleService {
             data.articleImage,
             data.articleContent,
             data.articleTags,
-            new Date(data.lastUpdated),
-            new Date(data.createdAt)
+            this.getTransformedDate(data.createdAt),
+            this.getTransformedDate(data.lastUpdated)
           );
         }
         return null;
@@ -131,5 +135,72 @@ export class ArticleService {
     };
 
     return from(updateDoc(articleDocRef, updatedData));
+  }
+
+  /**
+   * Get All existing Articles in Firestore
+   * @returns Observable to get Article List.
+   */
+
+  getAllArticle(): Observable<AppArticle[] | null> {
+    const articlesQuery = query(this.articlesCollection);
+    return from(getDocs(articlesQuery)).pipe(
+      map(snapshot => {
+        if (snapshot.empty) {
+          return null;
+        }
+
+        const articles: AppArticle[] = snapshot.docs.map(docSnap => {
+          const data = docSnap.data() as AppArticle;
+
+          return new AppArticle(
+            data.userId,
+            docSnap.id,
+            data.articleUsername,
+            data.articleTitle,
+            data.articleImage,
+            data.articleContent,
+            data.articleTags,
+            this.getTransformedDate(data.createdAt),
+            this.getTransformedDate(data.lastUpdated)
+          );
+        });
+
+        return articles;
+      })
+    );
+  }
+
+  getAllArticlesByUserId(userId: string): Observable<AppArticle[] | null> {
+    const articlesQuery = query(
+      this.articlesCollection,
+      where('userId', '==', userId)
+    );
+
+    return from(getDocs(articlesQuery)).pipe(
+      map(snapshot => {
+        if (snapshot.empty) {
+          return null;
+        }
+
+        const articles: AppArticle[] = snapshot.docs.map(docSnap => {
+          const data = docSnap.data() as AppArticle;
+
+          return new AppArticle(
+            data.userId,
+            docSnap.id,
+            data.articleUsername,
+            data.articleTitle,
+            data.articleImage,
+            data.articleContent,
+            data.articleTags,
+            this.getTransformedDate(data.createdAt),
+            this.getTransformedDate(data.lastUpdated)
+          );
+        });
+
+        return articles;
+      })
+    );
   }
 }

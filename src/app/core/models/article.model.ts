@@ -1,3 +1,5 @@
+import { Timestamp } from '@angular/fire/firestore';
+
 export class ArticleRequestModel {
   userId: string;
   articleUsername: string;
@@ -5,8 +7,8 @@ export class ArticleRequestModel {
   articleImage: string;
   articleContent: string;
   articleTags: string[];
-  lastUpdated: Date;
-  createdAt: Date;
+  lastUpdated: Date | Timestamp;
+  createdAt: Date | Timestamp;
 
   constructor(
     userId: string,
@@ -15,8 +17,8 @@ export class ArticleRequestModel {
     articleImage: string,
     articleContent: string,
     articleTags: string[],
-    lastUpdated: Date,
-    createdAt: Date
+    lastUpdated: Date | Timestamp,
+    createdAt: Date | Timestamp
   ) {
     this.userId = userId;
     this.articleUsername = articleUsername;
@@ -40,8 +42,8 @@ export class Article extends ArticleRequestModel {
     articleImage: string,
     articleContent: string,
     articleTags: string[],
-    lastUpdated: Date,
-    createdAt: Date
+    lastUpdated: Date | Timestamp,
+    createdAt: Date | Timestamp
   ) {
     super(
       userId,

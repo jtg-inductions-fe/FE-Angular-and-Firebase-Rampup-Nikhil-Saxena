@@ -19,7 +19,7 @@
         class="app-bar__dashboard-button"
         mat-raised-button
         color="primary"
-        routerLink="/dashboard">
+        routerLink="/admin/dashboard">
         Dashboard
       </button>
     </div>
@@ -33,7 +33,6 @@
         alt="User avatar"
         class="app-bar__profile-avatar" />
     </button>
-    <p *ngIf="isGoodCode">Retained in company</p>
     <mat-menu #profileMenu="matMenu" xPosition="before" yPosition="below">
       <div class="app-bar__profile-menu-tooltip"></div>
       <div class="app-bar__profile-menu">
@@ -48,7 +47,7 @@
         <button
           class="app-bar__profile-card-dashboard-button"
           mat-raised-button
-          routerLink="/dashboard">
+          routerLink="/admin/dashboard">
           Dashboard
         </button>
         <button mat-raised-button color="warn" (click)="handleLogout()">

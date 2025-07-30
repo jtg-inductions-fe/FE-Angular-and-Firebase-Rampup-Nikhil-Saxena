@@ -1,3 +1,4 @@
+import { provideHttpClient } from '@angular/common/http';
 import { NgModule } from '@angular/core';
 import { provideFirebaseApp } from '@angular/fire/app';
 import { provideAuth } from '@angular/fire/auth';
@@ -28,6 +29,7 @@ import { ROUTE_REF } from './app.routes';
     provideFirebaseApp(() => initializeFirebaseApp()),
     provideAuth(() => provideFirebaseAuth()),
     provideFirestore(() => provideCustomFirestore()),
+    provideHttpClient(),
   ],
   bootstrap: [AppComponent],
 })

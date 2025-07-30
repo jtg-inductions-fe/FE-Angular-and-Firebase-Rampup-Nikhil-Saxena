@@ -25,6 +25,13 @@ export const ROUTE_REF: Routes = [
     data: { requiresAuth: true }, // Require login
   },
   {
+    path: 'admin',
+    loadChildren: () =>
+      import('@modules/admin/admin.module').then(m => m.AdminModule),
+    canActivate: [AccessGuard],
+    data: { requiresAuth: true }, // Require login
+  },
+  {
     path: '**',
     loadComponent: () =>
       import('@pages/not-found/not-found.component').then(

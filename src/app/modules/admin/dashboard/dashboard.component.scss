@@ -1,0 +1,9 @@
+@use 'abstracts/functions' as fun;
+
+.dashboard {
+  &__container {
+    padding: fun.spacing(8) fun.spacing(2);
+    height: 100%;
+    width: 100%;
+  }
+}

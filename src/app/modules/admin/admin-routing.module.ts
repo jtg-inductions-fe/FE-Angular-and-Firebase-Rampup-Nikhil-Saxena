@@ -1,10 +1,12 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 
-const ADMIN_ROUTES: Routes = [];
+import { DashboardComponent } from './dashboard/dashboard.component';
+
+const routes: Routes = [{ path: 'dashboard', component: DashboardComponent }];
 
 @NgModule({
-  imports: [RouterModule.forChild(ADMIN_ROUTES)],
+  imports: [RouterModule.forChild(routes)],
   exports: [RouterModule],
 })
 export class AdminRoutingModule {}

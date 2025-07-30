@@ -1,7 +1,7 @@
-@use '/abstracts/mixins' as mix;
-@use '/base/variables' as var;
-@use '/abstracts/breakpoints' as bps;
-@use '/abstracts/functions' as fun;
+@use 'abstracts/mixins' as mix;
+@use 'base/variables' as var;
+@use 'abstracts/breakpoints' as bps;
+@use 'abstracts/functions' as fun;
 
 .app-bar {
   @include mix.flex(row, space-between, center);
