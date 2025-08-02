@@ -4,6 +4,8 @@ import {
   createUserWithEmailAndPassword,
   UserCredential,
   signInWithEmailAndPassword,
+  onAuthStateChanged,
+  signOut,
 } from '@angular/fire/auth';
 import {
   Firestore,
@@ -17,7 +19,14 @@ import {
 import { User as AppUser } from '@core/models/user.model';
 import { CookieService } from 'ngx-cookie-service';
 
-import { from, switchMap, catchError, throwError, Observable } from 'rxjs';
+import {
+  from,
+  switchMap,
+  catchError,
+  throwError,
+  Observable,
+  BehaviorSubject,
+} from 'rxjs';
 
 import { LocalStorageService } from './local-storage.service';
 import { NavigationService } from './navigation.services';
@@ -31,6 +40,14 @@ export class AuthService {
   private localStorage = inject(LocalStorageService);
   private cookieService = inject(CookieService);
   private navigationService = inject(NavigationService);
+  private authStatus$ = new BehaviorSubject<boolean>(false);
+
+  constructor() {
+    // Initialize auth state listener
+    onAuthStateChanged(this.auth, user => {
+      this.authStatus$.next(!!user);
+    });
+  }
 
   /**
    * Saves the Firebase ID token in a cookie with 2-day expiration.
@@ -139,16 +156,29 @@ export class AuthService {
    * Navigates to the login page.
    */
   logOutUser(): void {
-    this.cookieService.delete('Authorization', '/');
-    this.localStorage.clearUserData();
-    this.navigationService.handleNavigation('/auth/login');
+    signOut(this.auth)
+      .then(() => {
+        this.cookieService.delete('Authorization', '/');
+        this.localStorage.clearUserData();
+        this.navigationService.handleNavigation('/auth/login');
+      })
+      .catch(error => {
+        throwError(() => error);
+      });
   }
 
   /**
-   * Checks whether an auth token cookie is present to determine authentication.
-   * @returns Boolean indicating authentication status.
+   * Returns observable of authentication status
    */
-  getAuthenticationStatus(): boolean {
-    return this.cookieService.get('Authorization') !== '';
+  getAuthenticationStatus(): Observable<boolean> {
+    return this.authStatus$.asObservable();
+  }
+
+  /**
+   * Returns current authentication status as a boolean
+   */
+  getCurrentAuthenticationStatus(): boolean {
+    // return true;
+    return this.authStatus$.value;
   }
 }

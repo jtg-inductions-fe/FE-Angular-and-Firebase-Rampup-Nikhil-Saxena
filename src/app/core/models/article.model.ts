@@ -1,14 +1,17 @@
 import { Timestamp } from '@angular/fire/firestore';
 
+/**
+ * Represents the data required to create or update an article.
+ */
 export class ArticleRequestModel {
-  userId: string;
-  articleUsername: string;
-  articleTitle: string;
-  articleImage: string;
-  articleContent: string;
-  articleTags: string[];
-  lastUpdated: Date | Timestamp;
-  createdAt: Date | Timestamp;
+  userId: string; // ID of the user who created the article
+  articleUsername: string; // Username of the article author
+  articleTitle: string; // Title of the article
+  articleImage: string; // Base64-encoded image or URL
+  articleContent: string; // HTML content of the article
+  articleTags: string[]; // List of tags associated with the article
+  lastUpdated: Date | Timestamp; // Last updated timestamp
+  createdAt: Date | Timestamp; // Article creation timestamp
 
   constructor(
     userId: string,
@@ -31,8 +34,11 @@ export class ArticleRequestModel {
   }
 }
 
+/**
+ * Extends ArticleRequestModel with a unique articleId.
+ */
 export class Article extends ArticleRequestModel {
-  articleId?: string;
+  articleId: string; // Unique identifier for the article
 
   constructor(
     userId: string,

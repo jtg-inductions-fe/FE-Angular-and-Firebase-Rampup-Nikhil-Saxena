@@ -2,7 +2,6 @@ import {
   ChangeDetectionStrategy,
   Component,
   inject,
-  signal,
   ViewEncapsulation,
 } from '@angular/core';
 import { DocumentData, DocumentSnapshot } from '@angular/fire/firestore';
@@ -28,7 +27,6 @@ import { articleListColumnDefinition } from './article-list-column-definition';
   encapsulation: ViewEncapsulation.None,
 })
 export class ArticleListComponent {
-  refinedArticleList = signal<Array<object>>([]);
   private articleService = inject(ArticleService);
 
   rowModelType: RowModelType = 'infinite';

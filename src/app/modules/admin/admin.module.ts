@@ -18,14 +18,12 @@ import { DashboardComponent } from './dashboard/dashboard.component';
     CommonModule,
     AdminRoutingModule,
     ArticleListModule,
-    FiltersSidebarModule,
     MatSidenavModule,
     MatIconModule,
     MatListModule,
     FiltersSidebarModule,
     MatButtonModule,
     MatInputModule,
-    MatIconModule,
   ],
 })
 export class AdminModule {}

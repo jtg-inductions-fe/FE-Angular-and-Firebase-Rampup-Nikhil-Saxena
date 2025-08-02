@@ -1,5 +1,6 @@
 import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { signal } from '@angular/core';
+import { toSignal } from '@angular/core/rxjs-interop';
 
 import { AuthService } from '@services/auth.services';
 import { LocalStorageService } from '@services/local-storage.service';
@@ -34,7 +35,7 @@ export class AppBarComponent {
 
   constructor() {
     // Get stored user details from local storage (if any)
-    const userDetails = this.localStorage.getLocalStorage();
+    const userDetails = this.localStorage.getUserData();
 
     // Update the signals if user details exist
     if (userDetails) {
@@ -47,16 +48,20 @@ export class AppBarComponent {
    * Logs out the user by calling the AuthService and shows a snackbar message.
    */
   handleLogout(): void {
-    this.authService.logOutUser();
-    this.snackBarService.show('Logged Out Successfully');
+    try {
+      this.authService.logOutUser();
+      this.snackBarService.show('Logged out successfully');
+    } catch (error) {
+      this.snackBarService.show('Logout failed. Please try again.');
+    }
   }
 
   /**
-   * Returns `true` if the user is currently authenticated.
+   * Signal that tracks whether user is logged in, using Firebase auth state.
    */
-  isLoggedIn(): boolean {
-    return this.authService.getAuthenticationStatus();
-  }
+  isLoggedIn = toSignal(this.authService.getAuthenticationStatus(), {
+    initialValue: false,
+  });
 
   /**
    * Toggles the profile card dropdown visibility.

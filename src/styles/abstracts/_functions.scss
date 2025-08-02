@@ -10,13 +10,6 @@
   @return math.div($px, $base) * 1rem;
 }
 
-/// Gets spacing value from `$spacing` map defined in variables
-/// @param {String|Number} $factor - Key to fetch from spacing map
-/// @return {*} - Corresponding spacing value or null if not found
-@function get-spacing($factor) {
-  @return map-get($spacing, $factor);
-}
-
 /// Returns spacing value by key from `var.$spacing` map
 /// @param {String|Number} $key - Key to fetch spacing
 /// @return {*} - Value from spacing map or null if not found

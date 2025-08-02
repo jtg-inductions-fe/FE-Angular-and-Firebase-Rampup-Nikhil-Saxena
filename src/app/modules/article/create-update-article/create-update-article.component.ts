@@ -40,7 +40,7 @@ export class CreateArticleComponent implements OnInit {
   private navigationService = inject(NavigationService);
   private snackBarService = inject(SnackbarService);
 
-  articleTagPipe = new ArticleTagPipe();
+  private articleTagPipe = inject(ArticleTagPipe);
 
   articleForm!: FormGroup;
 
@@ -63,7 +63,7 @@ export class CreateArticleComponent implements OnInit {
     this.articleForm.reset();
     this.editorValue = '';
     this.tags = [];
-    this.base64Image = '';
+    this.base64Image = null;
     this.selectedFileName = '';
   }
 
@@ -75,7 +75,7 @@ export class CreateArticleComponent implements OnInit {
       tags: new FormControl([], this.tagsValidator),
     });
 
-    const user = this.localStorage.getLocalStorage();
+    const user = this.localStorage.getUserData();
     this.username = user?.username || '';
     this.userId = user?.userId || '';
 
@@ -187,12 +187,12 @@ export class CreateArticleComponent implements OnInit {
     } else {
       const newArticle = new Article(
         this.userId,
-        Date.now().toString(),
+        '',
         this.username,
         formValue.title,
         formValue.titleImage || '',
         formValue.editorContent,
-        this.articleTagPipe.transform(formValue.tags),
+        formValue,
         new Date(),
         new Date()
       );

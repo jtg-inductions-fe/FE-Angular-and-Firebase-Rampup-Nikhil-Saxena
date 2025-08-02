@@ -1,10 +1,12 @@
 import {
+  ChangeDetectionStrategy,
   Component,
   EventEmitter,
   Input,
   OnChanges,
   Output,
   SimpleChanges,
+  ViewEncapsulation,
 } from '@angular/core';
 
 import { textEditorConfiguration } from './rich-editor.configuration';
@@ -13,8 +15,10 @@ import { textEditorConfiguration } from './rich-editor.configuration';
   selector: 'app-text-editor',
   templateUrl: './rich-editor.component.html',
   styleUrls: ['./rich-editor.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  encapsulation: ViewEncapsulation.None,
 })
-export class TextEditorComponent implements OnChanges {
+export class RichEditorComponent implements OnChanges {
   @Input() content: string = '';
   @Input() type: 'editor' | 'viewer' = 'editor';
   @Output() contentChange = new EventEmitter<string>();

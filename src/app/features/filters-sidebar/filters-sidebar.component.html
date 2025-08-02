@@ -1,76 +1,133 @@
-<div class="filter-sidebar__container">
+<div
+  class="filter-sidebar__container"
+  role="region"
+  aria-label="Filter Sidebar">
   <mat-nav-list class="filter-sidebar__list">
     <div class="filter-sidebar__content">
+      <!-- Close Button -->
       <div class="filter-sidebar__close-container">
-        <button mat-icon-button color="accent" (click)="handleSidebarToggle()">
+        <button
+          mat-icon-button
+          color="accent"
+          (click)="handleSidebarToggle()"
+          aria-label="Close filter sidebar">
           <mat-icon>close</mat-icon>
         </button>
       </div>
 
-      <div class="filter-sidebar__field">
-        <h3 class="filter-sidebar__filters-heading">Tags</h3>
-        <app-article-tag-input [(tags)]="tags" placeholder="Add tags">
+      <!-- Tags -->
+      <div
+        class="filter-sidebar__field"
+        role="group"
+        aria-labelledby="tags-heading">
+        <h3 id="tags-heading" class="filter-sidebar__filters-heading">Tags</h3>
+        <app-article-tag-input
+          [(tags)]="tags"
+          placeholder="Add tags"
+          aria-label="Add or remove tags">
         </app-article-tag-input>
       </div>
 
-      <mat-divider class="filter-sidebar__divider"></mat-divider>
+      <mat-divider
+        class="filter-sidebar__divider"
+        role="separator"></mat-divider>
 
-      <div class="filter-sidebar__field">
-        <h3 class="filter-sidebar__filters-heading">Last Updated</h3>
-        <mat-form-field class="filter-sidebar__field--full-width">
+      <!-- Last Updated -->
+      <div
+        class="filter-sidebar__field"
+        role="group"
+        aria-labelledby="last-updated-heading">
+        <h3 id="last-updated-heading" class="filter-sidebar__filters-heading">
+          Last Updated
+        </h3>
+        <mat-form-field
+          class="filter-sidebar__field--full-width"
+          appearance="fill">
           <mat-label>Enter a date range</mat-label>
-          <mat-date-range-input [rangePicker]="pickerLastUpdated">
+          <mat-date-range-input
+            [rangePicker]="pickerLastUpdated"
+            aria-label="Last updated date range">
             <input
               matStartDate
               name="lastUpdatedStart"
               placeholder="Start date"
-              [(ngModel)]="lastUpdatedRange.start" />
+              [(ngModel)]="lastUpdatedRange.start"
+              aria-label="Last updated start date" />
             <input
               matEndDate
               name="lastUpdatedEnd"
               placeholder="End date"
-              [(ngModel)]="lastUpdatedRange.end" />
+              [(ngModel)]="lastUpdatedRange.end"
+              aria-label="Last updated end date" />
           </mat-date-range-input>
           <mat-hint>MM/DD/YYYY – MM/DD/YYYY</mat-hint>
           <mat-datepicker-toggle
             matIconSuffix
-            [for]="pickerLastUpdated"></mat-datepicker-toggle>
+            [for]="pickerLastUpdated"
+            aria-label="Toggle date picker"></mat-datepicker-toggle>
           <mat-date-range-picker #pickerLastUpdated></mat-date-range-picker>
         </mat-form-field>
       </div>
 
-      <mat-divider class="filter-sidebar__divider"></mat-divider>
+      <mat-divider
+        class="filter-sidebar__divider"
+        role="separator"></mat-divider>
 
-      <div class="filter-sidebar__field">
-        <h3 class="filter-sidebar__filters-heading">Created At</h3>
-        <mat-form-field class="filter-sidebar__field--full-width">
+      <!-- Created At -->
+      <div
+        class="filter-sidebar__field"
+        role="group"
+        aria-labelledby="created-at-heading">
+        <h3 id="created-at-heading" class="filter-sidebar__filters-heading">
+          Created At
+        </h3>
+        <mat-form-field
+          class="filter-sidebar__field--full-width"
+          appearance="fill">
           <mat-label>Enter a date range</mat-label>
-          <mat-date-range-input [rangePicker]="pickerCreatedAt">
+          <mat-date-range-input
+            [rangePicker]="pickerCreatedAt"
+            aria-label="Created at date range">
             <input
               matStartDate
               name="createdAtStart"
               placeholder="Start date"
-              [(ngModel)]="createdAtRange.start" />
+              [(ngModel)]="createdAtRange.start"
+              aria-label="Created at start date" />
             <input
               matEndDate
               name="createdAtEnd"
               placeholder="End date"
-              [(ngModel)]="createdAtRange.end" />
+              [(ngModel)]="createdAtRange.end"
+              aria-label="Created at end date" />
           </mat-date-range-input>
           <mat-hint>MM/DD/YYYY – MM/DD/YYYY</mat-hint>
           <mat-datepicker-toggle
             matIconSuffix
-            [for]="pickerCreatedAt"></mat-datepicker-toggle>
+            [for]="pickerCreatedAt"
+            aria-label="Toggle date picker"></mat-datepicker-toggle>
           <mat-date-range-picker #pickerCreatedAt></mat-date-range-picker>
         </mat-form-field>
       </div>
     </div>
 
-    <div class="filter-sidebar__apply-fiter-container">
-      <button mat-raised-button color="warn" (click)="handleClearFilters()">
+    <!-- Apply / Clear Buttons -->
+    <div
+      class="filter-sidebar__apply-filter-container"
+      role="group"
+      aria-label="Filter action buttons">
+      <button
+        mat-raised-button
+        color="warn"
+        (click)="handleClearFilters()"
+        aria-label="Clear filters">
         Clear
       </button>
-      <button mat-raised-button color="accent" (click)="handleApplyFilters()">
+      <button
+        mat-raised-button
+        color="accent"
+        (click)="handleApplyFilters()"
+        aria-label="Apply filters">
         Apply
       </button>
     </div>

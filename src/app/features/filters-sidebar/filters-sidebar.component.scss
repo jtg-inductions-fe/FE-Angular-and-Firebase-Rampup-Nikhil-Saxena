@@ -39,7 +39,7 @@
     width: 100%;
   }
 
-  &__apply-fiter-container {
+  &__apply-filter-container {
     width: 100%;
     @include mix.flex(row, flex-end, flex-start, fun.spacing(4));
   }

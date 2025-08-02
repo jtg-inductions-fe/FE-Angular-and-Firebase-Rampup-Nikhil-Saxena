@@ -3,22 +3,23 @@ import { Pipe, PipeTransform } from '@angular/core';
 import { ArticleTagObjectModel } from '@core/models/article-tag.model';
 
 /**
- * A custom Angular pipe to format Article Tags into String.
+ * Transforms an array of article tag objects into an array of tag display strings.
  *
- * It returns an String of tags separated by ',' containing tags for a particular Article.
+ * Usage:
+ *   tagArray | tagsDisplay
  */
 @Pipe({
-  name: 'articleTagPipe',
+  name: 'tagsDisplay',
 })
 export class ArticleTagPipe implements PipeTransform {
   /**
-   * @param value - A Tag object containing display and value option for each tag
-   * @returns An array of string containing tags for a particular Article.
+   * Transforms a list of tag objects to a list of their display strings.
+   *
+   * @param value - Array of ArticleTagObjectModel objects.
+   * @returns An array of strings representing the display value of each tag.
    */
   transform(value: ArticleTagObjectModel[]): string[] {
     if (!value) return [];
-    const tagString = value.map((tags: ArticleTagObjectModel) => tags.display);
-
-    return tagString;
+    return value.map(tag => tag.display);
   }
 }

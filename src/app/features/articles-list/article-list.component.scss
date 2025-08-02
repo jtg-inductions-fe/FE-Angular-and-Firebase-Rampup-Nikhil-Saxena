@@ -4,7 +4,6 @@
 @use 'abstracts/breakpoints' as bps;
 
 .article-list {
-  display: block;
   height: 100%;
   @include mix.flex(row, center, center);
 

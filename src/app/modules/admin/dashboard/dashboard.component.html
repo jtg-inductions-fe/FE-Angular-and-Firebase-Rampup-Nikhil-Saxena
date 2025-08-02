@@ -1,39 +1,58 @@
 <div class="dashboard">
-  <mat-sidenav-container class="dashboard__container">
+  <mat-sidenav-container
+    class="dashboard__container"
+    aria-label="Dashboard layout">
     <mat-sidenav
       class="dashboard__sidebar"
       [opened]="isSideBarOpen()"
-      [mode]="'over'">
+      [mode]="'over'"
+      aria-label="Filter sidebar"
+      role="complementary">
       <app-filters-sidebar
         [(isSidebarOpen)]="isSideBarOpen"></app-filters-sidebar>
     </mat-sidenav>
+
     <mat-sidenav-content class="dashboard__content">
-      <div class="dashboard__header">
-        <form class="dashboard__search-form">
+      <div
+        class="dashboard__header"
+        role="region"
+        aria-label="Dashboard header">
+        <form class="dashboard__search-form" aria-label="Search form">
           <mat-form-field class="dashboard__search-bar" appearance="outline">
             <mat-label>Search</mat-label>
-            <mat-icon matPrefix>search</mat-icon>
-            <input type="tel" matInput placeholder="" />
+            <mat-icon matPrefix aria-hidden="true">search</mat-icon>
+            <input
+              type="text"
+              matInput
+              placeholder="Search articles"
+              aria-label="Search articles" />
           </mat-form-field>
         </form>
 
-        <div class="dashboard__header-button-group">
+        <div
+          class="dashboard__header-button-group"
+          role="group"
+          aria-label="Header actions">
           <button
             mat-raised-button
             class="dashboard__button"
             color="primary"
-            (click)="handleToggleSidebar()">
+            (click)="handleToggleSidebar()"
+            aria-label="Toggle filter sidebar">
             Filters
           </button>
+
           <a
             routerLink="/article/create"
             mat-raised-button
             class="dashboard__button"
-            >Create New Story</a
-          >
+            aria-label="Create new story">
+            Create New Story
+          </a>
         </div>
       </div>
-      <app-article-list></app-article-list>
+
+      <app-article-list aria-label="Article list section"></app-article-list>
     </mat-sidenav-content>
   </mat-sidenav-container>
 </div>

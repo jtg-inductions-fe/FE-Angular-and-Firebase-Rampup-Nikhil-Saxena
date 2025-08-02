@@ -2,15 +2,14 @@ import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 
-import { ImageService } from '@services/image.service';
 import { QuillModule } from 'ngx-quill';
 
-import { TextEditorComponent } from './rich-editor.component';
+import { RichEditorComponent } from './rich-editor.component';
 
 @NgModule({
-  declarations: [TextEditorComponent],
+  declarations: [RichEditorComponent],
   imports: [CommonModule, QuillModule.forRoot(), FormsModule],
-  exports: [TextEditorComponent],
-  providers: [ImageService],
+  exports: [RichEditorComponent],
+  providers: [],
 })
 export class EditorModule {}

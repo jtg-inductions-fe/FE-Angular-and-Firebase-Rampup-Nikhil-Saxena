@@ -8,11 +8,10 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 
 import { ArticleTagInputComponent } from '@features/article-tag-input/article-tag-input.component';
-import { EditorModule } from '@features/rich-editor/text-editor.module';
+import { EditorModule } from '@features/rich-editor/rich-editor.module';
 import { ImageService } from '@services/image.service';
 import { PipesModule } from '@shared/pipes/pipes.module';
 import { TagInputModule } from 'ngx-chips';
-import { QuillModule } from 'ngx-quill';
 
 import { ArticleCardComponent } from './article-card/article-card.component';
 import { ArticleRoutingModule } from './article.routing-module';
@@ -22,7 +21,6 @@ import { CreateArticleComponent } from './create-update-article/create-update-ar
   declarations: [CreateArticleComponent, ArticleCardComponent],
   imports: [
     CommonModule,
-    QuillModule.forRoot(),
     FormsModule,
     MatFormFieldModule,
     ReactiveFormsModule,
@@ -32,7 +30,6 @@ import { CreateArticleComponent } from './create-update-article/create-update-ar
     MatIconModule,
     TagInputModule,
     ArticleRoutingModule,
-    MatCardModule,
     EditorModule,
     PipesModule,
     ArticleTagInputComponent,

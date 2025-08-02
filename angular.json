@@ -96,7 +96,12 @@
             "polyfills": ["zone.js", "zone.js/testing"],
             "tsConfig": "tsconfig.spec.json",
             "assets": ["src/favicon.ico", "src/assets"],
-            "styles": ["src/styles.scss"],
+            "styles": [
+              "src/styles/main.scss",
+              "src/styles.scss",
+              "./node_modules/quill/dist/quill.snow.css",
+              "./node_modules/quill/dist/quill.core.css"
+            ],
             "scripts": []
           }
         },

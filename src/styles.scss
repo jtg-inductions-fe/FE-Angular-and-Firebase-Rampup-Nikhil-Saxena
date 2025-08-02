@@ -1,6 +1,8 @@
+@use 'base/variables' as var;
+
 // Global styles
 html {
-  font-size: 100%; // Base font size (16px by default)
+  font-size: var.$font-size;
 }
 
 body {

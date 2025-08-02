@@ -7,7 +7,7 @@ import { Pipe, PipeTransform } from '@angular/core';
  * It returns an empty string for invalid or null values.
  */
 @Pipe({
-  name: 'DateTransformPipe',
+  name: 'dateTransform',
 })
 export class DateTransformPipe implements PipeTransform {
   /**

@@ -11,7 +11,6 @@ import {
   query,
   getDocs,
   where,
-  Timestamp,
   limit,
   deleteDoc,
   orderBy,
@@ -19,12 +18,11 @@ import {
   DocumentData,
   startAfter,
 } from '@angular/fire/firestore';
-import type { Query } from '@angular/fire/firestore';
+import type { Query, Timestamp } from '@angular/fire/firestore';
 
 import { Article as AppArticle } from '@core/models/article.model';
-import { DateTimestampPipe } from '@shared/pipes/dateTimestamp.pipe';
 
-import { from, map, Observable } from 'rxjs';
+import { from, map, Observable, switchMap } from 'rxjs';
 
 import { LocalStorageService } from './local-storage.service';
 
@@ -34,13 +32,21 @@ import { LocalStorageService } from './local-storage.service';
 export class ArticleService {
   private firestore = inject(Firestore);
   private localStorage = inject(LocalStorageService);
-  private dateTimestampPipe = new DateTimestampPipe();
 
-  private userId = this.localStorage.getLocalStorage()?.userId;
-  private username = this.localStorage.getLocalStorage()?.username;
+  private userId = this.localStorage.getUserData()?.userId;
+  private username = this.localStorage.getUserData()?.username;
 
-  getTransformedDate(rawDate: Timestamp | Date): Date {
-    return this.dateTimestampPipe.transform(rawDate);
+  private dateTimestampTransform(value: Date | Timestamp): Date {
+    if (!value) {
+      return new Date();
+    }
+    if (value instanceof Date) {
+      return value as Date;
+    } else {
+      return new Date(
+        new Date((value as Timestamp).seconds * 1000).setHours(0, 0, 0, 0)
+      );
+    }
   }
 
   /**
@@ -112,8 +118,8 @@ export class ArticleService {
             data.articleImage,
             data.articleContent,
             data.articleTags,
-            this.getTransformedDate(data.createdAt),
-            this.getTransformedDate(data.lastUpdated)
+            this.dateTimestampTransform(data.createdAt),
+            this.dateTimestampTransform(data.lastUpdated)
           );
         }
         return null;
@@ -168,8 +174,8 @@ export class ArticleService {
             data.articleImage,
             data.articleContent,
             data.articleTags,
-            this.getTransformedDate(data.createdAt),
-            this.getTransformedDate(data.lastUpdated)
+            this.dateTimestampTransform(data.createdAt),
+            this.dateTimestampTransform(data.lastUpdated)
           );
         });
 
@@ -192,10 +198,15 @@ export class ArticleService {
       'articles'
     ) as CollectionReference<DocumentData>;
 
+    const currentUserId = this.userId;
+    if (!currentUserId) {
+      throw new Error('User ID is required for fetching articles');
+    }
+
     // Initial query with user filter
     let articlesQuery: Query<DocumentData> = query(
       articlesRef,
-      where('userId', '==', this.userId)
+      where('userId', '==', currentUserId)
     );
 
     // Add orderBy clauses based on sortArray
@@ -235,8 +246,8 @@ export class ArticleService {
             data.articleImage,
             data.articleContent,
             data.articleTags,
-            this.getTransformedDate(data.createdAt),
-            this.getTransformedDate(data.lastUpdated)
+            this.dateTimestampTransform(data.createdAt),
+            this.dateTimestampTransform(data.lastUpdated)
           );
         });
 
@@ -254,7 +265,26 @@ export class ArticleService {
    * @returns An observable that completes when deletion is done
    */
   deleteArticleById(articleId: string): Observable<void> {
-    const articleDocRef = doc(this.articlesCollection, articleId);
-    return from(deleteDoc(articleDocRef));
+    const currentUserId = this.userId;
+    if (!currentUserId) {
+      throw new Error('User must be authenticated to delete articles');
+    }
+
+    // First verify the user owns this article
+    return this.getArticleById(articleId).pipe(
+      switchMap(article => {
+        if (!article) {
+          throw new Error('Article not found');
+        }
+        if (article.userId !== currentUserId) {
+          throw new Error(
+            'Unauthorized: Cannot delete article owned by another user'
+          );
+        }
+
+        const articleDocRef = doc(this.articlesCollection, articleId);
+        return from(deleteDoc(articleDocRef));
+      })
+    );
   }
 }

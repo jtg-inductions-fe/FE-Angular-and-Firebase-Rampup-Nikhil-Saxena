@@ -4,7 +4,7 @@ import { initializeApp, FirebaseApp } from '@angular/fire/app';
 import { getAuth, Auth } from '@angular/fire/auth';
 import { getFirestore, Firestore } from '@angular/fire/firestore';
 
-import { ENVIRONMENT } from '@environments/environment.dev';
+import { ENVIRONMENT } from '@environments/environment';
 
 /**
  * Initializes the Firebase App instance using the configuration

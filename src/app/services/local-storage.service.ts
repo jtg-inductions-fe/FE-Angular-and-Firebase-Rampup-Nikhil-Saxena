@@ -3,12 +3,14 @@ import { Injectable, inject } from '@angular/core';
 import { User as AppUser } from '@core/models/user.model';
 
 import { NavigationService } from './navigation.services';
+import { SnackbarService } from './snackbar.service';
 
 @Injectable({
   providedIn: 'root',
 })
 export class LocalStorageService {
   private navigate = inject(NavigationService);
+  private snackbarService = inject(SnackbarService);
 
   /**
    * Retrieves user data from local storage.
@@ -16,7 +18,7 @@ export class LocalStorageService {
    *
    * @returns An object containing username, email, and userId, or null if not found.
    */
-  getLocalStorage(): {
+  getUserData(): {
     username: string;
     email: string;
     userId: string;
@@ -39,9 +41,13 @@ export class LocalStorageService {
    * @param user - The user object containing userId, username, and email.
    */
   setUserData(user: AppUser): void {
-    localStorage.setItem('userId', user.userId);
-    localStorage.setItem('username', user.username);
-    localStorage.setItem('email', user.email);
+    try {
+      localStorage.setItem('userId', user.userId);
+      localStorage.setItem('username', user.username);
+      localStorage.setItem('email', user.email);
+    } catch (error) {
+      this.snackbarService.show('Failed to save user data to localstorage');
+    }
   }
 
   /**

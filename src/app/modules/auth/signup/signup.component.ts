@@ -94,8 +94,14 @@ export class SignupComponent {
     this.errorMessage.set('');
     this.successMessage.set('');
 
-    const { email, password, username } = this.signupForm.getRawValue();
-    if (!email || !password || !username) return;
+    const formValues = this.signupForm.getRawValue();
+    if (!formValues.email || !formValues.password || !formValues.username) {
+      this.isSubmitting.set(false);
+      this.signupForm.enable();
+      return;
+    }
+
+    const { email, password, username } = formValues;
 
     this.authService.registerUser(email, password, username).subscribe({
       next: userCredential => {
@@ -131,7 +137,8 @@ export class SignupComponent {
     ) {
       message = 'Email already in use. Please try logging in.';
     } else if (errorStr.includes('weak-password')) {
-      message = 'Password should be at least 6 characters.';
+      message =
+        'Password must be at least 8 characters and contain letters, numbers, and special characters.';
     }
 
     this.errorMessage.set(message);

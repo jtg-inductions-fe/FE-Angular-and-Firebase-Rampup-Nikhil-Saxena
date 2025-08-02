@@ -24,5 +24,7 @@
     @media (min-width: $breakpoint-xl) {
       @content;
     }
+  } @else {
+    @error "Invalid breakpoint: #{$point}. Valid options are: xs, sm, md, lg, xl";
   }
 }

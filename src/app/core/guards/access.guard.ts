@@ -20,7 +20,7 @@ export const AccessGuard: CanActivateFn = (route: ActivatedRouteSnapshot) => {
   const router = inject(Router);
 
   const REQUIRES_AUTH = route.data['requiresAuth'] === true;
-  const IS_AUTHENTICATED = authService.getAuthenticationStatus();
+  const IS_AUTHENTICATED = authService.getCurrentAuthenticationStatus();
 
   if (REQUIRES_AUTH && !IS_AUTHENTICATED) {
     router.navigate(['/auth/login']);

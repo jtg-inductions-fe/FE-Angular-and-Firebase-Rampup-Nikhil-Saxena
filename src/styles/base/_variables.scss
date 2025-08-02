@@ -5,6 +5,8 @@
   @return map.get($palette-map, $shade);
 }
 
+$font-size: 16px;
+
 // Primary Color Template: Teal
 $primary: mat.define-palette(mat.$teal-palette);
 // Secondary(secondary) Color Template: Grey
@@ -23,7 +25,7 @@ $primary-color-dark: get-palette-color($primary, 900);
 $warn-color: get-palette-color($warn, 600);
 
 // SecondaryColor
-$grey-color: get-palette-color($warn, 600);
+$grey-color: get-palette-color($grey, 600);
 
 // White
 $white: #ffffff;
@@ -104,3 +106,5 @@ $fonts: (
     weight: 800,
   ),
 );
+
+$app-bar-height: 64px;

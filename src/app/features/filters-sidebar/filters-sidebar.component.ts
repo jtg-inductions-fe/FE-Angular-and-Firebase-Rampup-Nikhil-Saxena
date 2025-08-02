@@ -1,7 +1,6 @@
 import { Component, model } from '@angular/core';
 
 import { ArticleTagObjectModel } from '@core/models/article-tag.model';
-import { ArticleTagPipe } from '@shared/pipes/article-tags-pipe.pipe';
 
 @Component({
   selector: 'app-filters-sidebar',
@@ -9,11 +8,8 @@ import { ArticleTagPipe } from '@shared/pipes/article-tags-pipe.pipe';
   styleUrls: ['./filters-sidebar.component.scss'],
 })
 export class FiltersSidebarComponent {
-  private articleTagPipe = new ArticleTagPipe();
-
   tags: ArticleTagObjectModel[] = [];
 
-  // Use separate objects for each date range
   lastUpdatedRange: { start: Date | null; end: Date | null } = {
     start: null,
     end: null,
@@ -26,7 +22,7 @@ export class FiltersSidebarComponent {
   isSidebarOpen = model<boolean>(true);
 
   handleSidebarToggle(): void {
-    this.isSidebarOpen.set(false);
+    this.isSidebarOpen.set(!this.isSidebarOpen());
   }
 
   handleApplyFilters(): void {}

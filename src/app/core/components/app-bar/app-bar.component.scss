@@ -71,9 +71,8 @@
   &__profile-card-avatar {
     width: fun.pxToRem(150);
     height: fun.pxToRem(150);
-    border-radius: 50%;
     margin-bottom: fun.spacing(4);
-    border-radius: mxToRem(40);
+    border-radius: pxToRem(40);
   }
 
   &__profile-info {
@@ -101,8 +100,7 @@
     color: var.$light-gray;
     border: none;
     padding: fun.spacing(2) fun.spacing(6);
-    font-size: 16px;
-    border-radius: 4px;
+    border-radius: fun.spacing(1);
     cursor: pointer;
     transition: background-color 200ms ease;
     &:hover {

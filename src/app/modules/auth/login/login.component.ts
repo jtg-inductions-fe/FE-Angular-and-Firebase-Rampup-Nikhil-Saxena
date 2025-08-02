@@ -1,6 +1,11 @@
-import { Component, inject, signal, computed } from '@angular/core';
-import { ChangeDetectionStrategy } from '@angular/core';
-import { ViewEncapsulation } from '@angular/core';
+import {
+  Component,
+  inject,
+  signal,
+  computed,
+  ChangeDetectionStrategy,
+  ViewEncapsulation,
+} from '@angular/core';
 import { Validators, FormControl, FormGroup } from '@angular/forms';
 
 import { AuthService } from '@services/auth.services';
@@ -75,7 +80,9 @@ export class LoginComponent {
 
   /** Handles login form submission */
   onSubmit(): void {
-    if (this.loginForm.invalid) return;
+    if (this.loginForm.invalid) {
+      return;
+    }
 
     this.isSubmitting.set(true);
     this.loginForm.disable();
