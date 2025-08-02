@@ -3,11 +3,12 @@ import {
   Component,
   inject,
   OnInit,
+  ViewEncapsulation,
 } from '@angular/core';
 import { Timestamp } from '@angular/fire/firestore';
 import {
-  FormBuilder,
   FormGroup,
+  FormControl,
   Validators,
   AbstractControl,
   ValidationErrors,
@@ -29,9 +30,9 @@ import { ArticleTagPipe } from '@shared/pipes/article-tags-pipe.pipe';
   templateUrl: './create-update-article.component.html',
   styleUrls: ['./create-update-article.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  encapsulation: ViewEncapsulation.None,
 })
 export class CreateArticleComponent implements OnInit {
-  private fb = inject(FormBuilder);
   private imageService = inject(ImageService);
   private localStorage = inject(LocalStorageService);
   private articleService = inject(ArticleService);
@@ -67,11 +68,11 @@ export class CreateArticleComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.articleForm = this.fb.group({
-      title: ['', Validators.required],
-      titleImage: [''],
-      editorContent: ['', Validators.required],
-      tags: [[], this.tagsValidator],
+    this.articleForm = new FormGroup({
+      title: new FormControl('', Validators.required),
+      titleImage: new FormControl(''),
+      editorContent: new FormControl('', Validators.required),
+      tags: new FormControl([], this.tagsValidator),
     });
 
     const user = this.localStorage.getLocalStorage();
@@ -168,7 +169,7 @@ export class CreateArticleComponent implements OnInit {
         articleTitle: formValue.title,
         articleImage: formValue.titleImage || '',
         articleContent: formValue.editorContent,
-        articleTags: this.articleTagPipe.transform(formValue.tags),
+        articleTags: formValue.tags,
       };
 
       this.articleService

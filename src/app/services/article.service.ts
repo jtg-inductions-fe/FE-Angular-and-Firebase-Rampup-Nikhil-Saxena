@@ -12,7 +12,14 @@ import {
   getDocs,
   where,
   Timestamp,
+  limit,
+  deleteDoc,
+  orderBy,
+  DocumentSnapshot,
+  DocumentData,
+  startAfter,
 } from '@angular/fire/firestore';
+import type { Query } from '@angular/fire/firestore';
 
 import { Article as AppArticle } from '@core/models/article.model';
 import { DateTimestampPipe } from '@shared/pipes/dateTimestamp.pipe';
@@ -171,16 +178,50 @@ export class ArticleService {
     );
   }
 
-  getAllArticlesByUserId(userId: string): Observable<AppArticle[] | null> {
-    const articlesQuery = query(
-      this.articlesCollection,
-      where('userId', '==', userId)
+  getAllArticlesByUserIdWithLimit(
+    articlesLimit: number,
+    sortArray: { colId: string; sort: 'asc' | 'desc' }[] = [],
+    lastVisibleDoc?: DocumentSnapshot<DocumentData>
+  ): Observable<{
+    articles: AppArticle[];
+    lastDoc: DocumentSnapshot<DocumentData> | null;
+  }> {
+    // Define the collection reference
+    const articlesRef = collection(
+      this.firestore,
+      'articles'
+    ) as CollectionReference<DocumentData>;
+
+    // Initial query with user filter
+    let articlesQuery: Query<DocumentData> = query(
+      articlesRef,
+      where('userId', '==', this.userId)
     );
 
+    // Add orderBy clauses based on sortArray
+    sortArray.forEach(sort => {
+      const { colId, sort: order } = sort;
+      articlesQuery = query(articlesQuery, orderBy(colId, order));
+    });
+
+    // Firestore requires at least one orderBy if using startAfter
+    if (sortArray.length === 0) {
+      articlesQuery = query(articlesQuery, orderBy('createdAt', 'desc'));
+    }
+
+    // Apply pagination cursor
+    if (lastVisibleDoc) {
+      articlesQuery = query(articlesQuery, startAfter(lastVisibleDoc));
+    }
+
+    // Apply final limit
+    articlesQuery = query(articlesQuery, limit(articlesLimit));
+
+    // Execute query
     return from(getDocs(articlesQuery)).pipe(
       map(snapshot => {
         if (snapshot.empty) {
-          return null;
+          return { articles: [], lastDoc: null };
         }
 
         const articles: AppArticle[] = snapshot.docs.map(docSnap => {
@@ -199,8 +240,21 @@ export class ArticleService {
           );
         });
 
-        return articles;
+        const lastDoc = snapshot.docs[snapshot.docs.length - 1];
+
+        return { articles, lastDoc };
       })
     );
+  }
+
+  /**
+   * Deletes an article by its ID.
+   *
+   * @param articleId - The ID of the article to delete
+   * @returns An observable that completes when deletion is done
+   */
+  deleteArticleById(articleId: string): Observable<void> {
+    const articleDocRef = doc(this.articlesCollection, articleId);
+    return from(deleteDoc(articleDocRef));
   }
 }

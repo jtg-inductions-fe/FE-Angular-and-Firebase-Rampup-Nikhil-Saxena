@@ -1,5 +1,39 @@
-<div class="dashboard__container">
-  <app-article-list
-    *ngIf="articleData()"
-    [articleListData]="articleData()"></app-article-list>
+<div class="dashboard">
+  <mat-sidenav-container class="dashboard__container">
+    <mat-sidenav
+      class="dashboard__sidebar"
+      [opened]="isSideBarOpen()"
+      [mode]="'over'">
+      <app-filters-sidebar
+        [(isSidebarOpen)]="isSideBarOpen"></app-filters-sidebar>
+    </mat-sidenav>
+    <mat-sidenav-content class="dashboard__content">
+      <div class="dashboard__header">
+        <form class="dashboard__search-form">
+          <mat-form-field class="dashboard__search-bar" appearance="outline">
+            <mat-label>Search</mat-label>
+            <mat-icon matPrefix>search</mat-icon>
+            <input type="tel" matInput placeholder="" />
+          </mat-form-field>
+        </form>
+
+        <div class="dashboard__header-button-group">
+          <button
+            mat-raised-button
+            class="dashboard__button"
+            color="primary"
+            (click)="handleToggleSidebar()">
+            Filters
+          </button>
+          <a
+            routerLink="/article/create"
+            mat-raised-button
+            class="dashboard__button"
+            >Create New Story</a
+          >
+        </div>
+      </div>
+      <app-article-list></app-article-list>
+    </mat-sidenav-content>
+  </mat-sidenav-container>
 </div>

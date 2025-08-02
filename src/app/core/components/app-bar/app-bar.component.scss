@@ -5,9 +5,8 @@
 
 .app-bar {
   @include mix.flex(row, space-between, center);
-  position: sticky;
+
   background-color: var.$app-background;
-  top: 0;
 
   &__logo-container {
     @include mix.flex(row, center, center);
@@ -21,7 +20,7 @@
 
   &__logo-name {
     display: none;
-    color: var.$app-text-primary;
+    color: var.$white;
     padding: 0 fun.spacing(2);
     font-size: fun.pxToRem(34);
     font-weight: 600;

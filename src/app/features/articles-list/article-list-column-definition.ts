@@ -7,12 +7,10 @@ export const articleListColumnDefinition: ColDef[] = [
     headerName: 'Title',
     flex: 3,
     minWidth: 100,
-    filter: true,
   },
   {
     field: 'lastUpdated',
     headerName: 'Last Updated',
-    filter: 'agDateColumnFilter',
     flex: 1,
     minWidth: 150,
     cellDataType: 'date',
@@ -20,7 +18,6 @@ export const articleListColumnDefinition: ColDef[] = [
   {
     field: 'createdAt',
     headerName: 'Created At',
-    filter: true,
     flex: 1,
     minWidth: 150,
     cellDataType: 'date',
@@ -29,8 +26,9 @@ export const articleListColumnDefinition: ColDef[] = [
     field: 'articleTags',
     headerName: 'Tags',
     minWidth: 150,
-    valueFormatter: ({ value }) => value.join(', '),
-    filter: true,
+    flex: 2,
+    valueFormatter: ({ value }) => value?.join(', '),
+    sortable: false,
   },
   {
     headerName: 'Actions',

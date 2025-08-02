@@ -2,16 +2,18 @@
   <div class="create-update__container">
     <form [formGroup]="articleForm" class="create-update__form">
       <!-- Title -->
-      <mat-form-field class="create-update__form-field">
+      <mat-form-field class="create-update__form-field" appearance="outline">
         <mat-label>Enter Your Title</mat-label>
         <input matInput placeholder="Enter Title" formControlName="title" />
       </mat-form-field>
-      <ng-container
-        *ngTemplateOutlet="
-          errorTemplate;
-          context: { control: articleForm.get('title'), fieldName: 'Title' }
-        ">
-      </ng-container>
+      <div class="create-update__error-container">
+        <ng-container
+          *ngTemplateOutlet="
+            errorTemplate;
+            context: { control: articleForm.get('title'), fieldName: 'Title' }
+          ">
+        </ng-container>
+      </div>
 
       <!-- Title Image Upload -->
       <mat-form-field class="create-update__image-input" appearance="outline">
@@ -43,15 +45,17 @@
         [content]="editorValue"
         (contentChange)="handleContentChange($event)">
       </app-text-editor>
-      <ng-container
-        *ngTemplateOutlet="
-          errorTemplate;
-          context: {
-            control: articleForm.get('editorContent'),
-            fieldName: 'Content',
-          }
-        ">
-      </ng-container>
+      <div class="create-update__error-container">
+        <ng-container
+          *ngTemplateOutlet="
+            errorTemplate;
+            context: {
+              control: articleForm.get('editorContent'),
+              fieldName: 'Content',
+            }
+          ">
+        </ng-container>
+      </div>
 
       <!-- Tags -->
       <div class="create-update__tag-input-container">
@@ -67,12 +71,14 @@
             [autocompleteItems]="autocompleteItems"></tag-input-dropdown>
         </tag-input>
 
-        <ng-container
-          *ngTemplateOutlet="
-            errorTemplate;
-            context: { control: articleForm.get('tags'), fieldName: 'Tags' }
-          ">
-        </ng-container>
+        <div class="create-update__error-container">
+          <ng-container
+            *ngTemplateOutlet="
+              errorTemplate;
+              context: { control: articleForm.get('tags'), fieldName: 'Tags' }
+            ">
+          </ng-container>
+        </div>
       </div>
 
       <!-- Submit -->
@@ -90,6 +96,7 @@
 
 <!-- Preview -->
 <app-article-card
+  mode="preview"
   [cardImage]="base64Image"
   [cardTitle]="articleForm.get('title')?.value"
   [cardContent]="editorValue"

@@ -1,4 +1,4 @@
-@use './base/variables' as *;
+@use 'base/variables' as *;
 /// Breakpoint Mixin
 /// Provides media queries for 5 screen sizes:
 /// @param {String} $point - Accepts 'xs, 'sm', 'md', 'lg' or 'xl'

@@ -6,14 +6,11 @@
 .article-list {
   display: block;
   height: 100%;
-  max-height: fun.pxToRem(600);
   @include mix.flex(row, center, center);
 
   &__container {
     height: 100%;
     width: 100%;
-    max-width: fun.pxToRem(1400);
-    padding-inline: fun.spacing(2);
   }
 
   &__content {

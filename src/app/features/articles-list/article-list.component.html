@@ -4,9 +4,17 @@
       [pagination]="pagination"
       class="article-list__content"
       [paginationPageSize]="paginationPageSize"
-      [rowData]="rowData"
       [theme]="theme"
       [columnDefs]="colDefs"
-      [paginationPageSizeSelector]="false" />
+      [paginationPageSizeSelector]="false"
+      (gridReady)="onGridReady($event)"
+      [rowBuffer]="rowBuffer"
+      [rowModelType]="rowModelType"
+      [cacheBlockSize]="cacheBlockSize"
+      [maxConcurrentDatasourceRequests]="maxConcurrentDatasourceRequests"
+      [infiniteInitialRowCount]="infiniteInitialRowCount"
+      [maxBlocksInCache]="maxBlocksInCache"
+      [rowData]="rowData"
+      [domLayout]="'autoHeight'" />
   </div>
 </div>

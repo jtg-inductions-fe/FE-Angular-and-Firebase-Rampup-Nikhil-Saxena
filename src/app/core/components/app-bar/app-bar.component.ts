@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { signal } from '@angular/core';
 
 import { AuthService } from '@services/auth.services';
@@ -9,39 +9,58 @@ import { SnackbarService } from '@services/snackbar.service';
   selector: 'app-bar',
   templateUrl: './app-bar.component.html',
   styleUrls: ['./app-bar.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AppBarComponent {
+  // Inject services using Angular's `inject()` function
   private localStorage = inject(LocalStorageService);
   private authService = inject(AuthService);
   private snackBarService = inject(SnackbarService);
 
-  // Use signals for reactive state management
+  /**
+   * Stores the logged-in user's username.
+   */
   username = signal('');
+
+  /**
+   * Stores the logged-in user's email.
+   */
   email = signal('');
-  profileCardDisplay = signal(false); // This will manage the dropdown visibility
+
+  /**
+   * Controls visibility of the profile dropdown card.
+   */
+  profileCardDisplay = signal(false);
 
   constructor() {
-    // Fetch user details from session storage
+    // Get stored user details from local storage (if any)
     const userDetails = this.localStorage.getLocalStorage();
 
+    // Update the signals if user details exist
     if (userDetails) {
       this.username.set(userDetails.username);
       this.email.set(userDetails.email);
     }
   }
 
-  // Handle logout
+  /**
+   * Logs out the user by calling the AuthService and shows a snackbar message.
+   */
   handleLogout(): void {
     this.authService.logOutUser();
     this.snackBarService.show('Logged Out Successfully');
   }
 
-  // Check if the user is logged in
+  /**
+   * Returns `true` if the user is currently authenticated.
+   */
   isLoggedIn(): boolean {
     return this.authService.getAuthenticationStatus();
   }
 
-  // Toggle the profile card display
+  /**
+   * Toggles the profile card dropdown visibility.
+   */
   handleToggleProfileCard(): void {
     this.profileCardDisplay.set(!this.profileCardDisplay());
   }

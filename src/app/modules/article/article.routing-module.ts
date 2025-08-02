@@ -5,9 +5,10 @@ import { ArticleCardComponent } from './article-card/article-card.component';
 import { CreateArticleComponent } from './create-update-article/create-update-article.component';
 
 const routes: Routes = [
+  { path: '', redirectTo: 'create', pathMatch: 'full' },
   { path: 'create', component: CreateArticleComponent },
   { path: 'edit/:id', component: CreateArticleComponent },
-  { path: 'view', component: ArticleCardComponent },
+  { path: 'view/:id', component: ArticleCardComponent },
 ];
 
 @NgModule({

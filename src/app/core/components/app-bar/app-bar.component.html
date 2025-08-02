@@ -1,4 +1,4 @@
-<mat-toolbar class="app-bar__toolbar">
+<mat-toolbar color="primary" class="app-bar__toolbar">
   <a routerLink="/" class="app-bar__logo-container">
     <img
       class="app-bar__logo"
@@ -11,14 +11,13 @@
   <!-- For logged-in users -->
   <ng-container *ngIf="isLoggedIn(); else guestLinks">
     <div class="app-bar__buttons-group">
-      <button mat-raised-button color="primary" routerLink="/explore">
+      <button mat-raised-button routerLink="/explore">
         <mat-icon class="material-symbols-outlined">auto_stories</mat-icon>
         Explore Stories
       </button>
       <button
         class="app-bar__dashboard-button"
         mat-raised-button
-        color="primary"
         routerLink="/admin/dashboard">
         Dashboard
       </button>
@@ -60,11 +59,7 @@
   <ng-template #guestLinks>
     <div class="app-bar__buttons-group">
       <a mat-button routerLink="/auth/login">Login</a>
-      <a
-        color="primary"
-        class="app-bar__signup"
-        mat-raised-button
-        routerLink="/auth/signup">
+      <a class="app-bar__signup" mat-raised-button routerLink="/auth/signup">
         Sign up
       </a>
     </div>

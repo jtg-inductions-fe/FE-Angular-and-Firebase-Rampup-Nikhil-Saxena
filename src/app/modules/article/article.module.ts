@@ -7,6 +7,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 
+import { ArticleTagInputComponent } from '@features/article-tag-input/article-tag-input.component';
 import { EditorModule } from '@features/rich-editor/text-editor.module';
 import { ImageService } from '@services/image.service';
 import { PipesModule } from '@shared/pipes/pipes.module';
@@ -34,6 +35,7 @@ import { CreateArticleComponent } from './create-update-article/create-update-ar
     MatCardModule,
     EditorModule,
     PipesModule,
+    ArticleTagInputComponent,
   ],
   providers: [ImageService],
 })

@@ -1,12 +1,13 @@
-@use '/abstracts/mixins' as mix;
-@use '/base/variables' as var;
-@use '/abstracts/functions' as fun;
-@use '/components/tag-input' as *;
+@use 'abstracts/mixins' as mix;
+@use 'base/variables' as var;
+@use 'abstracts/functions' as fun;
+@use 'components/tag-input' as *;
 
 .article-card {
   width: 100%;
   padding: fun.spacing(4);
   @include mix.flex(row, center, center);
+  background-color: var.$app-background;
 
   &__container {
     width: 100%;

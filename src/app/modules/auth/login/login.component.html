@@ -14,7 +14,7 @@
           <mat-label>Email</mat-label>
           <input
             matInput
-            formControlName="email"
+            [formControl]="emailControl()"
             type="email"
             placeholder="Enter your email" />
         </mat-form-field>
@@ -23,7 +23,7 @@
             *ngTemplateOutlet="
               errorTemplate;
               context: {
-                control: loginForm.get('email'),
+                control: emailControl(),
                 fieldName: 'Email',
               }
             ">
@@ -39,7 +39,7 @@
           <mat-label>Password</mat-label>
           <input
             matInput
-            formControlName="password"
+            [formControl]="passwordControl()"
             [type]="hidePassword() ? 'password' : 'text'"
             placeholder="Enter your password" />
           <button
@@ -47,11 +47,13 @@
             matSuffix
             type="button"
             (click)="clickEvent($event)"
-            [attr.aria-label]="'Hide password'"
-            [attr.aria-pressed]="hidePassword()">
-            <mat-icon>{{
-              hidePassword() ? 'visibility_off' : 'visibility'
-            }}</mat-icon>
+            [attr.aria-label]="
+              hidePassword() ? 'Show password' : 'Hide password'
+            "
+            [attr.aria-pressed]="!hidePassword()">
+            <mat-icon>
+              {{ hidePassword() ? 'visibility_off' : 'visibility' }}
+            </mat-icon>
           </button>
         </mat-form-field>
         <div class="auth-card__error-container">
@@ -59,7 +61,7 @@
             *ngTemplateOutlet="
               errorTemplate;
               context: {
-                control: loginForm.get('password'),
+                control: passwordControl(),
                 fieldName: 'Password',
               }
             ">
@@ -87,20 +89,20 @@
   <!-- Shared Error Template -->
   <ng-template #errorTemplate let-control="control" let-fieldName="fieldName">
     <div class="auth-card__error">
-      <ng-container *ngIf="control?.touched">
+      <ng-container *ngIf="control.touched || control.dirty">
         <mat-error
           class="auth-card__error-text"
-          *ngIf="control?.errors?.['required']">
+          *ngIf="control.errors?.['required']">
           {{ fieldName }} is required
         </mat-error>
         <mat-error
           class="auth-card__error-text"
-          *ngIf="control?.errors?.['email']">
+          *ngIf="control.errors?.['email']">
           Please enter a valid email address
         </mat-error>
         <mat-error
           class="auth-card__error-text"
-          *ngIf="control?.errors?.['server']">
+          *ngIf="control.errors?.['server']">
           {{ control.errors['server'] }}
         </mat-error>
       </ng-container>

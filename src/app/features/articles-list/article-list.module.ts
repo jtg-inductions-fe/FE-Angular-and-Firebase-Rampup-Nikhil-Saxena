@@ -1,7 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 
-import { ActionsButtonsListComponent } from '@features/actions-buttons-list/actions-buttons-list.component';
+import { ArticleService } from '@services/article.service';
 import { AgGridAngular } from 'ag-grid-angular';
 import { ModuleRegistry, AllCommunityModule } from 'ag-grid-community';
 
@@ -11,8 +11,8 @@ ModuleRegistry.registerModules([AllCommunityModule]);
 
 @NgModule({
   declarations: [ArticleListComponent],
-  imports: [CommonModule, AgGridAngular, ActionsButtonsListComponent],
+  imports: [CommonModule, AgGridAngular],
   exports: [ArticleListComponent],
-  providers: [],
+  providers: [ArticleService],
 })
 export class ArticleListModule {}

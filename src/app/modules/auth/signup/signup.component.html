@@ -14,7 +14,7 @@
           <mat-label>Username</mat-label>
           <input
             matInput
-            formControlName="username"
+            [formControl]="usernameControl()"
             type="text"
             placeholder="Enter your username" />
         </mat-form-field>
@@ -23,11 +23,10 @@
             *ngTemplateOutlet="
               errorTemplate;
               context: {
-                control: signupForm.get('username'),
+                control: usernameControl(),
                 fieldName: 'Username',
               }
-            ">
-          </ng-container>
+            "></ng-container>
         </div>
       </div>
 
@@ -39,7 +38,7 @@
           <mat-label>Email</mat-label>
           <input
             matInput
-            formControlName="email"
+            [formControl]="emailControl()"
             type="email"
             placeholder="Enter your email" />
         </mat-form-field>
@@ -48,11 +47,10 @@
             *ngTemplateOutlet="
               errorTemplate;
               context: {
-                control: signupForm.get('email'),
+                control: emailControl(),
                 fieldName: 'Email',
               }
-            ">
-          </ng-container>
+            "></ng-container>
         </div>
       </div>
 
@@ -64,7 +62,7 @@
           <mat-label>Password</mat-label>
           <input
             matInput
-            formControlName="password"
+            [formControl]="passwordControl()"
             [type]="hidePassword() ? 'password' : 'text'"
             placeholder="Enter your password" />
           <button
@@ -84,11 +82,10 @@
             *ngTemplateOutlet="
               errorTemplate;
               context: {
-                control: signupForm.get('password'),
+                control: passwordControl(),
                 fieldName: 'Password',
               }
-            ">
-          </ng-container>
+            "></ng-container>
         </div>
       </div>
 
@@ -100,7 +97,7 @@
           <mat-label>Confirm Password</mat-label>
           <input
             matInput
-            formControlName="confirmPassword"
+            [formControl]="confirmPasswordControl()"
             [type]="hidePassword() ? 'password' : 'text'"
             placeholder="Confirm your password" />
           <button
@@ -120,11 +117,10 @@
             *ngTemplateOutlet="
               errorTemplate;
               context: {
-                control: signupForm.get('confirmPassword'),
+                control: confirmPasswordControl(),
                 fieldName: 'Confirm Password',
               }
-            ">
-          </ng-container>
+            "></ng-container>
         </div>
       </div>
 

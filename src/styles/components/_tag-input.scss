@@ -1,5 +1,5 @@
-@use '/abstracts/functions' as fun;
-@use '/base/variables' as var;
+@use 'abstracts/functions' as fun;
+@use 'base/variables' as var;
 
 @import 'ngx-chips/core/styles/core/_core.scss';
 
@@ -11,12 +11,13 @@ $custom-theme: (
 // this is the tag's theme
 $custom-tag-theme: (
   background: var.$primary-color,
-  background-focused: var.$primary-color-dark,
-  background-active: var.$primary-color-dark,
+  background-focused: var.$primary-color-light,
+  background-active: var.$primary-color,
   background-hover: var.$primary-color-dark,
   color: var.$white,
   color-hover: var.$white,
-  border-radius: 2px,
+  border-radius: fun.pxToRem(40),
+  padding: 0 fun.spacing(2),
 );
 
 // this is the delete icon's theme
@@ -26,17 +27,27 @@ $custom-icon-theme: (
   transition: all 0.35s,
 );
 
+.ng2-tag-input.custom {
+  border-color: var.$primary-color;
+  width: 100%;
+}
+
+.ng2-tag-input input {
+  background-color: var.$white;
+}
+
 // apply theme to the container
-::ng-deep tag-input .ng2-tag-input.custom-theme {
+.ng2-tag-input.custom-theme {
+  background-color: var.$white;
   @include tag-input-theme($custom-theme);
 }
 
 // apply theme to the tags
-::ng-deep tag-input .ng2-tag-input.custom-theme tag {
+.ng2-tag-input.custom-theme tag {
   @include tag-theme($custom-tag-theme);
 }
 
 // apply theme to the delete icon
-::ng-deep tag-input .ng2-tag-input.custom-theme tag delete-icon {
+.ng2-tag-input.custom-theme tag delete-icon {
   @include icon-theme($custom-icon-theme);
 }

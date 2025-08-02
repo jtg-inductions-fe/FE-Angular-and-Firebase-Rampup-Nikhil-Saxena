@@ -7,8 +7,10 @@
 
 // Primary Color Template: Teal
 $primary: mat.define-palette(mat.$teal-palette);
-// Accent (secondary) Color Template: Grey
-$accent: mat.define-palette(mat.$grey-palette, 600, 300, 900);
+// Secondary(secondary) Color Template: Grey
+$grey: mat.define-palette(mat.$grey-palette, 600, 300, 900);
+// Accent
+$accent: mat.define-palette(mat.$blue-grey-palette, 600, 300, 900);
 // Color: Red
 $warn: mat.define-palette(mat.$red-palette);
 
@@ -20,28 +22,28 @@ $primary-color-dark: get-palette-color($primary, 900);
 // Warn Color
 $warn-color: get-palette-color($warn, 600);
 
-// Accent Color
-$accent-color: get-palette-color($warn, 600);
+// SecondaryColor
+$grey-color: get-palette-color($warn, 600);
 
 // White
 $white: #ffffff;
 
 // Light Gray
-$light-gray: get-palette-color($accent, 50);
+$light-gray: get-palette-color($grey, 50);
 
 // Application-specific colors
 // Background: Main app background
-$app-background: get-palette-color($accent, 300);
+$app-background: get-palette-color($grey, 100);
 // Surface: Card and container backgrounds
-$app-surface: get-palette-color($accent, 100);
+$app-surface: get-palette-color($grey, 100);
 // Text: Primary text content
-$app-text-primary: get-palette-color($accent, 800);
+$app-text-primary: get-palette-color($grey, 800);
 // Text: Secondary/muted text
-$app-text-secondary: get-palette-color($accent, 600);
+$app-text-secondary: get-palette-color($grey, 600);
 // Borders: Input fields and dividers
-$app-border: get-palette-color($accent, 400);
+$app-border: get-palette-color($grey, 400);
 // Disabled: Disabled state elements
-$app-disabled: get-palette-color($accent, 500);
+$app-disabled: get-palette-color($grey, 500);
 
 $breakpoint-xs: 320px;
 $breakpoint-sm: 480px;
