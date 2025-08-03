@@ -27,7 +27,6 @@ export const articleListColumnDefinition: ColDef[] = [
     headerName: 'Tags',
     minWidth: 150,
     flex: 2,
-    valueFormatter: ({ value }) => value?.join(', '),
     sortable: false,
   },
   {

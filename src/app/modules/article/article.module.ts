@@ -10,6 +10,7 @@ import { MatInputModule } from '@angular/material/input';
 import { ArticleTagInputComponent } from '@features/article-tag-input/article-tag-input.component';
 import { EditorModule } from '@features/rich-editor/rich-editor.module';
 import { ImageService } from '@services/image.service';
+import { ArticleTagPipe } from '@shared/pipes/article-tags-pipe.pipe';
 import { PipesModule } from '@shared/pipes/pipes.module';
 import { TagInputModule } from 'ngx-chips';
 
@@ -34,6 +35,6 @@ import { CreateArticleComponent } from './create-update-article/create-update-ar
     PipesModule,
     ArticleTagInputComponent,
   ],
-  providers: [ImageService],
+  providers: [ImageService, ArticleTagPipe],
 })
 export class ArticleModule {}

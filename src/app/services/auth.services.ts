@@ -178,7 +178,6 @@ export class AuthService {
    * Returns current authentication status as a boolean
    */
   getCurrentAuthenticationStatus(): boolean {
-    // return true;
-    return this.authStatus$.value;
+    return this.cookieService.check('Authorization');
   }
 }
