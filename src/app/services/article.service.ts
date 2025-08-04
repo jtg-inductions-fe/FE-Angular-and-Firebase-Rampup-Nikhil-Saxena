@@ -20,6 +20,7 @@ import {
 } from '@angular/fire/firestore';
 import type { Query, Timestamp } from '@angular/fire/firestore';
 
+import { ArticleFilters } from '@core/models/article-filters.model';
 import { Article as AppArticle } from '@core/models/article.model';
 
 import { from, map, Observable, switchMap } from 'rxjs';
@@ -184,9 +185,11 @@ export class ArticleService {
     );
   }
 
-  getAllArticlesByUserIdWithLimit(
+  getAllArticlesByUserIdWithOptions(
     articlesLimit: number,
     sortArray: { colId: string; sort: 'asc' | 'desc' }[] = [],
+    articleFilters?: ArticleFilters,
+    searchString?: string,
     lastVisibleDoc?: DocumentSnapshot<DocumentData>
   ): Observable<{
     articles: AppArticle[];
@@ -223,6 +226,59 @@ export class ArticleService {
     // Apply pagination cursor
     if (lastVisibleDoc) {
       articlesQuery = query(articlesQuery, startAfter(lastVisibleDoc));
+    }
+
+    // Apply Custom Filters
+    if (articleFilters) {
+      if (articleFilters.tags && articleFilters.tags.length > 0) {
+        articlesQuery = query(
+          articlesQuery,
+          where('articleTags', 'array-contains-any', articleFilters.tags)
+        );
+      }
+
+      if (articleFilters.createdAtRange?.start) {
+        articlesQuery = query(
+          articlesQuery,
+          where('createdAt', '>=', articleFilters.createdAtRange.start)
+        );
+      }
+
+      if (articleFilters.createdAtRange?.end) {
+        // To make the range inclusive of last date
+        articleFilters.createdAtRange.end.setDate(
+          articleFilters.createdAtRange.end.getDate() + 1
+        );
+        articlesQuery = query(
+          articlesQuery,
+          where('createdAt', '<=', articleFilters.createdAtRange.end)
+        );
+      }
+
+      if (articleFilters.lastUpdatedRange?.start) {
+        articlesQuery = query(
+          articlesQuery,
+          where('lastUpdated', '>=', articleFilters.lastUpdatedRange.start)
+        );
+      }
+
+      if (articleFilters.lastUpdatedRange?.end) {
+        articleFilters.lastUpdatedRange.end.setDate(
+          articleFilters.lastUpdatedRange.end.getDate() + 1
+        );
+        articlesQuery = query(
+          articlesQuery,
+          where('lastUpdated', '<', articleFilters.lastUpdatedRange.end)
+        );
+      }
+    }
+
+    if (searchString && searchString != '') {
+      articlesQuery = query(
+        articlesQuery,
+        where('articleTitle', '>=', searchString),
+        where('articleTitle', '<=', searchString + '\uf8ff')
+      );
     }
 
     // Apply final limit

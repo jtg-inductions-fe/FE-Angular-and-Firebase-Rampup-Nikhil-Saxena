@@ -1,6 +1,8 @@
-import { Component, model } from '@angular/core';
+import { Component, inject, model } from '@angular/core';
 
 import { ArticleTagObjectModel } from '@core/models/article-tag.model';
+import { ArticleFilterAndSearchService } from '@services/article-filters-search.service';
+import { ArticleTagPipe } from '@shared/pipes/article-tags-pipe.pipe';
 
 @Component({
   selector: 'app-filters-sidebar',
@@ -8,6 +10,9 @@ import { ArticleTagObjectModel } from '@core/models/article-tag.model';
   styleUrls: ['./filters-sidebar.component.scss'],
 })
 export class FiltersSidebarComponent {
+  private articleTagPipe = inject(ArticleTagPipe);
+  private articleFilterService = inject(ArticleFilterAndSearchService);
+
   tags: ArticleTagObjectModel[] = [];
 
   lastUpdatedRange: { start: Date | null; end: Date | null } = {
@@ -19,17 +24,29 @@ export class FiltersSidebarComponent {
     end: null,
   };
 
-  isSidebarOpen = model<boolean>(true);
+  isSidebarOpen = model<boolean>(false);
 
   handleSidebarToggle(): void {
     this.isSidebarOpen.set(!this.isSidebarOpen());
   }
 
-  handleApplyFilters(): void {}
+  handleApplyFilters(): void {
+    this.articleFilterService.updateFilters({
+      tags: this.articleTagPipe.transform(this.tags),
+      lastUpdatedRange: this.lastUpdatedRange,
+      createdAtRange: this.createdAtRange,
+    });
+    this.handleSidebarToggle();
+  }
 
   handleClearFilters(): void {
     this.tags = [];
     this.lastUpdatedRange = { start: null, end: null };
     this.createdAtRange = { start: null, end: null };
+    this.articleFilterService.updateFilters({
+      tags: this.articleTagPipe.transform(this.tags),
+      lastUpdatedRange: this.lastUpdatedRange,
+      createdAtRange: this.createdAtRange,
+    });
   }
 }

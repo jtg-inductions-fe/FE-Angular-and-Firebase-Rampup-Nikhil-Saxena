@@ -8,6 +8,8 @@ import { MatSidenavModule } from '@angular/material/sidenav';
 
 import { ArticleListModule } from '@features/articles-list/article-list.module';
 import { FiltersSidebarModule } from '@features/filters-sidebar/filters-sidebar.module';
+import { ArticleTagPipe } from '@shared/pipes/article-tags-pipe.pipe';
+import { PipesModule } from '@shared/pipes/pipes.module';
 
 import { AdminRoutingModule } from './admin-routing.module';
 import { DashboardComponent } from './dashboard/dashboard.component';
@@ -25,5 +27,6 @@ import { DashboardComponent } from './dashboard/dashboard.component';
     MatButtonModule,
     MatInputModule,
   ],
+  providers: [PipesModule, ArticleTagPipe],
 })
 export class AdminModule {}

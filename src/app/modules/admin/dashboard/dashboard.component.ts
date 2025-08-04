@@ -1,9 +1,11 @@
 import {
   ChangeDetectionStrategy,
   Component,
-  signal,
+  inject,
   ViewEncapsulation,
 } from '@angular/core';
+
+import { ArticleFilterAndSearchService } from '@services/article-filters-search.service';
 
 @Component({
   selector: 'app-dashboard',
@@ -13,9 +15,16 @@ import {
   encapsulation: ViewEncapsulation.None,
 })
 export class DashboardComponent {
-  isSideBarOpen = signal(false);
+  private articleSearchAndFilterService = inject(ArticleFilterAndSearchService);
+
+  isSideBarOpen = false;
+
+  onSearchChange($event: Event) {
+    const searchString = ($event.target as HTMLInputElement).value;
+    this.articleSearchAndFilterService.updateSearchString(searchString);
+  }
 
   handleToggleSidebar(): void {
-    this.isSideBarOpen.set(!this.isSideBarOpen());
+    this.isSideBarOpen = !this.isSideBarOpen;
   }
 }

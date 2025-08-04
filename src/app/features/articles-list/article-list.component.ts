@@ -6,6 +6,7 @@ import {
 } from '@angular/core';
 import { DocumentData, DocumentSnapshot } from '@angular/fire/firestore';
 
+import { ArticleFilters } from '@core/models/article-filters.model';
 import { Article as AppArticle } from '@core/models/article.model';
 import { ArticleService } from '@services/article.service';
 import type {
@@ -14,10 +15,12 @@ import type {
   Theme,
   IDatasource,
   IGetRowsParams,
+  GridApi,
 } from 'ag-grid-community';
 import { themeAlpine } from 'ag-grid-community';
 
 import { articleListColumnDefinition } from './article-list-column-definition';
+import { ArticleFilterAndSearchService } from '../../services/article-filters-search.service';
 
 @Component({
   selector: 'app-article-list',
@@ -28,6 +31,7 @@ import { articleListColumnDefinition } from './article-list-column-definition';
 })
 export class ArticleListComponent {
   private articleService = inject(ArticleService);
+  private articleFilterAndSearchService = inject(ArticleFilterAndSearchService);
 
   rowModelType: RowModelType = 'infinite';
   rowBuffer = 0;
@@ -37,8 +41,12 @@ export class ArticleListComponent {
   maxBlocksInCache = 10;
   pagination = true;
   paginationPageSize = 10;
+  currentFilter!: ArticleFilters;
+  currentSearchString!: string;
 
-  myTheme = themeAlpine.withParams({ spacing: 12 });
+  gridApi: GridApi | null = null;
+
+  myTheme = themeAlpine.withParams({ spacing: 8 });
   theme: Theme | 'legacy' = this.myTheme;
 
   rowData!: AppArticle[];
@@ -50,6 +58,7 @@ export class ArticleListComponent {
   >();
 
   onGridReady(params: GridReadyEvent<AppArticle>) {
+    this.gridApi = params.api;
     const dataSource: IDatasource = {
       rowCount: undefined,
       getRows: (rowParams: IGetRowsParams) => {
@@ -63,9 +72,11 @@ export class ArticleListComponent {
         const lastVisibleDoc = this.lastVisibleDocMap.get(page - 1);
 
         this.articleService
-          .getAllArticlesByUserIdWithLimit(
+          .getAllArticlesByUserIdWithOptions(
             this.paginationPageSize,
             sortArray,
+            this.currentFilter,
+            this.currentSearchString,
             lastVisibleDoc
           )
           .subscribe({
@@ -94,5 +105,19 @@ export class ArticleListComponent {
     };
 
     params.api!.setGridOption('datasource', dataSource);
+  }
+
+  constructor() {
+    this.articleFilterAndSearchService.currentSharedFilter.subscribe(value => {
+      this.currentFilter = value;
+      this.gridApi?.purgeInfiniteCache();
+    });
+
+    this.articleFilterAndSearchService.currentSharedSearchString.subscribe(
+      value => {
+        this.currentSearchString = value;
+        this.gridApi?.purgeInfiniteCache();
+      }
+    );
   }
 }

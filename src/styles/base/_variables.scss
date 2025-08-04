@@ -35,9 +35,9 @@ $light-gray: get-palette-color($grey, 50);
 
 // Application-specific colors
 // Background: Main app background
-$app-background: get-palette-color($grey, 100);
+$app-background: get-palette-color($grey, 50);
 // Surface: Card and container backgrounds
-$app-surface: get-palette-color($grey, 100);
+$app-surface: get-palette-color($grey, 200);
 // Text: Primary text content
 $app-text-primary: get-palette-color($grey, 800);
 // Text: Secondary/muted text
@@ -107,4 +107,8 @@ $fonts: (
   ),
 );
 
+// app-bar height
 $app-bar-height: 64px;
+
+// footer height
+$app-footer-height: 64px;
