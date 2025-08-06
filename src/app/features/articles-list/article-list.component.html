@@ -1,0 +1,20 @@
+<div class="article-list">
+  <div class="article-list__container">
+    <ag-grid-angular
+      [pagination]="pagination"
+      class="article-list__content"
+      [paginationPageSize]="paginationPageSize"
+      [theme]="theme"
+      [columnDefs]="colDefs"
+      [paginationPageSizeSelector]="false"
+      (gridReady)="onGridReady($event)"
+      [rowBuffer]="rowBuffer"
+      [rowModelType]="rowModelType"
+      [cacheBlockSize]="cacheBlockSize"
+      [maxConcurrentDatasourceRequests]="maxConcurrentDatasourceRequests"
+      [infiniteInitialRowCount]="infiniteInitialRowCount"
+      [maxBlocksInCache]="maxBlocksInCache"
+      [overlayNoRowsTemplate]="'No Data Found'"
+      [domLayout]="'autoHeight'" />
+  </div>
+</div>
