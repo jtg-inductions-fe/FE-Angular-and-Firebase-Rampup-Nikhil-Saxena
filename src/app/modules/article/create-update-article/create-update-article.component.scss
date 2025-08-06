@@ -1,0 +1,58 @@
+@use 'abstracts/mixins' as mix;
+@use 'base/variables' as var;
+@use 'abstracts/functions' as fun;
+@use 'components/tag-input' as *;
+
+.create-update {
+  @include mix.flex(row, center, center);
+  width: 100%;
+  padding: fun.spacing(4);
+  background-color: var.$app-background;
+
+  &__container {
+    width: 100%;
+    background-color: var.$white;
+    padding: fun.spacing(4);
+    max-width: fun.pxToRem(1100);
+    border: fun.pxToRem(1) solid var.$app-border;
+  }
+
+  &__form {
+    padding: fun.spacing(4) 0;
+  }
+
+  &__form-field {
+    width: 100%;
+  }
+
+  &__image-input {
+    width: 100%;
+    padding: fun.spacing(4) 0;
+  }
+
+  &__tag-input-container {
+    padding: fun.spacing(4) 0;
+  }
+
+  &__write-story {
+    color: var.$app-text-primary;
+    padding-bottom: fun.spacing(4);
+  }
+
+  &__publish-button {
+    margin-top: fun.spacing(4);
+  }
+
+  &__error-container {
+    height: 100%;
+    min-height: fun.pxToRem(25);
+    overflow: hidden;
+  }
+
+  .mat-mdc-form-field-subscript-wrapper {
+    display: none;
+    height: 0;
+    margin: 0;
+    padding: 0;
+  }
+}

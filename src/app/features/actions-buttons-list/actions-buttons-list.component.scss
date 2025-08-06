@@ -1,0 +1,22 @@
+@use 'abstracts/mixins' as mix;
+@use 'base/variables' as var;
+@use 'abstracts/functions' as fun;
+
+.actions {
+  &__container {
+    @include mix.flex(row, center, center);
+    padding: 0;
+    width: 100%;
+    height: 100%;
+  }
+
+  &__button {
+    border-radius: 100%;
+    @include mix.flex(row, center, center);
+    width: 100%;
+    height: 100%;
+    &:hover {
+      opacity: 0.5;
+    }
+  }
+}

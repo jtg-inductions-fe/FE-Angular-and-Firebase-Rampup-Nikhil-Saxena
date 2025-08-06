@@ -1,0 +1,50 @@
+/// Font-Face Mixin
+/// Dynamically generates a @font-face rule for custom fonts.
+///
+/// @param {String} $name        - Font family name to be used in CSS.
+/// @param {String} $file        - Path to the font file (excluding extension).
+/// @param {String} $weight      - Font weight (default: normal).
+/// @param {String} $style       - Font style (default: normal).
+/// @param {String} $display     - Font display strategy for performance (default: swap).
+///
+@mixin font-face(
+  $name,
+  $file,
+  $weight: normal,
+  $style: normal,
+  $display: swap
+) {
+  @font-face {
+    font-family: $name;
+    src:
+      url('#{$file}.woff') format('woff'),
+      url('#{$file}.ttf') format('ttf');
+    font-weight: $weight;
+    font-style: $style;
+    font-display: $display;
+  }
+}
+
+/// Flexbox Layout Mixin
+/// Creates a flex container with configurable properties.
+///
+/// @param {String} $direction   - Flex direction (row, column, etc.)
+/// @param {String} $justify     - Justify-content value (default: flex-start)
+/// @param {String} $align       - Align-items value (default: flex-start)
+/// @param {String} $gap         - Gap between flex items (default: 0)
+/// @param {String} $wrap        - Flex-wrap value (default: nowrap)
+///
+@mixin flex(
+  $direction,
+  $justify: flex-start,
+  $align: flex-start,
+  $gap: 0,
+  $wrap: nowrap
+) {
+  display: flex;
+  flex-direction: $direction;
+  justify-content: $justify;
+  align-items: $align;
+  flex-wrap: $wrap;
+  gap: $gap;
+}

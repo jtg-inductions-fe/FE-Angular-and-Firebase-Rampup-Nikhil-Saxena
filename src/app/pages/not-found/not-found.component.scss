@@ -1,0 +1,22 @@
+@use 'abstracts/mixins' as mix;
+@use 'abstracts/functions' as fun;
+@use 'base/variables' as var;
+
+.not-found {
+  @include mix.flex(row, center, center);
+  padding: fun.spacing(4);
+  height: 100%;
+  width: 100%;
+  background-color: var.$white;
+
+  &__content {
+    @include mix.flex(column, center, center, fun.spacing(4));
+    width: 100%;
+    max-width: fun.pxToRem(1000);
+  }
+
+  &__text {
+    text-align: center;
+    color: var.$primary-color;
+  }
+}

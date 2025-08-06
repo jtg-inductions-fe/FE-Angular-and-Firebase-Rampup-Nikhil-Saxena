@@ -1,0 +1,13 @@
+<tag-input
+  class="article-tag-input"
+  [inputId]="inputDisabledId"
+  [editable]="true"
+  [theme]="'custom-theme'"
+  [secondaryPlaceholder]="inputPlaceholder"
+  [onlyFromAutocomplete]="true"
+  [(ngModel)]="tags">
+  <tag-input-dropdown
+    [showDropdownIfEmpty]="true"
+    [focusFirstElement]="true"
+    [autocompleteItems]="autocompleteItems"></tag-input-dropdown>
+</tag-input>

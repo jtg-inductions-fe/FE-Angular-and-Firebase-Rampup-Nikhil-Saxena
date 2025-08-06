@@ -1,0 +1,90 @@
+@use 'abstracts/mixins' as abs;
+@use 'base/variables' as var;
+@use 'abstracts/functions' as fun;
+@use 'sass:map';
+
+.auth-card {
+  @include abs.flex(row, center, center);
+  height: 100%;
+
+  overflow: auto;
+  padding: fun.spacing(4);
+  background: var.$app-background;
+
+  &__card {
+    margin-inline: fun.spacing(1);
+    width: fun.pxToRem(400);
+    padding: fun.spacing(8);
+  }
+
+  &__title {
+    text-align: center;
+    margin-bottom: fun.spacing(4);
+  }
+
+  &__form {
+    @include abs.flex(column, flex-start, flex-start, fun.spacing(0));
+  }
+
+  &__field-wrapper {
+    @include abs.flex(column, flex-start, flex-start);
+    width: 100%;
+  }
+
+  &__field--full-width {
+    width: 100%;
+  }
+
+  &__error-container {
+    height: 100%;
+    min-height: fun.pxToRem(30);
+    overflow: hidden;
+  }
+
+  &__error-text {
+    font-size: fun.pxToRem(13);
+  }
+
+  &__button {
+    width: 100%;
+
+    :disabled {
+      cursor: not-allowed;
+    }
+  }
+
+  &__footer {
+    margin-top: fun.spacing(4);
+    text-align: center;
+  }
+
+  &__link {
+    color: map-get($map: var.$primary, $key: 800);
+    cursor: pointer;
+    text-decoration: underline;
+  }
+
+  &__success-error-message-container {
+    height: fun.pxToRem(18);
+  }
+
+  &__message--success {
+    font-size: fun.pxToRem(13);
+    color: var.$primary-color;
+    font-weight: 500;
+  }
+
+  &__message--error {
+    color: map-get($map: var.$warn, $key: 800);
+    font-weight: 500;
+    font-size: fun.pxToRem(13);
+  }
+
+  // Override Material form field subscript to use custom error display
+  .mat-mdc-form-field-subscript-wrapper {
+    display: none;
+    height: 0;
+    margin: 0;
+    padding: 0;
+  }
+}

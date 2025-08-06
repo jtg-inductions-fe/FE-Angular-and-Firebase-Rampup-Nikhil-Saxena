@@ -1,0 +1,54 @@
+@use 'base/variables' as var;
+@use 'abstracts/functions' as fun;
+
+.loader {
+  width: fun.pxToRem(60);
+  height: fun.pxToRem(50);
+  display: block;
+  margin: fun.pxToRem(15) auto;
+  position: relative;
+  color: var.$app-text-secondary;
+  box-sizing: border-box;
+  animation: rotation_19 1s linear infinite;
+}
+
+.loader::after,
+.loader::before {
+  content: '';
+  box-sizing: border-box;
+  position: absolute;
+  width: fun.pxToRem(30);
+  height: fun.pxToRem(30);
+  top: 0;
+  background-color: var.$app-text-secondary;
+  border-radius: 50%;
+  animation: scale50 1s infinite ease-in-out;
+}
+
+.loader::before {
+  top: auto;
+  bottom: 0;
+  background-color: var.$primary-color;
+  animation-delay: 0.5s;
+}
+
+@keyframes rotation_19 {
+  0% {
+    transform: rotate(0deg);
+  }
+
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes scale50 {
+  0%,
+  100% {
+    transform: scale(0);
+  }
+
+  50% {
+    transform: scale(1);
+  }
+}

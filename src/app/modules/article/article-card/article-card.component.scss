@@ -1,0 +1,61 @@
+@use 'abstracts/mixins' as mix;
+@use 'base/variables' as var;
+@use 'abstracts/functions' as fun;
+@use 'components/tag-input' as *;
+
+.article-card {
+  width: 100%;
+  padding: fun.spacing(4);
+  @include mix.flex(row, center, center);
+  background-color: var.$app-background;
+
+  &__container {
+    width: 100%;
+    padding: fun.spacing(4);
+    max-width: fun.pxToRem(1100);
+    border: fun.pxToRem(1) solid var.$app-border;
+  }
+
+  &__article-image {
+    max-height: fun.pxToRem(600);
+    padding-bottom: fun.spacing(8);
+  }
+
+  &__title {
+    font-weight: 800;
+    font-size: fun.pxToRem(60);
+    line-height: fun.pxToRem(70);
+    padding: fun.spacing(4) 0;
+  }
+
+  &__subtitle-container {
+    @include mix.flex(row, flex-start, center, fun.spacing(2));
+    cursor: pointer;
+    padding-top: fun.spacing(4);
+  }
+
+  &__subtitle-spacing {
+    flex: 1 1 auto;
+  }
+
+  &__avatar {
+    width: fun.pxToRem(40);
+    height: fun.pxToRem(40);
+  }
+
+  .ql-container {
+    border: none;
+  }
+
+  .ng2-tag-input {
+    border: none;
+  }
+
+  &__disable-input {
+    pointer-events: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+  }
+}

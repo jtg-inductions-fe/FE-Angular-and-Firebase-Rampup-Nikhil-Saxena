@@ -1,0 +1,67 @@
+<mat-toolbar color="primary" class="app-bar__toolbar">
+  <a routerLink="/" class="app-bar__logo-container">
+    <img
+      class="app-bar__logo"
+      src="assets/logo/Writica.png"
+      alt="Writica logo" />
+    <span class="app-bar__logo-name">Writica</span>
+  </a>
+
+  <span class="app-bar__space"></span>
+  <!-- For logged-in users -->
+  <ng-container *ngIf="isLoggedIn(); else guestLinks">
+    <div class="app-bar__buttons-group">
+      <button mat-raised-button routerLink="/explore">
+        <mat-icon class="material-symbols-outlined">auto_stories</mat-icon>
+        Explore Stories
+      </button>
+      <button
+        class="app-bar__dashboard-button"
+        mat-raised-button
+        routerLink="/admin/dashboard">
+        Dashboard
+      </button>
+    </div>
+
+    <button
+      mat-icon-button
+      class="app-bar__profile"
+      [matMenuTriggerFor]="profileMenu">
+      <img
+        src="assets/avatars/user-avatar.webp"
+        alt="User avatar"
+        class="app-bar__profile-avatar" />
+    </button>
+    <mat-menu #profileMenu="matMenu" xPosition="before" yPosition="below">
+      <div class="app-bar__profile-menu-tooltip"></div>
+      <div class="app-bar__profile-menu">
+        <img
+          src="assets/avatars/user-avatar.webp"
+          class="app-bar__profile-card-avatar"
+          alt="User avatar" />
+        <div class="app-bar__profile-info">
+          <div class="app-bar__username">{{ username() }}</div>
+          <div class="app-bar__email">{{ email() }}</div>
+        </div>
+        <button
+          class="app-bar__profile-card-dashboard-button"
+          mat-raised-button
+          routerLink="/admin/dashboard">
+          Dashboard
+        </button>
+        <button mat-raised-button color="warn" (click)="handleLogout()">
+          Logout
+        </button>
+      </div>
+    </mat-menu>
+  </ng-container>
+
+  <ng-template #guestLinks>
+    <div class="app-bar__buttons-group">
+      <a mat-button routerLink="/auth/login">Login</a>
+      <a class="app-bar__signup" mat-raised-button routerLink="/auth/signup">
+        Sign up
+      </a>
+    </div>
+  </ng-template>
+</mat-toolbar>

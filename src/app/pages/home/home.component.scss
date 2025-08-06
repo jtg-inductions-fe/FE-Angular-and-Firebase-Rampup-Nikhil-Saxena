@@ -1,0 +1,17 @@
+@use 'base/variables' as var;
+@use 'abstracts/functions' as fun;
+@use 'abstracts/mixins' as mix;
+@use 'abstracts/breakpoints' as bps;
+
+.home {
+  &__container {
+    width: 100%;
+    @include mix.flex(column, center, center, fun.spacing(2));
+    padding: fun.spacing(2);
+  }
+
+  &__article-list {
+    width: 100%;
+    max-width: fun.pxToRem(1100);
+  }
+}

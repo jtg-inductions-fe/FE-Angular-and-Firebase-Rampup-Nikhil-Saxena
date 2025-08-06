@@ -1,0 +1,46 @@
+@use 'abstracts/mixins' as mix;
+@use 'abstracts/functions' as fun;
+@use 'base/variables' as var;
+
+.filter-sidebar {
+  &__container {
+    width: 100%;
+    height: 100%;
+  }
+
+  &__list {
+    @include mix.flex(column, space-between, center);
+    height: 100%;
+    background-color: var.$white;
+    padding: fun.spacing(4);
+  }
+
+  &__content {
+    height: 100%;
+    width: 100%;
+  }
+
+  &__close-container {
+    @include mix.flex(row, flex-end);
+    width: 100%;
+  }
+
+  &__filters-heading {
+    color: var.$app-text-primary;
+    padding-bottom: fun.spacing(2);
+  }
+
+  &__field {
+    width: 100%;
+    padding: fun.spacing(4) 0;
+  }
+
+  &__field--full-width {
+    width: 100%;
+  }
+
+  &__apply-filter-container {
+    width: 100%;
+    @include mix.flex(row, flex-end, flex-start, fun.spacing(4));
+  }
+}
