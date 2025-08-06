@@ -6,11 +6,11 @@
       [src]="cardImage"
       alt="Article Image" />
 
-    <mat-card-title class="article-card__title">
-      {{ cardTitle }}
+    <mat-card-title>
+      <h1 class="article-card__title">{{ cardTitle }}</h1>
     </mat-card-title>
 
-    <mat-card-subtitle class="article-card__subtitle-container">
+    <div class="article-card__subtitle-container">
       <img
         class="article-card__avatar"
         mat-card-image
@@ -21,7 +21,7 @@
       <p class="article-card__last-edited">
         {{ lastUpdateDate | dateTransform }}
       </p>
-    </mat-card-subtitle>
+    </div>
 
     <div class="article-card__content">
       <app-text-editor type="viewer" [content]="cardContent"></app-text-editor>

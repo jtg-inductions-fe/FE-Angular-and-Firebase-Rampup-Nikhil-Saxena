@@ -13,13 +13,13 @@
   }
 
   &__content {
-    padding: fun.spacing(2);
+    padding: fun.spacing(3);
     background-color: var.$app-background;
   }
 
   &__header {
     @include mix.flex(row, space-between, center, fun.spacing(2), wrap);
-    padding: fun.spacing(2) 0;
+    padding-bottom: fun.spacing(3);
   }
 
   &__header-button-group {
@@ -42,6 +42,7 @@
   }
 
   .mat-drawer {
+    height: 100%;
     width: 100%;
     max-width: fun.pxToRem(400);
   }
