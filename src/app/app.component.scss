@@ -1,6 +1,0 @@
-@use 'base/variables' as var;
-
-.app-main {
-  height: calc(100vh - var.$app-bar-height);
-  background-color: var.$app-background;
-}

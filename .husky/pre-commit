@@ -1,7 +1,0 @@
-#!/usr/bin/env sh
-. "$(dirname -- "$0")/_/husky.sh"
-
-npx pretty-quick --staged || exit 1
-npm run lint:fix || exit 1
-git add . || exit 1
-npm run lint || exit 1
