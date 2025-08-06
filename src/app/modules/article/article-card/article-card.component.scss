@@ -44,7 +44,16 @@
     padding: fun.spacing(4) 0;
   }
 
+  .ql-container {
+    border: none;
+  }
+
+  .ng2-tag-input {
+    border: none;
+  }
+
   &__disable-input {
+    border: none;
     pointer-events: none;
     -webkit-user-select: none;
     -moz-user-select: none;

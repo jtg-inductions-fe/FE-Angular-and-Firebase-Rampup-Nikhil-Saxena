@@ -6,6 +6,7 @@ import {
   Input,
   ChangeDetectorRef,
   OnDestroy,
+  ViewEncapsulation,
 } from '@angular/core';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { ActivatedRoute } from '@angular/router';
@@ -21,6 +22,7 @@ import { Subject, takeUntil } from 'rxjs';
   templateUrl: './article-card.component.html',
   styleUrls: ['./article-card.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  encapsulation: ViewEncapsulation.None,
 })
 export class ArticleCardComponent implements OnInit, OnDestroy {
   private route = inject(ActivatedRoute);

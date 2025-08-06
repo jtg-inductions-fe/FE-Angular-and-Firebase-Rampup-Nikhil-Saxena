@@ -1,4 +1,4 @@
-<div class="home__container">
+<div *ngIf="articleList" class="home__container">
   <div class="home__article-list" *ngFor="let article of articleList">
     <app-article-summary-card
       [articleDetails]="article"></app-article-summary-card>

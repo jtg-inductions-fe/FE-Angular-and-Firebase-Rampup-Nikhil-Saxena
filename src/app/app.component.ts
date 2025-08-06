@@ -1,4 +1,4 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, inject, OnInit, ChangeDetectorRef } from '@angular/core';
 
 import { LoaderService } from '@services/loader.service';
 
@@ -12,10 +12,12 @@ export class AppComponent implements OnInit {
   isLoading: boolean = false;
 
   private loaderService = inject(LoaderService);
+  private cdr = inject(ChangeDetectorRef);
 
   ngOnInit(): void {
     this.loaderService.currentSharedLoader.subscribe(value => {
       this.isLoading = value;
+      this.cdr.detectChanges();
     });
   }
 }
