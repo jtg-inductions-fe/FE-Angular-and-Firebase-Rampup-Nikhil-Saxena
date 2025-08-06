@@ -1,0 +1,40 @@
+<div class="article-card">
+  <mat-card class="article-card__container">
+    <img
+      *ngIf="cardImage"
+      class="article-card__article-image"
+      [src]="cardImage"
+      alt="Article Image" />
+
+    <mat-card-title class="article-card__title">
+      {{ cardTitle }}
+    </mat-card-title>
+
+    <mat-card-subtitle class="article-card__subtitle-container">
+      <img
+        class="article-card__avatar"
+        mat-card-image
+        src="assets/avatars/user-avatar.webp"
+        alt="User Avatar" />
+      <mat-card-subtitle *ngIf="username">by {{ username }}</mat-card-subtitle>
+      <span class="article-card__subtitle-spacing"></span>
+      <p class="article-card__last-edited">
+        {{ lastUpdateDate | dateTransform }}
+      </p>
+    </mat-card-subtitle>
+
+    <div class="article-card__content">
+      <app-text-editor type="viewer" [content]="cardContent"></app-text-editor>
+    </div>
+
+    <div *ngIf="tags && tags.length > 0" class="article-card__tags">
+      <tag-input
+        class="article-card__disable-input"
+        [ngModel]="tags"
+        theme="custom-theme"
+        [removable]="false"
+        [placeholder]="''">
+      </tag-input>
+    </div>
+  </mat-card>
+</div>

@@ -1,0 +1,6 @@
+@use '@angular/material' as mat;
+
+// Custom typography config TODO
+$custom-typography: mat.define-typography-config();
+
+$typography-config: $custom-typography;
