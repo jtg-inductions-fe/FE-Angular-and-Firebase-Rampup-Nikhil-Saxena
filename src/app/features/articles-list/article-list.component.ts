@@ -34,15 +34,16 @@ export class ArticleListComponent {
   private articleFilterAndSearchService = inject(ArticleFilterAndSearchService);
 
   rowModelType: RowModelType = 'infinite';
-  rowBuffer = 0;
-  cacheBlockSize = 10;
+  rowBuffer = 15;
+  cacheBlockSize = 15;
   maxConcurrentDatasourceRequests = 1;
-  infiniteInitialRowCount = 10;
-  maxBlocksInCache = 10;
+  infiniteInitialRowCount = 20;
+  maxBlocksInCache = 15;
   pagination = true;
-  paginationPageSize = 10;
+  paginationPageSize = 15;
   currentFilter!: ArticleFilters;
   currentSearchString!: string;
+  isLoading: boolean = false;
 
   gridApi: GridApi | null = null;
 
@@ -62,6 +63,7 @@ export class ArticleListComponent {
     const dataSource: IDatasource = {
       rowCount: undefined,
       getRows: (rowParams: IGetRowsParams) => {
+        this.isLoading = true;
         const sortArray: { colId: string; sort: 'asc' | 'desc' }[] =
           rowParams.sortModel.map(sort => ({
             colId: sort.colId,
@@ -94,8 +96,10 @@ export class ArticleListComponent {
                     : -1;
                 rowParams.successCallback(data, lastRow);
               } else {
+                this.gridApi?.showNoRowsOverlay();
                 rowParams.successCallback([], 0);
               }
+              this.isLoading = false;
             },
             error: () => {
               rowParams.failCallback();

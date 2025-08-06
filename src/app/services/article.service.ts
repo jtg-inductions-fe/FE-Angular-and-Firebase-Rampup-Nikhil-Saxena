@@ -25,6 +25,7 @@ import { Article as AppArticle } from '@core/models/article.model';
 
 import { from, map, Observable, switchMap } from 'rxjs';
 
+import { LoaderService } from './loader.service';
 import { LocalStorageService } from './local-storage.service';
 
 @Injectable({
@@ -33,10 +34,17 @@ import { LocalStorageService } from './local-storage.service';
 export class ArticleService {
   private firestore = inject(Firestore);
   private localStorage = inject(LocalStorageService);
+  private loaderService = inject(LoaderService);
 
   private userId = this.localStorage.getUserData()?.userId;
   private username = this.localStorage.getUserData()?.username;
 
+  /**
+   * Converts a Firestore Timestamp or JS Date to a normalized JS Date (00:00:00).
+   *
+   * @param value - A Date or Firestore Timestamp object
+   * @returns Normalized JavaScript Date object
+   */
   private dateTimestampTransform(value: Date | Timestamp): Date {
     if (!value) {
       return new Date();
@@ -104,10 +112,12 @@ export class ArticleService {
    * @returns An observable emitting the `AppArticle` if found, or `null` otherwise
    */
   getArticleById(articleId: string): Observable<AppArticle | null> {
+    this.loaderService.setLoadingTrue();
     const articleDocRef = doc(this.articlesCollection, articleId);
 
     return from(getDoc(articleDocRef)).pipe(
       map(snapshot => {
+        this.loaderService.setLoadingFalse();
         if (snapshot.exists()) {
           const data = snapshot.data() as AppArticle;
 
@@ -156,12 +166,31 @@ export class ArticleService {
    * @returns Observable to get Article List.
    */
 
-  getAllArticle(): Observable<AppArticle[] | null> {
-    const articlesQuery = query(this.articlesCollection);
+  getAllArticle(
+    lastVisibleDoc?: DocumentSnapshot<DocumentData>,
+    //will add pagination later
+    articlesLimit: number = 1000
+  ): Observable<{
+    articles: AppArticle[];
+    lastDoc: DocumentSnapshot<DocumentData> | null;
+  }> {
+    this.loaderService.setLoadingTrue();
+    let articlesQuery = query(this.articlesCollection);
+
+    // Apply pagination cursor
+    if (lastVisibleDoc) {
+      articlesQuery = query(articlesQuery, startAfter(lastVisibleDoc));
+    }
+
+    // Apply final limit
+    articlesQuery = query(articlesQuery, limit(articlesLimit));
+
+    // Execute query
     return from(getDocs(articlesQuery)).pipe(
       map(snapshot => {
+        this.loaderService.setLoadingFalse();
         if (snapshot.empty) {
-          return null;
+          return { articles: [], lastDoc: null };
         }
 
         const articles: AppArticle[] = snapshot.docs.map(docSnap => {
@@ -180,11 +209,23 @@ export class ArticleService {
           );
         });
 
-        return articles;
+        const lastDoc = snapshot.docs[snapshot.docs.length - 1];
+
+        return { articles, lastDoc };
       })
     );
   }
 
+  /**
+   * Fetches articles for the current user with filtering, sorting, searching, and pagination support.
+   *
+   * @param articlesLimit - Maximum number of articles to fetch
+   * @param sortArray - Sorting rules (array of { colId, sort })
+   * @param articleFilters - Filters like tags, date ranges
+   * @param searchString - Optional search string for articleTitle
+   * @param lastVisibleDoc - Cursor for pagination
+   * @returns Observable emitting fetched articles and last document for pagination
+   */
   getAllArticlesByUserIdWithOptions(
     articlesLimit: number,
     sortArray: { colId: string; sort: 'asc' | 'desc' }[] = [],
@@ -195,11 +236,9 @@ export class ArticleService {
     articles: AppArticle[];
     lastDoc: DocumentSnapshot<DocumentData> | null;
   }> {
+    if (!lastVisibleDoc) this.loaderService.setLoadingTrue();
     // Define the collection reference
-    const articlesRef = collection(
-      this.firestore,
-      'articles'
-    ) as CollectionReference<DocumentData>;
+    const articlesRef = this.articlesCollection;
 
     const currentUserId = this.userId;
     if (!currentUserId) {
@@ -287,6 +326,7 @@ export class ArticleService {
     // Execute query
     return from(getDocs(articlesQuery)).pipe(
       map(snapshot => {
+        this.loaderService.setLoadingFalse();
         if (snapshot.empty) {
           return { articles: [], lastDoc: null };
         }

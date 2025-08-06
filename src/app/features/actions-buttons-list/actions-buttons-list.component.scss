@@ -4,7 +4,7 @@
 
 .actions {
   &__container {
-    @include mix.flex(row, center, center, fun.spacing(2));
+    @include mix.flex(row, center, center);
     padding: 0;
     width: 100%;
     height: 100%;

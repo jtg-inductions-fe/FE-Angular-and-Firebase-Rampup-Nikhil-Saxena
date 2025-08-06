@@ -8,6 +8,8 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { RouterModule } from '@angular/router';
 
 import { AppBarModule } from '@core/components/app-bar/app-bar.module';
+import { FooterComponent } from '@core/components/footer/footer.component';
+import { LoaderComponent } from '@core/components/loader/loader.component';
 import {
   initializeFirebaseApp,
   provideFirebaseAuth,
@@ -24,12 +26,15 @@ import { ROUTE_REF } from './app.routes';
     RouterModule.forRoot(ROUTE_REF),
     BrowserAnimationsModule,
     AppBarModule,
+    FooterComponent,
+    LoaderComponent,
   ],
   providers: [
     provideFirebaseApp(() => initializeFirebaseApp()),
     provideAuth(() => provideFirebaseAuth()),
     provideFirestore(() => provideCustomFirestore()),
     provideHttpClient(),
+    // { provide: ErrorHandler, useClass: GlobalErrorHandler },
   ],
   bootstrap: [AppComponent],
 })

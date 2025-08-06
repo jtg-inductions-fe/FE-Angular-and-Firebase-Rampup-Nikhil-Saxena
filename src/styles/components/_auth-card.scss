@@ -5,7 +5,10 @@
 
 .auth-card {
   @include abs.flex(row, center, center);
-  height: calc(100vh - var.$app-bar-height);
+  height: 100%;
+
+  overflow: auto;
+  padding: fun.spacing(4);
   background: var.$app-background;
 
   &__card {

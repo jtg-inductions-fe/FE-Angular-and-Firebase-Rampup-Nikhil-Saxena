@@ -1,0 +1,26 @@
+@use 'base/variables' as var;
+@use 'abstracts/functions' as fun;
+@use 'abstracts/mixins' as mix;
+@use 'abstracts/breakpoints' as bps;
+
+.article-card {
+  width: 100%;
+  cursor: pointer;
+
+  &__article-image {
+    display: none;
+    width: fun.pxToRem(200);
+    min-height: fun.pxToRem(150);
+    @include bps.breakpoint(md) {
+      display: block;
+    }
+  }
+
+  &__disable-input {
+    pointer-events: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+  }
+}
