@@ -175,7 +175,12 @@ export class ArticleService {
     lastDoc: DocumentSnapshot<DocumentData> | null;
   }> {
     this.loaderService.setLoadingTrue();
-    let articlesQuery = query(this.articlesCollection);
+    let articlesQuery = query(
+      this.articlesCollection,
+      orderBy('createdAt', 'desc')
+    );
+
+    articlesQuery = query(articlesQuery);
 
     // Apply pagination cursor
     if (lastVisibleDoc) {

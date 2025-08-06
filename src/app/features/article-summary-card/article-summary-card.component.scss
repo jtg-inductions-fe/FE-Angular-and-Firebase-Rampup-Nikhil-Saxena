@@ -16,11 +16,19 @@
     }
   }
 
+  .ng2-tag-input {
+    border: none;
+  }
+
   &__disable-input {
     pointer-events: none;
     -webkit-user-select: none;
     -moz-user-select: none;
     -ms-user-select: none;
     user-select: none;
+  }
+
+  &__content {
+    padding: fun.spacing(4);
   }
 }

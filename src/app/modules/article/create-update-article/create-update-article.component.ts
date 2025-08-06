@@ -192,7 +192,7 @@ export class CreateArticleComponent implements OnInit {
         formValue.title,
         formValue.titleImage || '',
         formValue.editorContent,
-        formValue.tags,
+        this.articleTagPipe.transform(formValue.tags),
         new Date(),
         new Date()
       );

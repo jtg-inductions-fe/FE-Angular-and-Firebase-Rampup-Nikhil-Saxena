@@ -18,17 +18,20 @@
 
   &__article-image {
     max-height: fun.pxToRem(600);
+    padding-bottom: fun.spacing(8);
   }
 
   &__title {
     font-weight: 800;
-    font-size: fun.pxToRem(50);
+    font-size: fun.pxToRem(60);
+    line-height: fun.pxToRem(70);
     padding: fun.spacing(4) 0;
   }
 
   &__subtitle-container {
     @include mix.flex(row, flex-start, center, fun.spacing(2));
     cursor: pointer;
+    padding-top: fun.spacing(4);
   }
 
   &__subtitle-spacing {
@@ -40,10 +43,6 @@
     height: fun.pxToRem(40);
   }
 
-  &__content {
-    padding: fun.spacing(4) 0;
-  }
-
   .ql-container {
     border: none;
   }
@@ -53,7 +52,6 @@
   }
 
   &__disable-input {
-    border: none;
     pointer-events: none;
     -webkit-user-select: none;
     -moz-user-select: none;
