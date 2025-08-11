@@ -1,0 +1,1 @@
+export const SNACKBAR_DISPLAY_DURATION = 3000;

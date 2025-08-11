@@ -1,0 +1,10 @@
+<div class="app-main">
+  <div class="app-main__navbar-container">
+    <app-bar></app-bar>
+  </div>
+  <main class="app-main__container" role="main">
+    <app-loader class="app-main__loader" *ngIf="isLoading"></app-loader>
+    <router-outlet></router-outlet>
+  </main>
+  <app-footer></app-footer>
+</div>

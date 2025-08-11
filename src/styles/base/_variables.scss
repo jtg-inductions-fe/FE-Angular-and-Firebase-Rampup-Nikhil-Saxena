@@ -1,0 +1,114 @@
+@use '@angular/material' as mat;
+@use 'sass:map';
+
+@function get-palette-color($palette-map, $shade) {
+  @return map.get($palette-map, $shade);
+}
+
+$font-size: 1rem;
+
+// Primary Color Template: Teal
+$primary: mat.define-palette(mat.$teal-palette);
+// Secondary(secondary) Color Template: Grey
+$grey: mat.define-palette(mat.$grey-palette, 600, 300, 900);
+// Accent
+$accent: mat.define-palette(mat.$blue-grey-palette, 600, 300, 900);
+// Color: Red
+$warn: mat.define-palette(mat.$red-palette);
+
+// Primary Color
+$primary-color-light: get-palette-color($primary, 50);
+$primary-color: get-palette-color($primary, 600);
+$primary-color-dark: get-palette-color($primary, 900);
+
+// Warn Color
+$warn-color: get-palette-color($warn, 600);
+
+// SecondaryColor
+$grey-color: get-palette-color($grey, 600);
+
+// White
+$white: #ffffff;
+
+// Light Gray
+$light-gray: get-palette-color($grey, 50);
+
+// Application-specific colors
+// Background: Main app background
+$app-background: get-palette-color($grey, 50);
+// Surface: Card and container backgrounds
+$app-surface: get-palette-color($grey, 200);
+// Text: Primary text content
+$app-text-primary: get-palette-color($grey, 800);
+// Text: Secondary/muted text
+$app-text-secondary: get-palette-color($grey, 600);
+// Borders: Input fields and dividers
+$app-border: get-palette-color($grey, 400);
+// Disabled: Disabled state elements
+$app-disabled: get-palette-color($grey, 500);
+
+$breakpoint-xs: 320px;
+$breakpoint-sm: 480px;
+$breakpoint-md: 768px;
+$breakpoint-lg: 1024px;
+$breakpoint-xl: 1400px;
+
+// Base spacing unit
+$base-spacing: 4px;
+
+// Spacing scale (factor-based)
+$spacing: (
+  0: 0,
+  0.5: $base-spacing * 0.5,
+  // 2px
+  1: $base-spacing * 1,
+  // 4px
+  1.5: $base-spacing * 1.5,
+  // 6px
+  2: $base-spacing * 2,
+  // 8px
+  3: $base-spacing * 3,
+  // 12px
+  4: $base-spacing * 4,
+  // 16px
+  5: $base-spacing * 5,
+  // 20px
+  6: $base-spacing * 6,
+  // 24px
+  8: $base-spacing * 8,
+  // 32px
+  10: $base-spacing * 10, // 40px
+);
+
+$font-path: '@assets/fonts/';
+
+// Font-face configuration map
+$fonts: (
+  'roboto-regular': (
+    name: 'roboto',
+    path: $font-path + 'Roboto-Regular',
+    weight: 400,
+  ),
+  'roboto-medium': (
+    name: 'roboto',
+    path: $font-path + 'Roboto-Medium',
+    weight: 500,
+  ),
+
+  'roboto-bold': (
+    name: 'roboto',
+    path: $font-path + 'Roboto-Bold',
+    weight: 700,
+  ),
+  'roboto-black': (
+    name: 'roboto',
+    path: $font-path + 'Roboto-Black',
+    weight: 800,
+  ),
+);
+
+// app-bar height
+$app-bar-height: 64px;
+
+// footer height
+$app-footer-height: 64px;

@@ -1,0 +1,29 @@
+<mat-card class="article-card">
+  <mat-card-header>
+    <mat-card-title-group>
+      <mat-card-title>{{ articleDetails?.articleTitle }}</mat-card-title>
+      <mat-card-subtitle
+        >{{ articleDetails?.articleUsername }}
+        <tag-input
+          class="article-card__disable-input"
+          [ngModel]="articleDetails?.articleTags"
+          theme="custom-theme"
+          [removable]="false"
+          [placeholder]="''">
+        </tag-input>
+      </mat-card-subtitle>
+
+      @if (articleDetails?.articleImage) {
+        <img
+          mat-card-sm-image
+          class="article-card__article-image"
+          [src]="articleDetails?.articleImage" />
+      }
+    </mat-card-title-group>
+  </mat-card-header>
+  <div class="article-card__content">
+    <button (click)="view()" color="accent" mat-raised-button>
+      View Article
+    </button>
+  </div>
+</mat-card>

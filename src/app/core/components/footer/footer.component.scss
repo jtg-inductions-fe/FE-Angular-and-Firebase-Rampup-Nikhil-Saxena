@@ -1,0 +1,32 @@
+@use 'abstracts/mixins' as mix;
+@use 'base/variables' as var;
+@use 'abstracts/breakpoints' as bps;
+@use 'abstracts/functions' as fun;
+
+.footer {
+  &__container {
+    @include mix.flex(row, space-between, center);
+    padding: 0 fun.spacing(4);
+    height: fun.pxToRem(64);
+    background-color: var.$app-surface;
+    z-index: 3;
+  }
+
+  &__content {
+    @include mix.flex(row, center, center, fun.spacing(4));
+    font-size: fun.pxToRem(12);
+    color: var.$app-text-primary;
+  }
+
+  &__content-text {
+    color: var.$app-text-secondary;
+  }
+
+  &__links {
+    @include mix.flex(row, center, center);
+  }
+
+  &__icon-button {
+    @include mix.flex(row, center, center);
+  }
+}
