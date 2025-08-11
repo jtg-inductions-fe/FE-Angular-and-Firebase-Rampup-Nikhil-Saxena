@@ -5,7 +5,7 @@ import {
   ViewEncapsulation,
 } from '@angular/core';
 
-import { ArticleFilterAndSearchService } from '@services/article-filters-search.service';
+import { ArticleFilterAndSearchService } from '@services/articleFiltersAndSearch.service';
 
 @Component({
   selector: 'app-dashboard',

@@ -5,18 +5,17 @@ import {
   signal,
   ViewEncapsulation,
 } from '@angular/core';
-import {
-  FormGroup,
-  FormControl,
-  Validators,
-  ValidatorFn,
-  AbstractControl,
-  ValidationErrors,
-} from '@angular/forms';
+import { FormGroup, FormControl, Validators } from '@angular/forms';
+import { Router } from '@angular/router';
 
-import { PASSWORD_REGEX } from '@core/constants/constants';
+import { PASSWORD_REGEX } from '@core/constants/app.const';
+import {
+  PASSWORD_VALIDATION_ERROR,
+  UNEXPECTED_ERROR,
+  USER_ALREADY_EXISTS,
+} from '@core/constants/messages.const';
+import { matchPasswordsValidator } from '@core/validators/auth.validator';
 import { AuthService } from '@services/auth.services';
-import { NavigationService } from '@services/navigation.services';
 import { SnackbarService } from '@services/snackbar.service';
 
 @Component({
@@ -28,7 +27,7 @@ import { SnackbarService } from '@services/snackbar.service';
 })
 export class SignupComponent {
   // Injected Services
-  private readonly navigationService = inject(NavigationService); // Handles route navigation
+  private readonly routerService = inject(Router); // Handles route navigation
   private readonly snackBarService = inject(SnackbarService); // Shows snackbars
   private readonly authService = inject(AuthService); // Handles auth API calls
 
@@ -51,7 +50,7 @@ export class SignupComponent {
       ]),
       confirmPassword: new FormControl('', [Validators.required]), // Confirm Password input
     },
-    { validators: this.matchPasswordsValidator() } // Group-level validator
+    { validators: matchPasswordsValidator() } // Group-level validator
   );
 
   usernameControl = signal(this.signupForm.get('username') as FormControl); // Username control signal
@@ -69,18 +68,6 @@ export class SignupComponent {
   clickEvent(event: MouseEvent): void {
     this.hidePassword.set(!this.hidePassword());
     event.stopPropagation();
-  }
-
-  /**
-   * Custom validator to match password and confirm password
-   * @returns ValidatorFn
-   */
-  matchPasswordsValidator(): ValidatorFn {
-    return (group: AbstractControl): ValidationErrors | null => {
-      const password = group.get('password')?.value;
-      const confirmPassword = group.get('confirmPassword')?.value;
-      return password === confirmPassword ? null : { mismatch: true };
-    };
   }
 
   /**
@@ -109,7 +96,7 @@ export class SignupComponent {
         this.successMessage.set(message);
         this.snackBarService.show(message);
         this.isSubmitting.set(false);
-        this.navigationService.handleNavigation('/');
+        this.routerService.navigate(['/']);
       },
       error: error => {
         this.handleFirebaseError(error);
@@ -129,16 +116,15 @@ export class SignupComponent {
     this.confirmPasswordControl().setErrors(null);
 
     const errorStr = String(error);
-    let message = 'An unexpected error occurred. Please try again.';
+    let message = UNEXPECTED_ERROR;
 
     if (
       errorStr.includes('already exists') ||
       errorStr.includes('email-already-in-use')
     ) {
-      message = 'Email already in use. Please try logging in.';
+      message = USER_ALREADY_EXISTS;
     } else if (errorStr.includes('weak-password')) {
-      message =
-        'Password must be at least 8 characters and contain letters, numbers, and special characters.';
+      message = PASSWORD_VALIDATION_ERROR;
     }
 
     this.errorMessage.set(message);

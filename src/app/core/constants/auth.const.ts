@@ -1,0 +1,1 @@
+export const AUTH_TOKEN_EXPIRATION_TIME = 2 * 24 * 60 * 60 * 1000;

@@ -6,12 +6,11 @@ import { MatInputModule } from '@angular/material/input';
 import { MatListModule } from '@angular/material/list';
 import { MatSidenavModule } from '@angular/material/sidenav';
 
-import { ArticleListModule } from '@features/articles-list/article-list.module';
-import { FiltersSidebarModule } from '@features/filters-sidebar/filters-sidebar.module';
-import { ArticleTagPipe } from '@shared/pipes/article-tags-pipe.pipe';
-import { PipesModule } from '@shared/pipes/pipes.module';
+import { ArticleListModule } from '@features/articlesList/articleList.module';
+import { FiltersSidebarModule } from '@features/filtersSidebar/filtersSidebar.module';
+import { ArticleTagPipe } from '@shared/pipes/articleTagsPipe.pipe';
 
-import { AdminRoutingModule } from './admin-routing.module';
+import { AdminRoutingModule } from './adminRouting.module';
 import { DashboardComponent } from './dashboard/dashboard.component';
 
 @NgModule({
@@ -27,6 +26,6 @@ import { DashboardComponent } from './dashboard/dashboard.component';
     MatButtonModule,
     MatInputModule,
   ],
-  providers: [PipesModule, ArticleTagPipe],
+  providers: [ArticleTagPipe],
 })
 export class AdminModule {}

@@ -7,9 +7,14 @@ import {
   ViewEncapsulation,
 } from '@angular/core';
 import { Validators, FormControl, FormGroup } from '@angular/forms';
+import { Router } from '@angular/router';
 
+import {
+  INVALID_CREDENTIALS,
+  TOO_MANY_REQUEST,
+  USER_NOT_EXISTS,
+} from '@core/constants/messages.const';
 import { AuthService } from '@services/auth.services';
-import { NavigationService } from '@services/navigation.services';
 import { SnackbarService } from '@services/snackbar.service';
 
 @Component({
@@ -24,7 +29,7 @@ export class LoginComponent {
   private authService = inject(AuthService);
 
   /** Injects NavigationService for route handling */
-  private navigationService = inject(NavigationService);
+  private routerService = inject(Router);
 
   /** Injects SnackbarService to show messages */
   private snackBarService = inject(SnackbarService);
@@ -97,7 +102,7 @@ export class LoginComponent {
         this.successMessage.set(message);
         this.snackBarService.show(message);
         this.isSubmitting.set(false);
-        this.navigationService.handleNavigation('/');
+        this.routerService.navigate(['/']);
       },
       error: error => {
         this.handleFirebaseError(error);
@@ -123,11 +128,11 @@ export class LoginComponent {
       errorStr.includes('auth/wrong-password') ||
       errorStr.includes('auth/invalid-credential')
     ) {
-      message = 'Invalid email or password.';
-    } else if (errorStr.includes('auth/too-many-requests')) {
-      message = 'Too many failed attempts. Try again later.';
+      message = INVALID_CREDENTIALS;
     } else if (errorStr.includes('User data not found in database')) {
-      message = 'Account does not exist or was deleted.';
+      message = USER_NOT_EXISTS;
+    } else if (errorStr.includes('auth/too-many-requests')) {
+      message = TOO_MANY_REQUEST;
     }
 
     this.errorMessage.set(message);

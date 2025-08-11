@@ -1,19 +1,20 @@
+import {
+  UNEXPECTED_ERROR,
+  INVALID_IMAGE_SIZE,
+} from '@core/constants/messages.const';
+import {
+  validateImageType,
+  validateImageSize,
+} from '@core/validators/image.validators';
+
 import { Observable } from 'rxjs';
 
 export class ImageService {
-  private readonly allowedTypes = [
-    'image/jpeg',
-    'image/png',
-    'image/gif',
-    'image/webp',
-  ];
-  private readonly maxSizeInMB = 5;
-
   /**
    * Encodes the first selected image file from an input element into a base64 string.
    *
    * @param inputElement - The HTML input element containing the image file.
-   * @returns An observable that emits the base64 string or an error.
+   * @returns An observable that emits the base64 string or null if no file is selected.
    */
   encodeImage(inputElement: HTMLInputElement): Observable<string | null> {
     return new Observable(observer => {
@@ -25,24 +26,11 @@ export class ImageService {
 
       const file = inputElement.files[0];
 
-      // Validate file type
-      if (!this.allowedTypes.includes(file.type)) {
-        observer.error(
-          new Error(
-            'Invalid file type. Only JPG, PNG, GIF, and WEBP are allowed.'
-          )
-        );
-        return;
-      }
-
-      // Validate file size
-      const maxSizeInBytes = this.maxSizeInMB * 1024 * 1024;
-      if (file.size > maxSizeInBytes) {
-        observer.error(
-          new Error(
-            `File is too large. Max allowed size is ${this.maxSizeInMB} MB.`
-          )
-        );
+      try {
+        validateImageType(file);
+        validateImageSize(file);
+      } catch (err) {
+        observer.error(err);
         return;
       }
 
@@ -54,13 +42,13 @@ export class ImageService {
       };
 
       reader.onerror = () => {
-        observer.error(new Error('Failed to read the file. Please try again.'));
+        observer.error(new Error(INVALID_IMAGE_SIZE));
       };
 
       try {
         reader.readAsDataURL(file);
       } catch (err) {
-        observer.error(new Error('Unexpected error while reading the file.'));
+        observer.error(new Error(UNEXPECTED_ERROR));
       }
     });
   }

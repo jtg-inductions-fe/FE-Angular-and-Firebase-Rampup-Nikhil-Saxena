@@ -1,6 +1,8 @@
 import { inject, Injectable } from '@angular/core';
 import { MatSnackBar, MatSnackBarConfig } from '@angular/material/snack-bar';
 
+import { SNACKBAR_DISPLAY_DURATION } from '@core/constants/snackbar.const';
+
 /**
  * Service for displaying snack bar notifications.
  */
@@ -13,9 +15,9 @@ export class SnackbarService {
   /**
    * Displays a snack bar message with optional duration.
    * @param message The message to display.
-   * @param duration Duration in milliseconds (default: 3000).
+   * @param duration Duration in milliseconds
    */
-  show(message: string, duration: number = 3000): void {
+  show(message: string, duration: number = SNACKBAR_DISPLAY_DURATION): void {
     const config: MatSnackBarConfig = {
       duration,
       horizontalPosition: 'right',

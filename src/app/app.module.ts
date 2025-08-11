@@ -7,7 +7,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { RouterModule } from '@angular/router';
 
-import { AppBarModule } from '@core/components/app-bar/app-bar.module';
+import { AppBarComponent } from '@core/components/appBar/appBar.component';
 import { FooterComponent } from '@core/components/footer/footer.component';
 import { LoaderComponent } from '@core/components/loader/loader.component';
 import {
@@ -25,7 +25,7 @@ import { ROUTE_REF } from './app.routes';
     BrowserModule,
     RouterModule.forRoot(ROUTE_REF),
     BrowserAnimationsModule,
-    AppBarModule,
+    AppBarComponent,
     FooterComponent,
     LoaderComponent,
   ],

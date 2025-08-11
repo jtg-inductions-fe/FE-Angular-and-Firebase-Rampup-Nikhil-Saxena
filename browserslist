@@ -3,7 +3,6 @@
 # Production target: modern, commonly used, actively maintained browsers
 >0.2%
 last 2 versions
-Firefox ESR
 not dead
 not op_mini all
 not IE 11

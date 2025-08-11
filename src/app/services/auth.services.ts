@@ -15,7 +15,9 @@ import {
   collection,
   getDocs,
 } from '@angular/fire/firestore';
+import { Router } from '@angular/router';
 
+import { AUTH_TOKEN_EXPIRATION_TIME } from '@core/constants/auth.const';
 import { User as AppUser } from '@core/models/user.model';
 import { CookieService } from 'ngx-cookie-service';
 
@@ -28,8 +30,7 @@ import {
   BehaviorSubject,
 } from 'rxjs';
 
-import { LocalStorageService } from './local-storage.service';
-import { NavigationService } from './navigation.services';
+import { LocalStorageService } from './storage.service';
 
 @Injectable({
   providedIn: 'root',
@@ -39,7 +40,7 @@ export class AuthService {
   private firestore = inject(Firestore);
   private localStorage = inject(LocalStorageService);
   private cookieService = inject(CookieService);
-  private navigationService = inject(NavigationService);
+  private routerService = inject(Router);
   private authStatus$ = new BehaviorSubject<boolean>(false);
 
   constructor() {
@@ -55,7 +56,9 @@ export class AuthService {
    */
   private handleTokenCookieSave(tokenCookie: string) {
     const expirationDate = new Date();
-    expirationDate.setTime(expirationDate.getTime() + 2 * 24 * 60 * 60 * 1000);
+    expirationDate.setTime(
+      expirationDate.getTime() + AUTH_TOKEN_EXPIRATION_TIME
+    );
     this.cookieService.set('Authorization', tokenCookie, expirationDate, '/');
   }
 
@@ -73,9 +76,9 @@ export class AuthService {
     username: string
   ): Observable<UserCredential> {
     return from(getDocs(collection(this.firestore, 'users'))).pipe(
-      switchMap(snapshot => {
-        const userExists = snapshot.docs.some(
-          document => (document.data() as AppUser).email === email
+      switchMap(document => {
+        const userExists = document.docs.some(
+          documentData => (documentData.data() as AppUser).email === email
         );
 
         if (userExists) {
@@ -132,9 +135,9 @@ export class AuthService {
             this.handleTokenCookieSave(idToken);
 
             return from(getDoc(doc(this.firestore, 'users', uid))).pipe(
-              switchMap(snapshot => {
-                if (snapshot.exists()) {
-                  const userData = snapshot.data() as AppUser;
+              switchMap(document => {
+                if (document.exists()) {
+                  const userData = document.data() as AppUser;
                   this.localStorage.setUserData(userData);
                   return from([{ ...userData, uid, email }]);
                 } else {
@@ -160,7 +163,7 @@ export class AuthService {
       .then(() => {
         this.cookieService.delete('Authorization', '/');
         this.localStorage.clearUserData();
-        this.navigationService.handleNavigation('/auth/login');
+        this.routerService.navigate(['/auth/login']);
       })
       .catch(error => {
         throwError(() => error);

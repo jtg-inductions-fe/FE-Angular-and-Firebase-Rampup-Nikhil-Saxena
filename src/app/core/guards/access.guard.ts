@@ -9,25 +9,25 @@ import { AuthService } from '@services/auth.services';
  * It checks if the route requires authentication and whether the user is authenticated,
  * and redirects accordingly.
  *
- * - If `REQUIRES_AUTH` is true and the user is not authenticated, redirects to `/auth/login`.
- * - If `REQUIRES_AUTH` is false and the user is authenticated, redirects to the home page `/`.
+ * - If `requireAuth` is true and the user is not authenticated, redirects to `/auth/login`.
+ * - If `requireAuth` is false and the user is authenticated, redirects to the home page `/`.
  *
- * @param route The current route snapshot containing route metadata.
+ * @param route The current route document containing route metadata.
  * @returns `true` if access is allowed, `false` otherwise (after redirect).
  */
 export const AccessGuard: CanActivateFn = (route: ActivatedRouteSnapshot) => {
   const authService = inject(AuthService);
   const router = inject(Router);
 
-  const REQUIRES_AUTH = route.data['requiresAuth'] === true;
-  const IS_AUTHENTICATED = authService.getCurrentAuthenticationStatus();
+  const requireAuth = route.data['requiresAuth'] === true;
+  const isAuthenticated = authService.getCurrentAuthenticationStatus();
 
-  if (REQUIRES_AUTH && !IS_AUTHENTICATED) {
+  if (requireAuth && !isAuthenticated) {
     router.navigate(['/auth/login']);
     return false;
   }
 
-  if (!REQUIRES_AUTH && IS_AUTHENTICATED) {
+  if (!requireAuth && isAuthenticated) {
     router.navigate(['/']);
     return false;
   }

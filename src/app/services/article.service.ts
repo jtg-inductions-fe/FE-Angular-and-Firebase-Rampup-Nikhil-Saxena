@@ -20,13 +20,14 @@ import {
 } from '@angular/fire/firestore';
 import type { Query, Timestamp } from '@angular/fire/firestore';
 
-import { ArticleFilters } from '@core/models/article-filters.model';
 import { Article as AppArticle } from '@core/models/article.model';
+import { ArticleFilters } from '@core/models/articleFilters.model';
+import { startOfDay } from 'date-fns';
 
 import { from, map, Observable, switchMap } from 'rxjs';
 
 import { LoaderService } from './loader.service';
-import { LocalStorageService } from './local-storage.service';
+import { LocalStorageService } from './storage.service';
 
 @Injectable({
   providedIn: 'root',
@@ -46,16 +47,13 @@ export class ArticleService {
    * @returns Normalized JavaScript Date object
    */
   private dateTimestampTransform(value: Date | Timestamp): Date {
-    if (!value) {
-      return new Date();
-    }
+    if (!value) return startOfDay(new Date());
+
     if (value instanceof Date) {
-      return value as Date;
-    } else {
-      return new Date(
-        new Date((value as Timestamp).seconds * 1000).setHours(0, 0, 0, 0)
-      );
+      return startOfDay(value);
     }
+
+    return startOfDay(new Date((value as Timestamp).seconds * 1000));
   }
 
   /**
@@ -116,10 +114,10 @@ export class ArticleService {
     const articleDocRef = doc(this.articlesCollection, articleId);
 
     return from(getDoc(articleDocRef)).pipe(
-      map(snapshot => {
+      map(document => {
         this.loaderService.setLoadingFalse();
-        if (snapshot.exists()) {
-          const data = snapshot.data() as AppArticle;
+        if (document.exists()) {
+          const data = document.data() as AppArticle;
 
           return new AppArticle(
             data.userId,
@@ -192,13 +190,13 @@ export class ArticleService {
 
     // Execute query
     return from(getDocs(articlesQuery)).pipe(
-      map(snapshot => {
+      map(document => {
         this.loaderService.setLoadingFalse();
-        if (snapshot.empty) {
+        if (document.empty) {
           return { articles: [], lastDoc: null };
         }
 
-        const articles: AppArticle[] = snapshot.docs.map(docSnap => {
+        const articles: AppArticle[] = document.docs.map(docSnap => {
           const data = docSnap.data() as AppArticle;
 
           return new AppArticle(
@@ -214,7 +212,7 @@ export class ArticleService {
           );
         });
 
-        const lastDoc = snapshot.docs[snapshot.docs.length - 1];
+        const lastDoc = document.docs[document.docs.length - 1];
 
         return { articles, lastDoc };
       })
@@ -330,13 +328,13 @@ export class ArticleService {
 
     // Execute query
     return from(getDocs(articlesQuery)).pipe(
-      map(snapshot => {
+      map(document => {
         this.loaderService.setLoadingFalse();
-        if (snapshot.empty) {
+        if (document.empty) {
           return { articles: [], lastDoc: null };
         }
 
-        const articles: AppArticle[] = snapshot.docs.map(docSnap => {
+        const articles: AppArticle[] = document.docs.map(docSnap => {
           const data = docSnap.data() as AppArticle;
 
           return new AppArticle(
@@ -352,7 +350,7 @@ export class ArticleService {
           );
         });
 
-        const lastDoc = snapshot.docs[snapshot.docs.length - 1];
+        const lastDoc = document.docs[document.docs.length - 1];
 
         return { articles, lastDoc };
       })

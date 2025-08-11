@@ -9,7 +9,7 @@ import { MatInputModule } from '@angular/material/input';
 
 import { AuthService } from '@services/auth.services';
 
-import { AuthenticationRoutingModule } from './auth-routing.module';
+import { AuthenticationRoutingModule } from './authRouting.module';
 import { LoginComponent } from './login/login.component';
 import { SignupComponent } from './signup/signup.component';
 

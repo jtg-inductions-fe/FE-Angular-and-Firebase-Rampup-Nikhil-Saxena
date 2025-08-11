@@ -5,7 +5,7 @@
   @return map.get($palette-map, $shade);
 }
 
-$font-size: 16px;
+$font-size: 1rem;
 
 // Primary Color Template: Teal
 $primary: mat.define-palette(mat.$teal-palette);

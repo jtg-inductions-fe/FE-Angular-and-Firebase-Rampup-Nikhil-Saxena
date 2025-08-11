@@ -1,31 +1,143 @@
-# FE Angular and Firebase Rampup - Nikhil Saxena
+# Writica
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 17.
+A modern blog website.
 
-## Install Dependencies
+---
 
-Before running the project, install all the necessary packages by running `npm install`
+## Installation
 
-## Development server
+1. **Install all dependencies:**
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The application will automatically reload if you change any of the source files.
+   ```bash
+   npm install
+   ```
 
-## Code scaffolding
+2. **Prepare Git hooks with Husky:**
 
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
+   ```bash
+   npm run prepare
+   ```
 
-## Build
+---
 
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory.
+## Development
 
-## Running unit tests
+To start the development server with live reloading:
 
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
+```bash
+npm run start
+```
 
-## Running end-to-end tests
+Then navigate to **[http://localhost:4200/](http://localhost:4200/)** in your browser.
 
-Run `ng e2e` to execute the end-to-end tests via a platform of your choice. To use this command, you need to first add a package that implements end-to-end testing capabilities.
+---
 
-## Further help
+## Available Commands
 
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI Overview and Command Reference](https://angular.io/cli) page.
+- **Start Development Server**
+
+  ```bash
+  npm run start
+  ```
+
+  Runs `ng serve` with live reload.
+
+- **Build Project**
+
+  ```bash
+  npm run build
+  ```
+
+  Compiles the app into the `dist/` folder.
+
+- **Run Unit Tests**
+
+  ```bash
+  npm test
+  ```
+
+  Executes tests using Karma and Jasmine.
+
+- **Watch Mode Build**
+
+  ```bash
+  npm run watch
+  ```
+
+  Builds and watches files for changes.
+
+- **Lint Code**
+
+  ```bash
+  npm run lint
+  ```
+
+  Lints the project using ESLint.
+
+- **Fix Lint Errors Automatically**
+
+  ```bash
+  npm run lint:fix
+  ```
+
+- **Format Code with Prettier**
+
+  ```bash
+  npm run prettier
+  ```
+
+---
+
+## Code Quality & Git Hooks
+
+- **Husky** is configured to ensure code quality on commits.
+- **ESLint** ensures consistent, error-free TypeScript code.
+- **Prettier** automatically formats your codebase.
+- Run manually with:
+
+  ```bash
+  npm run lint
+  npm run prettier
+  ```
+
+---
+
+## 📂 Project Structure
+
+```
+src/
+├── app/
+│   ├── core/          # Core modules & components
+│   ├── features/      # Feature modules & components
+│   ├── modules/       # Reusable modules
+│   ├── pages/         # Page-level components
+│   ├── services/      # Application services
+│   └── shared/        # Shared components & utilities
+├── assets/            # Static assets
+├── environments/      # Environment configs
+styles/                # Global styles
+```
+
+---
+
+## Technologies Used
+
+- Angular 17
+- Firebase
+- Angular Material
+- Quill Rich Text Editor
+- ngx-chip
+- ESLint & Prettier
+- Husky (for Git hooks)
+
+---
+
+## Build for Production
+
+Run the following command to generate production-ready code:
+
+```bash
+npm run build
+```
+
+This outputs to the `/dist/` folder.

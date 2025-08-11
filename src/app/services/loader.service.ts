@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 
-import { BehaviorSubject, Observable } from 'rxjs';
+import { Observable, Subject } from 'rxjs';
 
 /**
  * Service to manage loading state.
@@ -10,7 +10,7 @@ import { BehaviorSubject, Observable } from 'rxjs';
 })
 export class LoaderService {
   // Holds the current loading state
-  private isLoading = new BehaviorSubject<boolean>(false);
+  private isLoading = new Subject<boolean>();
 
   // Observable for loading state
   public readonly currentSharedLoader: Observable<boolean> =

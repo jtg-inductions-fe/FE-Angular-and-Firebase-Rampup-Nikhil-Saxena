@@ -7,19 +7,19 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 
-import { ArticleTagInputComponent } from '@features/article-tag-input/article-tag-input.component';
-import { EditorModule } from '@features/rich-editor/rich-editor.module';
+import { ArticleTagInputComponent } from '@features/articleTagInput/articleTagInput.component';
+import { EditorModule } from '@features/richEditor/richEditor.module';
 import { ImageService } from '@services/image.service';
-import { ArticleTagPipe } from '@shared/pipes/article-tags-pipe.pipe';
-import { PipesModule } from '@shared/pipes/pipes.module';
+import { ArticleTagPipe } from '@shared/pipes/articleTagsPipe.pipe';
+import { DateTransform } from '@shared/pipes/customDate.pipe';
 import { TagInputModule } from 'ngx-chips';
 
-import { ArticleCardComponent } from './article-card/article-card.component';
-import { ArticleRoutingModule } from './article.routing-module';
-import { CreateArticleComponent } from './create-update-article/create-update-article.component';
+import { ArticleCardComponent } from './articleCard/articleCard.component';
+import { ArticleRoutingModule } from './articleRouting.module';
+import { CreateArticleComponent } from './createUpdateArticle/createUpdateArticle.component';
 
 @NgModule({
-  declarations: [CreateArticleComponent, ArticleCardComponent],
+  declarations: [CreateArticleComponent, ArticleCardComponent, DateTransform],
   imports: [
     CommonModule,
     FormsModule,
@@ -32,7 +32,6 @@ import { CreateArticleComponent } from './create-update-article/create-update-ar
     TagInputModule,
     ArticleRoutingModule,
     EditorModule,
-    PipesModule,
     ArticleTagInputComponent,
   ],
   providers: [ImageService, ArticleTagPipe],
